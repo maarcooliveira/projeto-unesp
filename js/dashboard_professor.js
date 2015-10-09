@@ -12,7 +12,7 @@ function mostrarAddTurma() {
 
 function remove(type, id) {
 
-    var ajaxurl = 'excluir_registro.php';
+    var ajaxurl = 'api/excluir_registro.php';
     var data =  {'tabela': type, 'id': id};
     $.post(ajaxurl, data, function (response) {
     	console.log(response);
@@ -22,7 +22,7 @@ function remove(type, id) {
 
 function liberar(id) {
 
-    var ajaxurl = 'liberar_atividade.php';
+    var ajaxurl = 'api/liberar_atividade.php';
     var data =  {'id': id};
     $.post(ajaxurl, data, function (response) {
     	console.log(response);

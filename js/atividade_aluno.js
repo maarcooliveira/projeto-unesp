@@ -317,7 +317,7 @@ function enviar_form_salvar() {
 
 
     $.ajax({
-            url: "salvar_arquivo_aluno.php",
+            url: "api/salvar_arquivo_aluno.php",
             type:'POST',
             data:
             {

@@ -1,12 +1,12 @@
 <?php
   session_start();
-  include("check_login.php");
+  include("api/check_login.php");
   if ($_SESSION["tipo"] != "professor") {
     header("Location: index.php");
   }
 
   // include db connect class
-  require_once __DIR__ . '/db_connect.php';
+  require_once __DIR__ . '/api/db_connect.php';
 
   if (isset($_POST['submit'])) {
 
@@ -65,7 +65,7 @@
           <li class="has-dropdown">
             <a href="#"><?php echo $nome; ?></a>
             <ul class="dropdown">
-              <li><a href="logout.php">Sair</a></li>
+              <li><a href="api/logout.php">Sair</a></li>
             </ul>
           </li>
         </ul>

@@ -18,7 +18,7 @@ function mostrarAddTurma() {
 
 function remove(type, id) {
 
-    var ajaxurl = 'excluir_registro.php';
+    var ajaxurl = 'api/excluir_registro.php';
     var data =  {'tabela': type, 'id': id};
     $.post(ajaxurl, data, function (response) {
     	console.log(response);

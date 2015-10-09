@@ -6,14 +6,14 @@
     $nome = "";
   }
   else {
-    include("check_login.php");
+    include("api/check_login.php");
     if ($_SESSION["tipo"] != "aluno") {
       header("Location: index.php");
     }
   }
 
   // include db connect class
-  require_once __DIR__ . '/db_connect.php';
+  require_once __DIR__ . '/api/db_connect.php';
 
   $id = isset($_GET['id']) ? $_GET['id'] : "";
 
@@ -99,7 +99,7 @@
           <li class="has-dropdown">
             <a href="#"><?php echo $nome; ?></a>
             <ul class="dropdown">
-              <li><a href="logout.php">Sair</a></li>
+              <li><a href="api/logout.php">Sair</a></li>
             </ul>
           </li>
         </ul>
@@ -108,7 +108,7 @@
     <!-- </div> -->
 
     <main class="container">
-      <form action="salvar_arquivo_aluno.php" method="post" id="formSaveMapaAluno">
+      <form action="api/salvar_arquivo_aluno.php" method="post" id="formSaveMapaAluno">
         <div><hr id="full-hr"></div>
         <input type="hidden" name="dados_mapa" id="dados_mapa">
         <input type="hidden" name="id_atividade" id="id_atividade" value="<?php echo $_GET['id']?>">

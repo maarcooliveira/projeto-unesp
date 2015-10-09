@@ -2,7 +2,7 @@
   session_start();
 
   // include db connect class
-  require_once __DIR__ . '/db_connect.php';
+  require_once __DIR__ . '/api/db_connect.php';
 
   //TEMP: para login sem facebook
   if (isset($_POST['usuario']) && isset($_POST['senha'])) {
@@ -52,7 +52,7 @@
   // }
   // else {
 
-  //   include("check_login.php");
+  //   include("api/check_login.php");
 
   //   $query  = "SELECT * FROM usuario WHERE id_facebook = '" . $user_profile["id"] . "' LIMIT 1";
   //   $result = mysqli_query($connection, $query);

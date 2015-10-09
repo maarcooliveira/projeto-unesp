@@ -1,25 +1,19 @@
 <?php
- 
-/*
- * Following code will delete a product from table
- * A product is identified by product id (pid)
- */
- 
-// array for JSON response
+
 $response = array();
- 
+
 // check for required fields
 if (isset($_POST['user']) && isset($_POST['turma'])) {
     $user = $_POST['user'];
     $turma = $_POST['turma'];
- 
+
     // include db connect class
     require_once __DIR__ . '/db_connect.php';
-    
+
     $query = "DELETE FROM usuario_turma WHERE id_turma = {$turma} AND id_usuario = {$user}";
     // mysql update row with matched pid
     $result = mysqli_query($connection, $query);
- 
+
     // check if row deleted or not
     if (mysqli_affected_rows() > 0) {
         // successfully updated

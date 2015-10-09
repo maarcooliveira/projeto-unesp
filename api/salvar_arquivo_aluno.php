@@ -9,8 +9,8 @@
    // include db connect class
   require_once __DIR__ . '/db_connect.php';
 
-   if (json_decode($dados_mapa) != null) { 
-     $path = getcwd() . "/atividades/" . $id_atividade . "/resolucoes";
+   if (json_decode($dados_mapa) != null) {
+     $path = dirname( dirname(__FILE__) ) . "/atividades/" . $id_atividade . "/resolucoes";
      if (!file_exists($path)) {
          mkdir($path, 0777, true);
      }
