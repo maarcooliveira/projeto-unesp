@@ -28,7 +28,7 @@ $( document ).ready(function() {
         }
 
         render = function(r, n) {
-            var color = Raphael.getColor();
+            var color = "#07AEFF"; //Raphael.getColor();
             /* the Raphael set is obligatory, containing all you want to display */
 
             rec = r.rect(n.point[0], n.point[1], 130, 20);
@@ -52,7 +52,9 @@ $( document ).ready(function() {
         }
 
         for (var i = 0; i < gabarito['edges'].length; i++) {
-            g.addEdge(gabarito['edges'][i]['source'], gabarito['edges'][i]['target'], {label: gabarito['edges'][i]['weight'], stroke : "#C7C7C7", "font-size": "16px"});
+            // g.addEdge(gabarito['edges'][i]['source'], gabarito['edges'][i]['target'], {label: gabarito['edges'][i]['weight'], stroke : "#C7C7C7", "font-size": "16px"});
+            //TODO mostrar peso quando !== 1
+            g.addEdge(gabarito['edges'][i]['source'], gabarito['edges'][i]['target'], {label: gabarito['edges'][i]['weight'], stroke : "#C7C7C7", "font-size": "0px"});
         }
 
       //   layouter = new Graph.Layout.Ordered(g, topological_sort(g));

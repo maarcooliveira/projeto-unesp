@@ -7,5 +7,5 @@
     $_SESSION["id"] = null;
     $_SESSION["tipo"] = null;
   }
-  header("Location: index.php");
-?>  
+  header("Location: ../index.php");
+?>

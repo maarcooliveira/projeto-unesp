@@ -70,7 +70,7 @@ function inicializar() {
     }
 
     render = function(r, n) {
-        var color = Raphael.getColor();
+        var color = "#07AEFF"; //Raphael.getColor();
         /* the Raphael set is obligatory, containing all you want to display */
 
         rec = r.rect(n.point[0], n.point[1], 130, 20);
@@ -98,7 +98,9 @@ function mostrarMapa() {
 
     if (resolucao !== undefined) {
         for (var i = 0; i < resolucao['edges'].length; i++) {
-            g.addEdge(resolucao['edges'][i]['source'], resolucao['edges'][i]['target'], {label: resolucao['edges'][i]['weight'], stroke : "#C7C7C7", "font-size": "16px"});
+            // g.addEdge(resolucao['edges'][i]['source'], resolucao['edges'][i]['target'], {label: resolucao['edges'][i]['weight'], stroke : "#C7C7C7", "font-size": "16px"});
+            //TODO: mostrar edge quando nao for 1
+            g.addEdge(resolucao['edges'][i]['source'], resolucao['edges'][i]['target'], {label: resolucao['edges'][i]['weight'], stroke : "#C7C7C7", "font-size": "0px"});
         }
     }
 
@@ -108,7 +110,6 @@ function mostrarMapa() {
     renderer.draw();
 
     if (resolucao !== undefined) {
-        console.log("nao eh undefined");
         for (var i = 0; i < g.edges.length; i++) {
             var newEdge = g.edges[i];
             (function (_nE) {
@@ -137,7 +138,9 @@ function mostrarGabarito() {
         for (var i = 0; i < gabarito['edges'].length; i++) {
             for (var j = 0; j < gabarito['edges'].length; j++) {
                 if (matriz[i][j] !== 0) {
-                    gab.addEdge(gabarito['edges'][i]['source'], gabarito['edges'][i]['target'], {label: gabarito['edges'][i]['weight'], stroke : "#C7C7C7", "font-size": "16px"});
+                  //   gab.addEdge(gabarito['edges'][i]['source'], gabarito['edges'][i]['target'], {label: gabarito['edges'][i]['weight'], stroke : "#C7C7C7", "font-size": "16px"});
+                  //TODO: mostrar peso
+                  gab.addEdge(gabarito['edges'][i]['source'], gabarito['edges'][i]['target'], {label: gabarito['edges'][i]['weight'], stroke : "#C7C7C7", "font-size": "0px"});
                 }
             }
         }
@@ -207,9 +210,9 @@ function removeSelectColor(obj) {
 
 function addSelectColor(obj) {
     $(obj).attr('class', 'selected');
-    $(obj).attr('fill', '#212121');
+    $(obj).attr('fill', '#F8B500');
     text = $(obj).parent().next();
-    $(text).attr('fill', '#FFFFFF');
+    $(text).attr('fill', '#000000');
 }
 
 function toggleItemSelected() {
@@ -263,9 +266,12 @@ function redraw() {
 }
 
 function addEdge(weight) {
-    var from = $(src).parent().attr('title');
-    var to = $(dest).parent().attr('title');
-    var newEdge = g.addEdge(from, to, {label: weight, stroke : "#C7C7C7", "font-size": "16px"});
+   var from = $(src).parent().attr('title');
+   var to = $(dest).parent().attr('title');
+   // var newEdge = g.addEdge(from, to, {label: weight, stroke : "#C7C7C7", "font-size": "16px"});
+   //TODO: temp; deve mostrar o peso das ligações quando o peso não for 1 por padrão
+   var newEdge = g.addEdge(from, to, {label: weight, stroke : "#C7C7C7", "font-size": "0px"});
+
     renderer.draw();
     cancelSelect();
 
@@ -328,7 +334,6 @@ function enviar_form_salvar() {
             },
             success: function(msg)
             {
-                console.log(msg);
                 if (msg === "enviado") {
                     window.location.href = "dashboard_aluno.php";
                 }
@@ -354,7 +359,7 @@ function mostrarTabela() {
     var npr = Math.pow(np, 2) - np; //posicoes relevantes
     var distancia_cel = 0;
 
-    console.log(resolucao);
+   //  console.log(resolucao);
 
     matriz = [];
 

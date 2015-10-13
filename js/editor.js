@@ -58,7 +58,7 @@ function mostrarMapa() {
     }
 
     render = function(r, n) {
-    	var color = Raphael.getColor();
+    	var color = "#07AEFF"; //Raphael.getColor();
         /* the Raphael set is obligatory, containing all you want to display */
 
         rec = r.rect(n.point[0], n.point[1], 130, 20);
@@ -83,7 +83,9 @@ function mostrarMapa() {
         }
 
         for (var i = 0; i < gabarito['edges'].length; i++) {
-            var newEdge = g.addEdge(gabarito['edges'][i]['source'], gabarito['edges'][i]['target'], {label: gabarito['edges'][i]['weight'], stroke : "#C7C7C7", "font-size": "16px"});
+            // var newEdge = g.addEdge(gabarito['edges'][i]['source'], gabarito['edges'][i]['target'], {label: gabarito['edges'][i]['weight'], stroke : "#C7C7C7", "font-size": "16px"});
+            //TODO mostrar peso quando for diferente
+            var newEdge = g.addEdge(gabarito['edges'][i]['source'], gabarito['edges'][i]['target'], {label: gabarito['edges'][i]['weight'], stroke : "#C7C7C7", "font-size": "0px"});
         }
 
     }
@@ -191,9 +193,9 @@ function removeSelectColor(obj) {
 
 function addSelectColor(obj) {
     $(obj).attr('class', 'selected');
-    $(obj).attr('fill', '#212121');
+    $(obj).attr('fill', '#F8B500');
     text = $(obj).parent().next();
-    $(text).attr('fill', '#FFFFFF');
+    $(text).attr('fill', '#000000');
 }
 
 function ocultarMapa() {
@@ -259,19 +261,22 @@ function addNode(name) {
 
 function addEdge(weight) {
 	var from = $(src).parent().attr('title');
-    var to = $(dest).parent().attr('title');
-	var newEdge = g.addEdge(from, to, {label: weight, stroke : "#C7C7C7", "font-size": "16px"});
+   var to = $(dest).parent().attr('title');
+	// var newEdge = g.addEdge(from, to, {label: weight, stroke : "#C7C7C7", "font-size": "16px"});
+   //TODO: temp; deve mostrar o peso das ligações quando o peso não for 1 por padrão
+   var newEdge = g.addEdge(from, to, {label: weight, stroke : "#C7C7C7", "font-size": "0px"});
+
 	renderer.draw();
-    cancelSelect();
+   cancelSelect();
 
-    (function (_eC, _nE) {
-        $(_nE.connection.fg[0]).data('edgeId', _eC);
-        $(_nE.connection.fg[0]).on('click', function() {
-            removeEdge(_nE);
-        });
-    })(edgeCount, newEdge);
+   (function (_eC, _nE) {
+      $(_nE.connection.fg[0]).data('edgeId', _eC);
+      $(_nE.connection.fg[0]).on('click', function() {
+         removeEdge(_nE);
+      });
+   })(edgeCount, newEdge);
 
-    edgeCount++;
+   edgeCount++;
 }
 
 function removeEdge(edge) {
