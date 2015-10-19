@@ -108,10 +108,12 @@ Raphael.fn.connection = function (obj1, obj2, style) {
       deve retornar. */
     var hoverIn = function() {
         edge.fg.attr({"stroke": "#F8B500"});
+        edge.fg.attr({"stroke-width": 8});
     };
 
     var hoverOut = function() {
         edge.fg.attr({"stroke": "#C7C7C7"});
+        edge.fg.attr({"stroke-width": 4});
     }
 
     edge.fg.hover(hoverIn, hoverOut, edge, edge);
