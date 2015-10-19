@@ -172,7 +172,7 @@ Graph.Renderer.Raphael = function(element, graph, width, height) {
     //     this.set && this.set.animate({"fill-opacity": .1}, 200) && this.set.toFront();
     //     e.preventDefault && e.preventDefault();
     // };
-
+    //
     // var d = document.getElementById(element);
     // d.onmousemove = function (e) {
     //     e = e || window.event;
@@ -204,9 +204,9 @@ Graph.Renderer.Raphael = function(element, graph, width, height) {
     //     selfRef.isDrag = false;
     //     console.log("selected: " + selfRef.isSelected);
     // };
-
-
-
+    //
+    //
+    //
     // $(d).on('touchstart', function() {
     //     console.log("touch start");
     //     selfRef.isSelected = true;
@@ -241,6 +241,8 @@ Graph.Renderer.Raphael = function(element, graph, width, height) {
     //         selfRef.isDrag.dy = clientY;
     //     }
     // });
+
+    // END DRAGGING
 
     this.draw();
 };
@@ -489,26 +491,25 @@ Graph.Layout.Grid.prototype = {
       if (!this.isAssigned) {
          this.assignToGrid();
       }
-      else {
-         console.log("NOT assigning to grid");
-      }
       this.layoutCalcBounds();
    },
 
    assignToGrid: function() {
+     var NUM_L = 6;
+     var NUM_C = 6;
       console.log("assigning to grid");
       var grid = [];
-      for (var i = 0; i < 6; i++) {
+      for (var i = 0; i < NUM_L; i++) {
          grid[i] = [];
-         for (var j = 0; j < 6; j++) {
+         for (var j = 0; j < NUM_C; j++) {
             grid[i][j] = false;
          }
       }
       console.log(this.graph.nodes);
       for (n in this.graph.nodes) {
          console.log("hi");
-         var i = Math.floor(Math.random() * (6 - 0)) + 0;
-         var j = Math.floor(Math.random() * (6 - 0)) + 0;
+         var i = Math.floor(Math.random() * (NUM_L - 0)) + 0;
+         var j = Math.floor(Math.random() * (NUM_C - 0)) + 0;
          console.log(i + ", " + j);
          if (!grid[i][j]) {
             grid[i][j] = true;
@@ -517,18 +518,27 @@ Graph.Layout.Grid.prototype = {
             var countI = 0;
             var countJ = 0;
             while(grid[i][j]) {
-               if (countI < 6) {
-                  i = (i + 1) % 6;
-                  countI++;
+              //  if (countI < NUM_L) {
+              //     i = (i + 1) % NUM_L;
+              //     countI++;
+              //  }
+              //  else {
+              //     countI = 0;
+              //     j = (j + 1) % NUM_C;
+              //  }
+
+               if (countJ < NUM_C) {
+                 j = (j + 1) % NUM_C;
+                 countJ++;
                }
                else {
-                  countI = 0;
-                  j = (j + 1) % 6;
+                 countJ = 0;
+                 i = (i + 1) % NUM_L;
                }
             }
          }
-         this.graph.nodes[n].layoutPosX = i;
-         this.graph.nodes[n].layoutPosY = j;
+         this.graph.nodes[n].layoutPosX = j;
+         this.graph.nodes[n].layoutPosY = i;
          console.log("assigned pos " + i + " and " + j + " to node " + this.graph.nodes[n].id);
          grid[i][j] = true;
       }
@@ -582,7 +592,7 @@ Graph.Layout.Ordered.prototype = {
             for (i in this.order) {
                 var node = this.order[i];
                 node.layoutPosX = counter;
-                node.layoutPosY = counter;//Math.random();
+                node.layoutPosY = Math.random();
                 counter++;
             }
     },
