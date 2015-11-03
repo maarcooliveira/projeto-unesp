@@ -6,8 +6,10 @@
 	$dbuser pelo usuário
 	$dbpass pela senha
 	$dbname pelo nome do banco de dados
+
+	** Renomear este arquivo para db_connect.php
 */
-	
+
 $dbhost = "localhost";
 $dbuser = "usr";
 $dbpass = "pwd";
