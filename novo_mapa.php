@@ -192,6 +192,7 @@
     <script src="./js/dracula_graph.js"></script>
     <script src="./js/dracula_algorithms.js"></script>
     <script src="./js/dracula_graffle.js"></script>
+    <script src="./js/noty/packaged/jquery.noty.packaged.min.js"></script>
     <script src="./js/editor.js"></script>
     <script>
       $(document).foundation();

@@ -62,11 +62,11 @@ function mostrarMapa() {
         /* the Raphael set is obligatory, containing all you want to display */
 
         rec = r.rect(n.point[0], n.point[1], 130, 20);
-        txt = r.text(n.point[0], n.point[1], (n.label || n.id)).attr({"font-size": "16px"});
+        txt = r.text(n.point[0], n.point[1], (n.label || n.id)).attr({"font-size": "12px"});
 
-        w = txt.getBBox().width + 50;
+        w = txt.getBBox().width + 20;
         h = txt.getBBox().height + 20;
-        x = txt.getBBox().x - 25;
+        x = txt.getBBox().x - 10;
         y = txt.getBBox().y - 10;
 
         attrs = {"title": (n.label || n.id), "fill": color, "stroke": color, r: "1px", "stroke-width": "1px", "width": w, "height": h, "x": x, "y": y};
@@ -99,8 +99,10 @@ function mostrarMapa() {
         console.log(nodes);
     }
 
-   // layouter = new Graph.Layout.Ordered(g, topological_sort(g));
+  // Algoritmo original para escolher posição dos nós
+  //  layouter = new Graph.Layout.Ordered(g, topological_sort(g));
 
+  //NEXTEX: comentar linhas abaixo para forçar novo layout em mapa;
    if (continuacao) {
       layouter = new Graph.Layout.Grid(g, true);
    }
@@ -267,14 +269,24 @@ function addEdge(weight) {
    var newEdge = g.addEdge(from, to, {label: weight, stroke : "#C7C7C7", "font-size": "0px"});
 
 	renderer.draw();
-   cancelSelect();
 
-   (function (_eC, _nE) {
-      $(_nE.connection.fg[0]).data('edgeId', _eC);
-      $(_nE.connection.fg[0]).on('click', function() {
-         removeEdge(_nE);
-      });
-   })(edgeCount, newEdge);
+  // Notificação de ligação inserida
+  var n = noty({
+    text: '<i class="fa fa-check"></i> \"<strong>' + from + '</strong>\" e \"<strong>' + to + '</strong>\" foram relacionados',
+    layout: 'topCenter',
+    type: 'information',
+    theme: 'relax',
+    timeout: 3000
+  });
+
+  cancelSelect();
+
+  (function (_eC, _nE) {
+    $(_nE.connection.fg[0]).data('edgeId', _eC);
+    $(_nE.connection.fg[0]).on('click', function() {
+       removeEdge(_nE);
+    });
+  })(edgeCount, newEdge);
 
    edgeCount++;
 }
@@ -283,6 +295,16 @@ function removeEdge(edge) {
     var index = g.edges.indexOf(edge);
     edge.remove();
     g.edges.splice(index, 1);
+
+    var from = edge.source.id;
+    var to = edge.target.id;
+    var n = noty({
+      text: '<i class="fa fa-times"></i> \"<strong>' + from + '</strong>\" e \"<strong>' + to + '</strong>\" foram desrelacionados',
+      layout: 'topCenter',
+      type: 'warning',
+      theme: 'relax',
+      timeout: 3000
+    });
 }
 
 function salvar() {

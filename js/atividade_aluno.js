@@ -273,6 +273,16 @@ function addEdge(weight) {
    var newEdge = g.addEdge(from, to, {label: weight, stroke : "#C7C7C7", "font-size": "0px"});
 
     renderer.draw();
+
+    // Notificação de ligação inserida
+    var n = noty({
+      text: '<i class="fa fa-check"></i> \"<strong>' + from + '</strong>\" e \"<strong>' + to + '</strong>\" foram relacionados',
+      layout: 'topCenter',
+      type: 'information',
+      theme: 'relax',
+      timeout: 3000
+    });
+
     cancelSelect();
 
     (function (_eC, _nE) {
@@ -289,6 +299,16 @@ function removeEdge(edge) {
     var index = g.edges.indexOf(edge);
     edge.remove();
     g.edges.splice(index, 1);
+
+    var from = edge.source.id;
+    var to = edge.target.id;
+    var n = noty({
+      text: '<i class="fa fa-times"></i> \"<strong>' + from + '</strong>\" e \"<strong>' + to + '</strong>\" foram desrelacionados',
+      layout: 'topCenter',
+      type: 'warning',
+      theme: 'relax',
+      timeout: 3000
+    });
 }
 
 function salvar() {
@@ -338,7 +358,7 @@ function enviar_form_salvar() {
                     window.location.href = "dashboard_aluno.php";
                 }
                 var n = noty({
-                  text: 'Atividade salva',
+                  text: '<i class="fa fa-floppy-o"></i> Atividade salva',
                   layout: 'topCenter',
                   type: 'success',
                   theme: 'relax',
