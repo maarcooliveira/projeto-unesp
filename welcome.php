@@ -79,6 +79,7 @@
     <title>NextEx - Novo usuário</title>
     <link rel="stylesheet" href="./css/foundation.min.css" />
     <link rel="stylesheet" href="./css/style.css" />
+    <link rel="shortcut icon" href="./images/icon.png">
   </head>
 
   <body>
