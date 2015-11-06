@@ -5,7 +5,6 @@
     header("Location: index.php");
   }
 
-  // include db connect class
   require_once __DIR__ . '/api/db_connect.php';
 
   if (isset($_POST['submit'])) {
@@ -76,74 +75,96 @@
 
     <main class="container">
       <br>
+
       <div class="row">
-        <h3>Meus mapas</h3>
-
-        <table>
-          <thead>
-            <tr>
-              <th>Título</th>
-              <th>Turma</th>
-              <th>Prazo para entrega</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php while($mapa = mysqli_fetch_assoc($mapas)) { ?>
-              <tr>
-                <td><a href="atividade_aluno.php?id=<?php echo $mapa['id'] ?>"><?php echo $mapa['titulo'] ?></a></td>
-                <td><?php echo $mapa['turma'] ?></td>
-                <td><?php echo date("d/m/Y", strtotime($mapa['data_entrega'])) ?></td>
-                <td><?php if ($mapa['concluido'] == 1) echo "Entregue"; else echo "Não entregue"; ?></td>
-              </tr>
-            <?php } ?>
-          </tbody>
-        </table>
-
-        <hr><h3>Minhas Turmas</h3>
-        <table>
-          <thead>
-            <tr>
-              <th>Turma</th>
-              <th>Professor</th>
-              <th>Opções</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php while($turma = mysqli_fetch_assoc($turmas)) { ?>
-              <tr>
-                <td><?php echo $turma['nome'] ?></td>
-                <td><?php echo $turma['professor'] ?></td>
-                <td><a onclick="remove('usuario_turma', '<?php echo $turma['id'] ?>');">Sair desta turma</a></td>
-              </tr>
-            <?php } ?>
-          </tbody>
-        </table>
-        <br><a id="botaoAddTurma" class="button radius" onclick="mostrarAddTurma();">Adicionar turma</a>
+        <h3>Minhas Atividades</h3>
+        <br>
       </div>
 
-      <form action="dashboard_aluno.php" method="post" id="formAddTurma">
-        <div class="row">
-          <h4>Participar de nova turma</h4>
-        </div>
-        <div class="row">
-          <div class="small-10 small-offset-1 large-6 large-offset-0 columns">
-            <label>Turmas na sua universidade
-              <select name="turma">
-                <?php
-                  while($outraTurma = mysqli_fetch_assoc($outrasTurmas)) {
-                    echo "<option value='{$outraTurma['id']}'>{$outraTurma['nome']}</option>";
-                  } ?>
-              </select>
-            </label>
-          </div>
-        </div>
+      <div class="row">
+        <h5 class="small-3 columns b">Título</h5>
+        <h5 class="small-3 columns b">Turma</h5>
+        <h5 class="small-3 columns b">Entrega</h5>
+        <h5 class="small-3 columns b">Status</h5>
+      </div>
 
-        <div class="row">
-          <a onclick="esconderAddTurma();" class="button radius small-5 small-offset-1 large-3 large-offset-0">Cancelar</a>
-          <input type="submit" name="submit" class="button radius small-5 large-3" value="Confirmar">
-        </div>
-      </form>
+
+      <?php $count = 0;
+        while($mapa = mysqli_fetch_assoc($mapas)) { ?>
+          <div class="row <?php if($count%2 == 0) echo "darker"?>">
+            <br>
+            <a class="small-3 columns" href="atividade_aluno.php?id=<?php echo $mapa['id'] ?>"><?php echo $mapa['titulo'] ?></a>
+            <span class="small-3 columns"><?php echo $mapa['turma'] ?></span>
+            <span class="small-3 columns"><?php echo date("d/m/Y", strtotime($mapa['data_entrega'])) ?></span>
+            <span class="small-3 columns"><?php if ($mapa['concluido'] == 1) echo "Entregue"; else echo "Não entregue"; ?></span>
+            <br><br>
+          </div>
+      <?php $count++; } ?>
+
+      <br><br>
+      <div class="row">
+        <h3>Turmas das quais participo</h3>
+        <br>
+      </div>
+
+      <div class="row">
+        <h5 class="small-6 columns b">Turma</h5>
+        <h5 class="small-3 columns b">Professor</h5>
+        <h5 class="small-3 columns b"><a href="#" data-reveal-id="modalAddTurma"><i class="fa fa-plus"></i> Nova turma</a></h5>
+      </div>
+
+
+      <?php $count = 0;
+        while($turma = mysqli_fetch_assoc($turmas)) { ?>
+          <div class="row <?php if($count%2 == 0) echo "darker"?>">
+            <br>
+            <span class="small-6 columns"><?php echo $turma['nome'] ?></span>
+            <span class="small-3 columns"><?php echo $turma['professor'] ?></span>
+            <a class="small-3 columns imp" onclick="remove('usuario_turma', '<?php echo $turma['id'] ?>');"><i class="fa fa-minus-circle"></i> Sair da turma</a>
+            <br><br>
+          </div>
+      <?php $count++; } ?>
+
+
+
+      <div id="modalAddTurma" class="reveal-modal " data-reveal aria-labelledby="modalAddTurmaTitle" aria-hidden="true" role="dialog">
+          <div class="row collapse">
+            <h3 id="modalAddTurmaTitle" class="text-center">Participar de nova turma</h3>
+              <div id="modalAddTurmaContent" class="large-10 small-10 columns large-offset-1 small-offset-1">
+
+
+                <form action="dashboard_aluno.php" method="post" id="formAddTurma">
+                  <br><br>
+                  <div class="row">
+                    <div class="small-10 small-offset-1 large-8 large-offset-2 columns">
+                      <label>Turmas na sua universidade
+                        <select name="turma">
+                          <?php
+                            while($outraTurma = mysqli_fetch_assoc($outrasTurmas)) {
+                              echo "<option value='{$outraTurma['id']}'>{$outraTurma['nome']}</option>";
+                            } ?>
+                        </select>
+                      </label>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <br>
+                    <a class="button radius secondary small-5 small-offset-1 large-4 large-offset-2" onclick="$('#modalAddTurma').foundation('reveal', 'close');">Cancelar</a>
+                    <input type="submit" name="submit" class="button radius small-5 large-4" value="Confirmar">
+                  </div>
+                </form>
+
+
+
+
+              </div>
+          </div>
+      </div>
+
+
+
+
     </main>
 
     <script src="./js/jquery-2.1.4.min.js"></script>

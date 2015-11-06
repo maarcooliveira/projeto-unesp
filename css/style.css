@@ -3,3 +3,19 @@
 body, h1, h2, h3, h4, h5, h6, p, a {
 	font-family: 'Lato', sans-serif !important;
 }
+
+.imp {
+	color: #e53935;
+}
+
+.imp:hover {
+	color: #c62828;
+}
+
+.b {
+	font-weight: bold;
+}
+
+.darker {
+	background-color: #f6f6f6;
+}

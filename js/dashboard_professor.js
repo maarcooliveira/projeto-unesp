@@ -1,15 +1,3 @@
-esconderAddTurma();
-
-function esconderAddTurma() {
-	$('#formAddTurma').css('display', 'none');
-    $('#botaoAddTurma').css('display', 'block');
-}
-
-function mostrarAddTurma() {
-	$('#formAddTurma').css('display', 'inline');
-    $('#botaoAddTurma').css('display', 'none');
-}
-
 function remove(type, id) {
 
     var ajaxurl = 'api/excluir_registro.php';

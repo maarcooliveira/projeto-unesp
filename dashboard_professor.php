@@ -76,92 +76,103 @@
     <main class="container">
       <br>
       <div class="row">
-        <h3>Mapas</h3>
-
-        <table>
-          <thead>
-            <tr>
-              <th>Título</th>
-              <th>Turma</th>
-              <th>Prazo final</th>
-              <th>Status</th>
-              <th>Opções</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php while($mapa = mysqli_fetch_assoc($mapas)) {
-                $link = "novo_mapa.php?id=" . $mapa['id'];
-                if ($mapa['liberado']) {
-                  $link = "atividade_professor.php?id=" . $mapa['id'];
-                }
-            ?>
-              <tr>
-
-                <td><a href="<?php echo $link ?>"><?php echo $mapa['titulo'] ?></a></td>
-                <td><?php echo $mapa['turma'] ?></td>
-                <td><?php echo date("d/m/Y", strtotime($mapa['data_entrega'])) ?></td>
-                <td>
-                    <?php if ($mapa['liberado']) { echo 'Liberado'; } else {  ?>
-                      <a onclick="liberar('<?php echo $mapa['id'] ?>');">Liberar</a>
-                    <?php } ?></td>
-                <td><a onclick="remove('atividade', '<?php echo $mapa['id'] ?>');">Excluir</a></td>
-              </tr>
-            <?php } ?>
-          </tbody>
-        </table>
-        <br><a class="button radius" href="novo_mapa.php">Novo mapa</a>
-
-        <hr><h3>Minhas Turmas</h3>
-        <table>
-          <thead>
-            <tr>
-              <th>Turma</th>
-              <th>Universidade</th>
-              <!-- <th>Criado em</th> -->
-              <th>Opções</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php while($turma = mysqli_fetch_assoc($turmas)) { ?>
-              <tr>
-                <td><?php echo $turma['nome'] ?></td>
-                <td><?php echo $turma['universidade'] ?></td>
-                <!-- <td><?php //echo $turma['data_criacao'] ?></td> -->
-                <td><a onclick="remove('turma', '<?php echo $turma['id'] ?>');">Excluir</a></td>
-              </tr>
-            <?php } ?>
-          </tbody>
-        </table>
-        <br><a class="button radius" onclick="mostrarAddTurma();">Nova turma</a>
+        <h3>Atividades</h3>
+        <br>
       </div>
 
-      <form action="dashboard_professor.php" method="post" id="formAddTurma">
-        <br><br>
-        <div class="row">
-          <div class="small-10 small-offset-1 large-6 large-offset-0 columns">
-            <label>Universidade
-              <select name="universidade">
-                <?php
-                  while($universidade = mysqli_fetch_assoc($universidades)) {
-                    echo "<option value='{$universidade['id']}'>{$universidade['nome']}</option>";
-                  } ?>
-              </select>
-            </label>
-          </div>
-        </div>
+      <div class="row">
+        <h5 class="small-3 columns b">Título</h5>
+        <h5 class="small-3 columns b">Turma</h5>
+        <h5 class="small-2 columns b">Entrega</h5>
+        <h5 class="small-2 columns b">Status</h5>
+        <h5 class="small-2 columns b"><a href="novo_mapa.php"><i class="fa fa-plus"></i> Criar</a></h5>
+      </div>
 
-        <div class="row">
-          <div class="small-10 small-offset-1 large-6 large-offset-0 columns">
-            <label>Nome da turma
-              <input type="text" name="turma" placeholder="Ex: Algoritmos e Programação I" />
-            </label>
+      <?php
+        $count = 0;
+        while($mapa = mysqli_fetch_assoc($mapas)) {
+          $link = "novo_mapa.php?id=" . $mapa['id'];
+          if ($mapa['liberado']) {
+            $link = "atividade_professor.php?id=" . $mapa['id'];
+          }
+      ?>
+        <div class="row <?php if($count%2 == 0) echo "darker"?>">
+          <br>
+          <a class="small-3 columns" href="<?php echo $link ?>"><?php echo $mapa['titulo'] ?></a>
+          <span class="small-3 columns"><?php echo $mapa['turma'] ?></span>
+          <span class="small-2 columns"><?php echo date("d/m/Y", strtotime($mapa['data_entrega'])) ?></span>
+          <?php if ($mapa['liberado']) { ?>
+            <span class="small-2 columns"><i class="fa fa-check-square-o"></i> Liberado</span>
+          <?php } else { ?>
+            <a class="small-2 columns" onclick="liberar('<?php echo $mapa['id'] ?>');"><i class="fa fa-square-o"></i> Liberar</a>
+          <?php } ?>
+          <a class="small-2 columns imp" onclick="remove('atividade', '<?php echo $mapa['id'] ?>');"><i class="fa fa-minus-circle"></i> Excluir</a>
+          <br><br>
+        </div>
+      <?php $count++; } ?>
+
+      <br><br>
+      <div class="row">
+        <h3>Turmas</h3>
+        <br>
+      </div>
+
+      <div class="row">
+        <h5 class="small-4 columns b">Turma</h5>
+        <h5 class="small-4 columns b">Universidade</h5>
+        <h5 class="small-2 columns b">Criado em</h5>
+        <h5 class="small-2 columns b"><a href="#" data-reveal-id="modalAddTurma"><i class="fa fa-plus"></i> Criar</a></h5>
+      </div>
+
+      <?php
+        $count = 0;
+        while($turma = mysqli_fetch_assoc($turmas)) { ?>
+        <div class="row <?php if($count%2 == 0) echo "darker"?>">
+          <br>
+          <span class="small-4 columns"><?php echo $turma['nome'] ?></span>
+          <span class="small-4 columns"><?php echo $turma['universidade'] ?></span>
+          <span class="small-2 columns"><?php echo date("d/m/Y", strtotime($turma['data_criacao'])) ?></span>
+          <a class="small-2 columns imp" onclick="remove('turma', '<?php echo $turma['id'] ?>');"><i class="fa fa-minus-circle"></i> Excluir</a>
+          <br><br>
+        </div>
+      <?php $count++; } ?>
+
+      <div id="modalAddTurma" class="reveal-modal " data-reveal aria-labelledby="modalAddTurmaTitle" aria-hidden="true" role="dialog">
+          <div class="row collapse">
+            <h3 id="modalAddTurmaTitle" class="text-center">Nova turma</h3>
+              <div id="modalAddTurmaContent" class="large-10 small-10 columns large-offset-1 small-offset-1">
+                <form action="dashboard_professor.php" method="post" id="formAddTurma">
+                  <br><br>
+                  <div class="row">
+                    <div class="small-10 small-offset-1 large-8 large-offset-2 columns">
+                      <label>Universidade
+                        <select name="universidade">
+                          <?php
+                            while($universidade = mysqli_fetch_assoc($universidades)) {
+                              echo "<option value='{$universidade['id']}'>{$universidade['nome']}</option>";
+                            } ?>
+                        </select>
+                      </label>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="small-10 small-offset-1 large-8 large-offset-2 columns">
+                      <label>Nome da turma
+                        <input type="text" name="turma" placeholder="Ex: Algoritmos e Programação I" />
+                      </label>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <br>
+                    <a class="button radius secondary small-5 small-offset-1 large-4 large-offset-2" onclick="$('#modalAddTurma').foundation('reveal', 'close');">Cancelar</a>
+                    <input type="submit" name="submit" class="button radius small-5 large-4" value="Confirmar">
+                  </div>
+                </form>
+              </div>
           </div>
-        </div>
-        <div class="row">
-          <a onclick="esconderAddTurma();" class="button radius small-5 small-offset-1 large-3 large-offset-0">Cancelar</a>
-          <input type="submit" name="submit" class="button radius small-5 large-3" value="Confirmar">
-        </div>
-      </form>
+      </div>
+
     </main>
 
     <script src="./js/jquery-2.1.4.min.js"></script>
