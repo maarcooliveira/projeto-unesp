@@ -99,19 +99,29 @@ function mostrarMapa() {
         console.log(nodes);
     }
 
-  // Algoritmo original para escolher posição dos nós
-  //  layouter = new Graph.Layout.Ordered(g, topological_sort(g));
+    // Algoritmo original para escolher posição dos nós
+    if (continuacao) {
+      console.log("eh continuacao");
+      layouter = new Graph.Layout.Ordered(g, true, null);
+    }
+    else {
+      layouter = new Graph.Layout.Ordered(g, false, topological_sort(g));
+      console.log("nao eh continuacao");
+    }
+
 
   //NEXTEX: comentar linhas abaixo para forçar novo layout em mapa;
-   if (continuacao) {
-      layouter = new Graph.Layout.Grid(g, true);
-   }
-   else {
-      layouter = new Graph.Layout.Grid(g, false);
-   }
+  //  if (continuacao) {
+  //     layouter = new Graph.Layout.Grid(g, true);
+  //  }
+  //  else {
+  //     layouter = new Graph.Layout.Grid(g, false);
+  //  }
 
-   renderer = new Graph.Renderer.Raphael('canvas', g, width, height);
-	renderer.draw();
+
+
+    renderer = new Graph.Renderer.Raphael('canvas', g, width, height);
+  	renderer.draw();
 
     if (continuacao) {
         for (var i = 0; i < g.edges.length; i++) {
@@ -326,6 +336,7 @@ function salvar() {
       pos.x = g.nodes[mapa_nodes[n]].layoutPosX;
       pos.y = g.nodes[mapa_nodes[n]].layoutPosY;
       node_positions.push(pos);
+      console.log("saving new positions: " + pos.x + " " + pos.y);
     }
 
     mapa['nodes'] = mapa_nodes;

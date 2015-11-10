@@ -57,8 +57,8 @@ $( document ).ready(function() {
             g.addEdge(gabarito['edges'][i]['source'], gabarito['edges'][i]['target'], {label: gabarito['edges'][i]['weight'], stroke : "#C7C7C7", "font-size": "0px"});
         }
 
-      //   layouter = new Graph.Layout.Ordered(g, topological_sort(g));
-        layouter = new Graph.Layout.Grid(g, true);
+        layouter = new Graph.Layout.Ordered(g, true, null);
+        // layouter = new Graph.Layout.Grid(g, true);
         renderer = new Graph.Renderer.Raphael('gabarito', g, width, height);
         renderer.draw();
         calcularMatrizes();

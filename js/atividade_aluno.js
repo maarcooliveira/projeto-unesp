@@ -104,8 +104,8 @@ function mostrarMapa() {
         }
     }
 
-   //  layouter = new Graph.Layout.Ordered(g, topological_sort(g));
-    layouter = new Graph.Layout.Grid(g, true);
+    layouter = new Graph.Layout.Ordered(g, true, null);
+    // layouter = new Graph.Layout.Grid(g, true);
     renderer = new Graph.Renderer.Raphael('canvas', g, width, height);
     renderer.draw();
 

@@ -160,89 +160,52 @@ Graph.Renderer.Raphael = function(element, graph, width, height) {
         }
     }
 
+
+
     /*
      * Dragging
      */
-    // this.isDrag = false;
-    // this.isSelected = false; //modificação 01: permitir seleção
-    // this.dragger = function (e) {
-    //     this.dx = e.clientX;
-    //     this.dy = e.clientY;
-    //     selfRef.isDrag = this;
-    //     this.set && this.set.animate({"fill-opacity": .1}, 200) && this.set.toFront();
-    //     e.preventDefault && e.preventDefault();
-    // };
-    //
-    // var d = document.getElementById(element);
-    // d.onmousemove = function (e) {
-    //     e = e || window.event;
-    //     if (selfRef.isDrag) {
-    //         selfRef.isSelected = false;
-    //         var bBox = selfRef.isDrag.set.getBBox();
-    //         // TODO round the coordinates here (eg. for proper image representation)
-    //         var newX = e.clientX - selfRef.isDrag.dx + (bBox.x + bBox.width / 2);
-    //         var newY = e.clientY - selfRef.isDrag.dy + (bBox.y + bBox.height / 2);
-    //         /* prevent shapes from being dragged out of the canvas */
-    //         var clientX = e.clientX - (newX < 20 ? newX - 20 : newX > selfRef.width - 20 ? newX - selfRef.width + 20 : 0);
-    //         var clientY = e.clientY - (newY < 20 ? newY - 20 : newY > selfRef.height - 20 ? newY - selfRef.height + 20 : 0);
-    //         selfRef.isDrag.set.translate(clientX - Math.round(selfRef.isDrag.dx), clientY - Math.round(selfRef.isDrag.dy));
-    //         //            console.log(clientX - Math.round(selfRef.isDrag.dx), clientY - Math.round(selfRef.isDrag.dy));
-    //         for (var i in selfRef.graph.edges) {
-    //             selfRef.graph.edges[i].connection && selfRef.graph.edges[i].connection.draw();
-    //         }
-    //         //selfRef.r.safari();
-    //         selfRef.isDrag.dx = clientX;
-    //         selfRef.isDrag.dy = clientY;
-    //     }
-    // };
-    // d.onmousedown = function () {
-    //     selfRef.isSelected = true;
-    // }
-    // //comparar os valores de x e y onmouseup. se forem o mesmo valor, é click, se não, drag;
-    // d.onmouseup = function () {
-    //     selfRef.isDrag && selfRef.isDrag.set.animate({"fill-opacity": .6}, 500);
-    //     selfRef.isDrag = false;
-    //     console.log("selected: " + selfRef.isSelected);
-    // };
-    //
-    //
-    //
-    // $(d).on('touchstart', function() {
-    //     console.log("touch start");
-    //     selfRef.isSelected = true;
-    // });
-    // $(d).on('touchend', function() {
-    //     console.log("touch end");
-    //     selfRef.isDrag && selfRef.isDrag.set.animate({"fill-opacity": .6}, 500);
-    //     selfRef.isDrag = false;
-    // });
-    // $(d).on('touchmove', function(e) {
-    //     console.log("touch move");
-    //     e = e || window.event;
-    //     // console.log(e);
-    //     if (selfRef.isDrag) {
-    //         console.log(e);
-    //         console.log("TRUE");
-    //         selfRef.isSelected = false;
-    //         var bBox = selfRef.isDrag.set.getBBox();
-    //         // TODO round the coordinates here (eg. for proper image representation)
-    //         var newX = e.clientX - selfRef.isDrag.dx + (bBox.x + bBox.width / 2);
-    //         var newY = e.clientY - selfRef.isDrag.dy + (bBox.y + bBox.height / 2);
-    //         /* prevent shapes from being dragged out of the canvas */
-    //         var clientX = e.clientX - (newX < 20 ? newX - 20 : newX > selfRef.width - 20 ? newX - selfRef.width + 20 : 0);
-    //         var clientY = e.clientY - (newY < 20 ? newY - 20 : newY > selfRef.height - 20 ? newY - selfRef.height + 20 : 0);
-    //         selfRef.isDrag.set.translate(clientX - Math.round(selfRef.isDrag.dx), clientY - Math.round(selfRef.isDrag.dy));
-    //         //            console.log(clientX - Math.round(selfRef.isDrag.dx), clientY - Math.round(selfRef.isDrag.dy));
-    //         for (var i in selfRef.graph.edges) {
-    //             selfRef.graph.edges[i].connection && selfRef.graph.edges[i].connection.draw();
-    //         }
-    //         //selfRef.r.safari();
-    //         selfRef.isDrag.dx = clientX;
-    //         selfRef.isDrag.dy = clientY;
-    //     }
-    // });
+    this.isDrag = false;
+    this.dragger = function (e) {
+        this.dx = e.clientX;
+        this.dy = e.clientY;
+        selfRef.isDrag = this;
+        this.set && this.set.animate({"fill-opacity": .1}, 200) && this.set.toFront();
+        e.preventDefault && e.preventDefault();
+    };
 
-    // END DRAGGING
+    var d = document.getElementById(element);
+    d.onmousemove = function (e) {
+        e = e || window.event;
+        if (selfRef.isDrag) {
+            var bBox = selfRef.isDrag.set.getBBox();
+            // TODO round the coordinates here (eg. for proper image representation)
+            var newX = e.clientX - selfRef.isDrag.dx + (bBox.x + bBox.width / 2);
+            var newY = e.clientY - selfRef.isDrag.dy + (bBox.y + bBox.height / 2);
+            /* prevent shapes from being dragged out of the canvas */
+            var clientX = e.clientX - (newX < 20 ? newX - 20 : newX > selfRef.width - 20 ? newX - selfRef.width + 20 : 0);
+            var clientY = e.clientY - (newY < 20 ? newY - 20 : newY > selfRef.height - 20 ? newY - selfRef.height + 20 : 0);
+            selfRef.isDrag.set.translate(clientX - Math.round(selfRef.isDrag.dx), clientY - Math.round(selfRef.isDrag.dy));
+            //            console.log(clientX - Math.round(selfRef.isDrag.dx), clientY - Math.round(selfRef.isDrag.dy));
+            for (var i in selfRef.graph.edges) {
+                selfRef.graph.edges[i].connection && selfRef.graph.edges[i].connection.draw();
+            }
+            //selfRef.r.safari();
+            selfRef.isDrag.dx = clientX;
+            selfRef.isDrag.dy = clientY;
+
+            //NEXTEX:
+            var nodeId = selfRef.r.top.attrs.text;
+            selfRef.graph.nodes[nodeId].layoutPosX = clientX/selfRef.width;
+            selfRef.graph.nodes[nodeId].layoutPosY = clientY/selfRef.height;
+            selfRef.draw();
+        }
+    };
+    d.onmouseup = function () {
+        selfRef.isDrag && selfRef.isDrag.set.animate({"fill-opacity": .6}, 500);
+        selfRef.isDrag = false;
+    };
+    //END DRAGGING
 
     this.draw();
 };
@@ -569,16 +532,17 @@ Graph.Layout.Grid.prototype = {
    }
 };
 
-
-// TODO create grid
-Graph.Layout.Ordered = function(graph, order) {
+Graph.Layout.Ordered = function(graph, isAssigned, order) {
     this.graph = graph;
     this.order = order;
+    this.isAssigned = isAssigned;
     this.layout();
 };
 Graph.Layout.Ordered.prototype = {
     layout: function() {
-        this.layoutPrepare();
+        if (!this.isAssigned) {
+          this.layoutPrepare();
+        }
         this.layoutCalcBounds();
     },
 
@@ -588,33 +552,41 @@ Graph.Layout.Ordered.prototype = {
             node.layoutPosX = 0;
             node.layoutPosY = 0;
         }
-            var counter = 0;
-            for (i in this.order) {
-                var node = this.order[i];
-                node.layoutPosX = counter;
-                node.layoutPosY = Math.random();
-                counter++;
-            }
+        //NEXTEX: counter no longer used. both x and y are random between 0 and 1.
+        var counter = 0;
+        for (i in this.order) {
+            var node = this.order[i];
+            node.layoutPosX = Math.random(); //counter;
+            node.layoutPosY = Math.random();
+            counter++;
+        }
     },
 
     layoutCalcBounds: function() {
-        var minx = Infinity, maxx = -Infinity, miny = Infinity, maxy = -Infinity;
+        // var minx = Infinity, maxx = -Infinity, miny = Infinity, maxy = -Infinity;
+        //
+        // for (i in this.graph.nodes) {
+        //     var x = this.graph.nodes[i].layoutPosX;
+        //     var y = this.graph.nodes[i].layoutPosY;
+        //
+        //     if(x > maxx) maxx = x;
+        //     if(x < minx) minx = x;
+        //     if(y > maxy) maxy = y;
+        //     if(y < miny) miny = y;
+        // }
+        //
+        // this.graph.layoutMinX = minx;
+        // this.graph.layoutMaxX = maxx;
+        //
+        // this.graph.layoutMinY = miny;
+        // this.graph.layoutMaxY = maxy;
 
-        for (i in this.graph.nodes) {
-            var x = this.graph.nodes[i].layoutPosX;
-            var y = this.graph.nodes[i].layoutPosY;
+        //NEXTEX: Now range is in percentage;
+        this.graph.layoutMinX = 0.0;
+        this.graph.layoutMaxX = 1.0;
 
-            if(x > maxx) maxx = x;
-            if(x < minx) minx = x;
-            if(y > maxy) maxy = y;
-            if(y < miny) miny = y;
-        }
-
-        this.graph.layoutMinX = minx;
-        this.graph.layoutMaxX = maxx;
-
-        this.graph.layoutMinY = miny;
-        this.graph.layoutMaxY = maxy;
+        this.graph.layoutMinY = 0.0;
+        this.graph.layoutMaxY = 1.0;
     }
 };
 
