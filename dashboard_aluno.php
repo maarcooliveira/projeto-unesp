@@ -120,11 +120,11 @@
             <br>
             <span class="small-6 columns"><?php echo $turma['nome'] ?></span>
             <span class="small-3 columns"><?php echo $turma['professor'] ?></span>
-            <a class="small-3 columns imp" onclick="remove('usuario_turma', '<?php echo $turma['id'] ?>');"><i class="fa fa-minus-circle"></i> Sair da turma</a>
+            <a class="small-3 columns imp" onclick="remover('usuario_turma', '<?php echo $turma['id'] ?>');"><i class="fa fa-minus-circle"></i> Sair da turma</a>
             <br><br>
           </div>
       <?php $count++; } ?>
-
+      <br><br>
 
 
       <div id="modalAddTurma" class="reveal-modal " data-reveal aria-labelledby="modalAddTurmaTitle" aria-hidden="true" role="dialog">
@@ -155,15 +155,9 @@
                   </div>
                 </form>
 
-
-
-
               </div>
           </div>
       </div>
-
-
-
 
     </main>
 

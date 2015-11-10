@@ -4,7 +4,7 @@ if(isAndroid) {
     initAndroid();
 }
 
-function remove(type, id) {
+function remover(type, id) {
 
     var ajaxurl = 'api/excluir_registro.php';
     var data =  {'tabela': type, 'id': id};

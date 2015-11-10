@@ -8,20 +8,6 @@
   // include db connect class
   require_once __DIR__ . '/api/db_connect.php';
 
-  if (isset($_POST['submit'])) {
-
-    $universidade = isset($_POST['universidade']) ? $_POST['universidade'] : "";
-    $turma = isset($_POST['turma']) ? $_POST['turma'] : "";
-    $professor = isset($_SESSION['id']) ? $_SESSION['id'] : "";
-
-    $query  = "INSERT INTO turma (nome, id_universidade, id_professor) VALUES ('{$turma}', {$universidade}, {$professor})";
-    $result = mysqli_query($connection, $query);
-    if (!$result) { die("Database query failed. " . mysqli_error ($connection)); }
-    // if ($result) {
-
-    // }
-  }
-
   $queryUni  = "SELECT * FROM universidade ORDER BY nome";
   $queryMapas = "SELECT atividade.*, turma.nome AS turma FROM atividade
                  INNER JOIN turma ON atividade.id_turma = turma.id
@@ -105,8 +91,8 @@
             <span class="small-2 columns"><i class="fa fa-check-square-o"></i> Liberado</span>
           <?php } else { ?>
             <a class="small-2 columns" onclick="liberar('<?php echo $mapa['id'] ?>');"><i class="fa fa-square-o"></i> Liberar</a>
+            <a class="small-2 columns imp" onclick="remover('atividade', '<?php echo $mapa['id'] ?>');"><i class="fa fa-minus-circle"></i> Excluir</a>
           <?php } ?>
-          <a class="small-2 columns imp" onclick="remove('atividade', '<?php echo $mapa['id'] ?>');"><i class="fa fa-minus-circle"></i> Excluir</a>
           <br><br>
         </div>
       <?php $count++; } ?>
@@ -132,21 +118,22 @@
           <span class="small-4 columns"><?php echo $turma['nome'] ?></span>
           <span class="small-4 columns"><?php echo $turma['universidade'] ?></span>
           <span class="small-2 columns"><?php echo date("d/m/Y", strtotime($turma['data_criacao'])) ?></span>
-          <a class="small-2 columns imp" onclick="remove('turma', '<?php echo $turma['id'] ?>');"><i class="fa fa-minus-circle"></i> Excluir</a>
+          <a class="small-2 columns imp" onclick="remover('turma', '<?php echo $turma['id'] ?>');"><i class="fa fa-minus-circle"></i> Excluir</a>
           <br><br>
         </div>
       <?php $count++; } ?>
-
+      <br><br>
+      
       <div id="modalAddTurma" class="reveal-modal " data-reveal aria-labelledby="modalAddTurmaTitle" aria-hidden="true" role="dialog">
           <div class="row collapse">
             <h3 id="modalAddTurmaTitle" class="text-center">Nova turma</h3>
               <div id="modalAddTurmaContent" class="large-10 small-10 columns large-offset-1 small-offset-1">
-                <form action="dashboard_professor.php" method="post" id="formAddTurma">
+                <form id="formAddTurma">
                   <br><br>
                   <div class="row">
                     <div class="small-10 small-offset-1 large-8 large-offset-2 columns">
                       <label>Universidade
-                        <select name="universidade">
+                        <select name="universidade" id="universidade">
                           <?php
                             while($universidade = mysqli_fetch_assoc($universidades)) {
                               echo "<option value='{$universidade['id']}'>{$universidade['nome']}</option>";
@@ -159,14 +146,14 @@
                   <div class="row">
                     <div class="small-10 small-offset-1 large-8 large-offset-2 columns">
                       <label>Nome da turma
-                        <input type="text" name="turma" placeholder="Ex: Algoritmos e Programação I" />
+                        <input type="text" name="turma" id="turma" placeholder="Ex: Algoritmos e Programação I" />
                       </label>
                     </div>
                   </div>
                   <div class="row">
                     <br>
                     <a class="button radius secondary small-5 small-offset-1 large-4 large-offset-2" onclick="$('#modalAddTurma').foundation('reveal', 'close');">Cancelar</a>
-                    <input type="submit" name="submit" class="button radius small-5 large-4" value="Confirmar">
+                    <a class="button radius small-5 large-4" onclick="adicionar()">Confirmar</a>
                   </div>
                 </form>
               </div>
