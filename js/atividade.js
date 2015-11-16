@@ -169,6 +169,8 @@ function mostrarMapa() {
         toggleItemSelected();
     });
 
+    $('#canvas text').css('pointer-events', 'none');
+
     if (!continuacao) {
         var titulo = $("#titulo").val();
         var descricao = $("#descricao").val();
@@ -336,7 +338,6 @@ function salvar() {
       pos.x = g.nodes[mapa_nodes[n]].layoutPosX;
       pos.y = g.nodes[mapa_nodes[n]].layoutPosY;
       node_positions.push(pos);
-      console.log("saving new positions: " + pos.x + " " + pos.y);
     }
 
     mapa['nodes'] = mapa_nodes;

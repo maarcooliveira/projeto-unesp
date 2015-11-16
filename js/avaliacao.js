@@ -188,6 +188,8 @@ function addControles() {
         }
         toggleItemSelected();
     });
+
+    $('#canvas text').css('pointer-events', 'none');
 }
 
 function showInput() {
