@@ -82,7 +82,7 @@
     <nav class="top-bar" data-topbar role="navigation" id="navbar">
       <ul class="title-area">
         <li class="name">
-          <h1><a href="dashboard_aluno.php"><i class="fa fa-arrow-left"></i> NextEx</a></h1>
+          <h1><a href="aluno.php"><i class="fa fa-arrow-left"></i> NextEx</a></h1>
         </li>
          <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
         <li class="toggle-topbar menu-icon"><a href="#"><span></span></a></li>
@@ -150,7 +150,7 @@
     <script src="./js/dracula_algorithms.js"></script>
     <script src="./js/dracula_graffle.js"></script>
     <script src="./js/noty/packaged/jquery.noty.packaged.min.js"></script>
-    <script src="./js/atividade_aluno.js"></script>
+    <script src="./js/avaliacao.js"></script>
     <script>
       $(document).foundation();
     </script>

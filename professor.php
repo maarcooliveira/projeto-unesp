@@ -71,15 +71,15 @@
         <h5 class="small-3 columns b">Turma</h5>
         <h5 class="small-2 columns b">Entrega</h5>
         <h5 class="small-2 columns b">Status</h5>
-        <h5 class="small-2 columns b"><a href="novo_mapa.php"><i class="fa fa-plus"></i> Criar</a></h5>
+        <h5 class="small-2 columns b"><a href="atividade.php"><i class="fa fa-plus"></i> Criar</a></h5>
       </div>
 
       <?php
         $count = 0;
         while($mapa = mysqli_fetch_assoc($mapas)) {
-          $link = "novo_mapa.php?id=" . $mapa['id'];
+          $link = "atividade.php?id=" . $mapa['id'];
           if ($mapa['liberado']) {
-            $link = "atividade_professor.php?id=" . $mapa['id'];
+            $link = "resultados.php?id=" . $mapa['id'];
           }
       ?>
         <div class="row <?php if($count%2 == 0) echo "darker"?>">
@@ -123,7 +123,7 @@
         </div>
       <?php $count++; } ?>
       <br><br>
-      
+
       <div id="modalAddTurma" class="reveal-modal " data-reveal aria-labelledby="modalAddTurmaTitle" aria-hidden="true" role="dialog">
           <div class="row collapse">
             <h3 id="modalAddTurmaTitle" class="text-center">Nova turma</h3>
@@ -165,7 +165,7 @@
     <script src="./js/jquery-2.1.4.min.js"></script>
     <script src="./js/foundation.min.js"></script>
     <script src="http://connect.facebook.net/en_US/all.js"></script>
-    <script src="./js/dashboard_professor.js"></script>
+    <script src="./js/professor.js"></script>
     <script>
       $(document).foundation();
     </script>

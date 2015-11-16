@@ -93,7 +93,7 @@
         while($mapa = mysqli_fetch_assoc($mapas)) { ?>
           <div class="row <?php if($count%2 == 0) echo "darker"?>">
             <br>
-            <a class="small-3 columns" href="atividade_aluno.php?id=<?php echo $mapa['id'] ?>"><?php echo $mapa['titulo'] ?></a>
+            <a class="small-3 columns" href="avaliacao.php?id=<?php echo $mapa['id'] ?>"><?php echo $mapa['titulo'] ?></a>
             <span class="small-3 columns"><?php echo $mapa['turma'] ?></span>
             <span class="small-3 columns"><?php echo date("d/m/Y", strtotime($mapa['data_entrega'])) ?></span>
             <span class="small-3 columns"><?php if ($mapa['concluido'] == 1) echo "Entregue"; else echo "Não entregue"; ?></span>
@@ -133,7 +133,7 @@
               <div id="modalAddTurmaContent" class="large-10 small-10 columns large-offset-1 small-offset-1">
 
 
-                <form action="dashboard_aluno.php" method="post" id="formAddTurma">
+                <form action="aluno.php" method="post" id="formAddTurma">
                   <br><br>
                   <div class="row">
                     <div class="small-10 small-offset-1 large-8 large-offset-2 columns">
@@ -164,7 +164,7 @@
     <script src="./js/jquery-2.1.4.min.js"></script>
     <script src="./js/foundation.min.js"></script>
     <script src="http://connect.facebook.net/en_US/all.js"></script>
-    <script src="./js/dashboard_aluno.js"></script>
+    <script src="./js/aluno.js"></script>
     <script>
       $(document).foundation();
     </script>

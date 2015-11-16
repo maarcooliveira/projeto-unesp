@@ -64,7 +64,7 @@
     <nav class="top-bar" data-topbar role="navigation" id="navbar">
       <ul class="title-area">
         <li class="name">
-          <h1><a href="dashboard_professor.php"><i class="fa fa-arrow-left"></i> NextEx</a></h1>
+          <h1><a href="professor.php"><i class="fa fa-arrow-left"></i> NextEx</a></h1>
         </li>
          <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
         <li class="toggle-topbar menu-icon"><a href="#"><span></span></a></li>
@@ -157,7 +157,7 @@
           </div>
 
           <div class="row">
-            <a href="dashboard_professor.php" class="button radius small-5 small-offset-1 large-3 large-offset-0">Cancelar</a>
+            <a href="professor.php" class="button radius small-5 small-offset-1 large-3 large-offset-0">Cancelar</a>
             <a onclick="mostrarMapa();" class="button radius small-5 large-3">Continuar</a>
 
           </div>
@@ -194,7 +194,7 @@
     <script src="./js/dracula_algorithms.js"></script>
     <script src="./js/dracula_graffle.js"></script>
     <script src="./js/noty/packaged/jquery.noty.packaged.min.js"></script>
-    <script src="./js/editor.js"></script>
+    <script src="./js/atividade.js"></script>
     <script>
       $(document).foundation();
     </script>

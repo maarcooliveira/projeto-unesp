@@ -54,5 +54,5 @@
      fclose($file);
    } else {
    }
-   header("Location: ../dashboard_professor.php");
+   header("Location: ../professor.php");
 ?>

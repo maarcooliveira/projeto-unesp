@@ -33,8 +33,8 @@
     else {
       echo "salvo";
     }
-    //   header("Location: dashboard_aluno.php");
+    //   header("Location: aluno.php");
   // else
-  //   header("Location: atividade_aluno.php?id=" . $id_atividade); //TODO: alterar para ajax
+  //   header("Location: avaliacao.php?id=" . $id_atividade); //TODO: alterar para ajax
 
 ?>

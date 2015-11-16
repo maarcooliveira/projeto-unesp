@@ -17,9 +17,9 @@
         $_SESSION["tipo"] = $u['tipo'];
         $_SESSION["nome"] = $u['nome'];
         if ($_SESSION["tipo"] == "professor")
-          header("Location: dashboard_professor.php");
+          header("Location: professor.php");
         else
-          header("Location: dashboard_aluno.php");
+          header("Location: aluno.php");
       }
     }
   }
@@ -45,9 +45,9 @@
   //     $_SESSION["id"] = $user_id;
   //     $_SESSION["tipo"] = $tipo;
   //     if ($tipo == "professor")
-  //       header("Location: dashboard_professor.php");
+  //       header("Location: professor.php");
   //     else
-  //       header("Location: dashboard_aluno.php");
+  //       header("Location: aluno.php");
   //   }
   // }
   // else {
@@ -63,9 +63,9 @@
   //     $_SESSION["id"] = $user["id"];
   //     $_SESSION["tipo"] = $user["tipo"];
   //     if ($user["tipo"] == "professor")
-  //       header("Location: dashboard_professor.php");
+  //       header("Location: professor.php");
   //     else if($user["tipo"] == "aluno")
-  //       header("Location: dashboard_aluno.php");
+  //       header("Location: aluno.php");
   //   }
   // }
 ?>

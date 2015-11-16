@@ -355,7 +355,7 @@ function enviar_form_salvar() {
             success: function(msg)
             {
                 if (msg === "enviado") {
-                    window.location.href = "dashboard_aluno.php";
+                    window.location.href = "aluno.php";
                 }
                 var n = noty({
                   text: '<i class="fa fa-floppy-o"></i> Atividade salva',
