@@ -16,7 +16,9 @@
     if (!$result) { die("Database query failed. " . mysqli_error ($connection)); }
   }
 
-  $queryOutrasTurmas = "SELECT * FROM turma WHERE id_universidade IN (SELECT id_universidade FROM usuario WHERE id = {$_SESSION['id']}) AND id NOT IN (SELECT id_turma FROM usuario_turma WHERE id_usuario = {$_SESSION['id']})";
+  $queryOutrasTurmas = "SELECT turma.*, usuario.nome AS professor FROM turma
+                        INNER JOIN usuario ON turma.id_professor = usuario.id
+                        WHERE turma.id_universidade IN (SELECT id_universidade FROM usuario WHERE id = {$_SESSION['id']}) AND turma.id NOT IN (SELECT id_turma FROM usuario_turma WHERE id_usuario = {$_SESSION['id']})";
   $queryInsertResolucao = "INSERT IGNORE INTO resolucao (id_atividade, id_usuario, concluido) SELECT id, {$_SESSION['id']}, false FROM atividade WHERE id_turma IN (SELECT id_turma FROM usuario_turma WHERE id_usuario = {$_SESSION['id']})";
 
   $queryMapas = "SELECT atividade.*, turma.nome AS turma, resolucao.concluido AS concluido FROM atividade
@@ -141,7 +143,7 @@
                         <select name="turma">
                           <?php
                             while($outraTurma = mysqli_fetch_assoc($outrasTurmas)) {
-                              echo "<option value='{$outraTurma['id']}'>{$outraTurma['nome']}</option>";
+                              echo "<option value='{$outraTurma['id']}'>{$outraTurma['nome']}" . " - Prof. " . "{$outraTurma['professor']}</option>";
                             } ?>
                         </select>
                       </label>

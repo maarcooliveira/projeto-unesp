@@ -37,8 +37,8 @@ if(isAndroid) {
 inicializar();
 mostrarMapa();
 if (gabarito !== undefined) {
-    // mostrarTabela();
-    //TODO: removido para teste unesp
+  // mostrarTabela(); //TODO: removido para teste unesp
+  $('#canvas').css('pointer-events', 'none'); // ignora clicks
 }
 else {
     addControles();
