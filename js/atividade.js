@@ -58,7 +58,7 @@ function mostrarMapa() {
     }
 
     render = function(r, n) {
-    	var color = "#07AEFF"; //Raphael.getColor();
+        var color = "#07AEFF"; //Raphael.getColor();
         /* the Raphael set is obligatory, containing all you want to display */
 
         rec = r.rect(n.point[0], n.point[1], 130, 20);

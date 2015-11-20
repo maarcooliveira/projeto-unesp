@@ -32,11 +32,11 @@ $( document ).ready(function() {
             /* the Raphael set is obligatory, containing all you want to display */
 
             rec = r.rect(n.point[0], n.point[1], 130, 20);
-            txt = r.text(n.point[0], n.point[1], (n.label || n.id)).attr({"font-size": "16px"});
+            txt = r.text(n.point[0], n.point[1], (n.label || n.id)).attr({"font-size": "12px"});
 
-            w = txt.getBBox().width + 50;
+            w = txt.getBBox().width + 20;
             h = txt.getBBox().height + 20;
-            x = txt.getBBox().x - 25;
+            x = txt.getBBox().x - 10;
             y = txt.getBBox().y - 10;
 
             attrs = {"title": (n.label || n.id), "fill": color, "stroke": color, r: "1px", "stroke-width": "1px", "width": w, "height": h, "x": x, "y": y};
