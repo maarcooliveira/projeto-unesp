@@ -8,17 +8,17 @@
   // include db connect class
   require_once __DIR__ . '/api/db_connect.php';
 
-  if (isset($_POST['submit'])) {
-
-    $turma = isset($_POST['turma']) ? $_POST['turma'] : "";
-    $titulo = isset($_POST['titulo']) ? $_POST['titulo'] : "";
-    $entrega = isset($_POST['entrega']) ? $_POST['entrega'] : "";
-
-    $query  = "INSERT INTO atividade (id_turma, titulo, data_entrega) VALUES ({$turma}, '{$titulo}', '{$entrega}')";
-    $result = mysqli_query($connection, $query);
-    echo $query;
-    if (!$result) { die("Database query failed. " . mysqli_error ($connection)); }
-  }
+  // if (isset($_POST['submit'])) {
+  //
+  //   $turma = isset($_POST['turma']) ? $_POST['turma'] : "";
+  //   $titulo = isset($_POST['titulo']) ? $_POST['titulo'] : "";
+  //   $entrega = isset($_POST['entrega']) ? $_POST['entrega'] : "";
+  //
+  //   $query  = "INSERT INTO atividade (id_turma, titulo, data_entrega) VALUES ({$turma}, '{$titulo}', '{$entrega}')";
+  //   $result = mysqli_query($connection, $query);
+  //   echo $query;
+  //   if (!$result) { die("Database query failed. " . mysqli_error ($connection)); }
+  // }
 
   $id = isset($_GET['id']) ? $_GET['id'] : "undefined";
   $continuacao = 0;
@@ -29,6 +29,15 @@
     $mapa_txt_php =  file_get_contents(getcwd() . "/atividades/" . $id . "/mapa.json");
     $gabarito_txt_php =  file_get_contents(getcwd() . "/atividades/" . $id . "/gabarito.json");
     $continuacao = 1;
+    $queryAtividade = "SELECT * FROM atividade WHERE id = {$id}";
+    $atividade = mysqli_query($connection, $queryAtividade);
+    if (!$atividade) { die("Database query failed. " . mysqli_error ($connection)); }
+    $a = mysqli_fetch_assoc($atividade);
+  }
+  else {
+    $a['titulo'] = "";
+    $a['id_turma'] = "";
+    $a['data_entrega'] = "";
   }
 
   $queryTurmas = "SELECT * FROM turma WHERE id_professor = {$_SESSION['id']}";
@@ -45,6 +54,7 @@
     <title>NextEx - Nova Atividade</title>
     <link rel="stylesheet" href="./css/foundation.min.css" />
     <link rel="stylesheet" href="./css/style.css" />
+    <link rel="stylesheet" href="./css/bootstrap-tokenfield.css" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
     <link rel="shortcut icon" href="./images/icon.png">
   </head>
@@ -73,6 +83,7 @@
       <section class="top-bar-section">
         <!-- Right Nav Section -->
         <ul class="right">
+          <li><a id="tb_editar" onclick="editar();"><i class="fa fa-pencil-square-o"></i> Editar</a></li>
           <li><a id="tb_remover" onclick="removeEdge();"><i class="fa fa-chain-broken"></i> Remover</a></li>
           <li><a id="tb_cancelar" onclick="cancelSelect();"><i class="fa fa-times"></i> Cancelar</a></li>
           <li><a id="tb_salvar" onclick="salvar();"><i class="fa fa-check"></i> Concluído</a></li>
@@ -92,18 +103,22 @@
 
       <form action="api/salvar_arquivo.php" method="post" id="formAddMapa">
 
-        <div id="form-p1">
+        <div id="form-p1" style="display: none;">
           <br><div class="row">
-            <h3>Nova atividade</h3>
+            <h3 class="text-center"><?php if($id == "undefined") echo "Nova Atividade"; else echo "Editar: {$a['titulo']}"; ?></h3>
           </div>
           <br>
           <div class="row">
-            <div class="small-10 small-offset-1 large-6 large-offset-0 columns">
+            <div class="small-10 small-offset-1 large-8 large-offset-2 columns">
               <label>Turma
                 <select name="id_turma">
                   <?php
                     while($turma = mysqli_fetch_assoc($turmas)) {
-                      echo "<option value='{$turma['id']}'>{$turma['nome']}</option>";
+                      if ($turma['id'] == $a['id_turma'])
+                        $selected = "selected";
+                      else
+                        $selected = "";
+                      echo "<option value='{$turma['id']}' " . $selected . ">{$turma['nome']}</option>";
                     } ?>
                 </select>
               </label>
@@ -111,21 +126,21 @@
           </div>
 
           <div class="row">
-            <div class="small-10 small-offset-1 large-6 large-offset-0 columns">
+            <div class="small-10 small-offset-1 large-8 large-offset-2 columns">
               <label>Título
-                <input type="text" id="titulo" name="titulo" placeholder="Insira um nome curto para o mapa" />
+                <input type="text" id="titulo" name="titulo" placeholder="Insira um nome para a atividade" value="<?php echo $a['titulo'] ?>"/>
               </label>
             </div>
           </div>
 
           <div class="row">
-            <div class="small-5 small-offset-1 large-3 large-offset-0 columns">
+            <div class="small-5 small-offset-1 large-4 large-offset-2 columns">
               <label>Peso inicial
-                <input type="number" id="peso_i" name="peso_i" placeholder="Peso inicial" value="-1" />
+                <input type="number" id="peso_i" name="peso_i" placeholder="Peso inicial" value="1"/>
               </label>
             </div>
 
-            <div class="small-5 large-3 columns end">
+            <div class="small-5 large-4 columns end">
               <label>Peso final
                 <input type="number" id="peso_f" name="peso_f" placeholder="Peso final" value="1" />
               </label>
@@ -133,7 +148,7 @@
           </div>
 
           <div class="row">
-            <div class="small-10 small-offset-1 large-6 large-offset-0 columns">
+            <div class="small-10 small-offset-1 large-8 large-offset-2 columns">
               <label>Descrição
                 <textarea name="descricao" id="descricao" placeholder="Descreva como a atividade deve ser realizada"></textarea>
               </label>
@@ -141,30 +156,28 @@
           </div>
 
           <div class="row">
-            <div class="small-10 small-offset-1 large-6 large-offset-0 columns">
+            <div class="small-10 small-offset-1 large-8 large-offset-2 columns">
               <label>Data de entrega
-                <input type="date" name="data_entrega"/>
+                <input type="date" name="data_entrega" <?php if (!$a['data_entrega'] == "") echo "value='" . date("Y-m-d", strtotime($a['data_entrega'])) . "'" ?>/>
               </label>
             </div>
           </div>
 
           <div class="row">
-            <div class="small-10 small-offset-1 large-6 large-offset-0 columns">
+            <div class="small-10 small-offset-1 large-8 large-offset-2 columns">
               <label>Termos
-                <textarea name="termos" id="termos" placeholder="Digite a lista de termos separados por linha"></textarea>
+                <input name="termos" id="termos" placeholder="Insira os termos separados por vírgula" <?php if($id !== "undefined") echo "disabled" ?>/>
               </label>
             </div>
           </div>
 
           <div class="row">
-            <a href="professor.php" class="button radius small-5 small-offset-1 large-3 large-offset-0">Cancelar</a>
-            <a onclick="mostrarMapa();" class="button radius small-5 large-3">Continuar</a>
+            <a href="professor.php" class="button radius secondary small-5 small-offset-1 large-4 large-offset-2" id="btn-cancelar">Cancelar</a>
+            <a onclick="continuar();" class="button radius small-5 large-4">Continuar</a>
 
-          </div>
-          <div>
-            <hr id="full-hr">
           </div>
         </div>
+        <hr id="full-hr" style="visibility: hidden">
         <input type="hidden" name="dados_mapa" id="dados_mapa">
         <input type="hidden" name="dados_gabarito" id="dados_gabarito">
         <input type="hidden" name="continuacao" id="continuacao">
@@ -194,6 +207,7 @@
     <script src="./js/dracula_algorithms.js"></script>
     <script src="./js/dracula_graffle.js"></script>
     <script src="./js/noty/packaged/jquery.noty.packaged.min.js"></script>
+    <script src="./js/bootstrap-tokenfield.min.js"></script>
     <script src="./js/atividade.js"></script>
     <script>
       $(document).foundation();

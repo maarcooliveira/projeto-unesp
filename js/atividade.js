@@ -2,6 +2,7 @@ var width, height, g, renderer, layouter, render, src, dest, edge, canSelectDest
 var complete_graph, incomplete_graph;
 var mapa = {};
 var gabarito = {};
+var editado = false;
 
 // PROVISORIO P/ ENVIAR LISTA DE NOS E EDGES A SEREM SALVAS;
 var mapa_nodes;
@@ -19,11 +20,19 @@ $(document).ready(function() {
     $("#tb_cancelar").css('display', 'none');
     $("#tb_peso").css('display', 'none');
 
+    $("#descricao").text(mapa['descricao']);
+    $("#peso_i").val(mapa['peso_i']);
+    $("#peso_f").val(mapa['peso_f']);
+
     row_width = $('#full-hr').width();
 
     if (continuacao) {
         $("#form-p1").css('display', 'none');
         mostrarMapa();
+    }
+    else {
+      $("#form-p1").css('display', 'inline');
+      $("#termos").tokenfield();
     }
 
     $("#confirma_peso").on('click', function() {
@@ -33,6 +42,51 @@ $(document).ready(function() {
     edgeCount = 0;
 });
 
+function editar() {
+  $("#form-p1").css('display', 'inline');
+  $("#btn-cancelar").css('visibility', 'hidden');
+  $("#canvas").css('display', 'none');
+  $("#termos").tokenfield();
+  for (t in mapa['nodes']) {
+    $('#termos').tokenfield('createToken', mapa['nodes'][t]);
+  }
+  $('#termos').tokenfield('disable');
+  editado = true;
+}
+
+function continuar() {
+  if (editado) {
+    console.log("Verificando alterações");
+
+    $("#form-p1").css('display', 'none');
+    $("#canvas").css('display', 'inline');
+
+    var nodes_tk = $('#termos').tokenfield('getTokens');
+    var nodes = Array();
+
+    for (i = 0; i < nodes_tk.length; i++) {
+      nodes.push(nodes_tk[i].label);
+    }
+
+    old_nodes = Object.keys(g['nodes']);
+
+    for (i = 0; i < old_nodes.length; i++) {
+      if (nodes.indexOf(old_nodes[i]) === -1) {
+        //call remove node function
+      }
+    }
+
+    for (i = 0; i < nodes.length; i++) {
+      if (old_nodes.indexOf(nodes[i]) === -1) {
+        //call add node function
+      }
+    }
+
+  }
+  else {
+    mostrarMapa();
+  }
+}
 
 function mostrarMapa() {
 
@@ -90,23 +144,18 @@ function mostrarMapa() {
 
     }
     else {
-        var nodes = $("#termos").val().split(/\n/);
+      var nodes = $('#termos').tokenfield('getTokens');
 
-        for (i = 0; i < nodes.length; i++) {
-            if(nodes[i].length > 0)
-               g.addNode(nodes[i], {render:render});
-        }
-        console.log(nodes);
+      for (i = 0; i < nodes.length; i++) {
+        g.addNode(nodes[i].label, {render:render});
+      }
     }
 
-    // Algoritmo original para escolher posição dos nós
     if (continuacao) {
-      console.log("eh continuacao");
       layouter = new Graph.Layout.Ordered(g, true, null);
     }
     else {
       layouter = new Graph.Layout.Ordered(g, false, topological_sort(g));
-      console.log("nao eh continuacao");
     }
 
 
@@ -171,25 +220,7 @@ function mostrarMapa() {
 
     $('#canvas text').css('pointer-events', 'none');
 
-    if (!continuacao) {
-        var titulo = $("#titulo").val();
-        var descricao = $("#descricao").val();
-        var peso_i = $("#peso_i").val();
-        var peso_f = $("#peso_f").val();
-
-      //   mapa['mapa'] = g;
-        mapa['titulo'] = titulo;
-        mapa['descricao'] = descricao;
-        mapa['peso_i'] = peso_i;
-        mapa['peso_f'] = peso_f;
-
-        gabarito['titulo'] = titulo;
-        gabarito['descricao'] = descricao;
-        gabarito['peso_i'] = peso_i;
-        gabarito['peso_f'] = peso_f;
-    }
-
-    $("html, body").animate({ scrollTop: $(document).height() }, 1000);
+    // $("html, body").animate({ scrollTop: $(document).height() }, 1000);
 }
 
 function showInput() {
@@ -264,13 +295,15 @@ function redraw() {
 }
 
 function sort() {
-	layouter = new Graph.Layout.Ordered(g, topological_sort(g));
-    renderer.draw();
+	layouter = new Graph.Layout.Ordered(g, false, topological_sort(g));
+  renderer.draw();
 }
 
 function addNode(name) {
-	g.addNode(name, {render:render});
-	sort();
+	var newNode = g.addNode(name, {render:render});
+  console.log(newNode);
+  newNode.layoutPosX = 0.5;
+  newNode.layoutPosY = 0.5;
 }
 
 function addEdge(weight) {
@@ -322,8 +355,20 @@ function removeEdge(edge) {
 function salvar() {
     mapa_nodes = Object.keys(g['nodes']);
 
-    console.log("NODES::");
-    console.log(mapa_nodes);
+    var titulo = $("#titulo").val();
+    var descricao = $("#descricao").val();
+    var peso_i = $("#peso_i").val();
+    var peso_f = $("#peso_f").val();
+
+    mapa['titulo'] = titulo;
+    mapa['descricao'] = descricao;
+    mapa['peso_i'] = peso_i;
+    mapa['peso_f'] = peso_f;
+
+    gabarito['titulo'] = titulo;
+    gabarito['descricao'] = descricao;
+    gabarito['peso_i'] = peso_i;
+    gabarito['peso_f'] = peso_f;
 
     for (var i = 0; i < g['edges'].length; i++) {
         var src_n = g['edges'][i]['source']['id'];
@@ -360,6 +405,17 @@ function removeNode() {
     g.removeNode(name);
     layouter = new Graph.Layout.Ordered(g, topological_sort(g));
     renderer.draw();
+}
+
+function removeNodeByName(name) {
+    g.removeNode(name);
+    // console.log(g);
+    // layouter = new Graph.Layout.Ordered(g, true, null);
+    // console.log(layouter);
+    // renderer.draw();
+    // console.log(renderer);
+    console.log("vai mostrar mapa");
+    mostrarMapa();
 }
 
 function colorEdges() {

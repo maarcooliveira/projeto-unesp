@@ -23,7 +23,10 @@
     $id_atividade = mysqli_insert_id($connection);
    }
    else {
-
+     $query  = "UPDATE atividade SET id_turma = {$id_turma}, titulo = '{$titulo}', data_entrega = '{$data_entrega}', liberado = false WHERE id = {$id_atividade}";
+     $result = mysqli_query($connection, $query);
+     // echo $query;
+     if (!$result) { die("Database query failed. " . mysqli_error ($connection)); }
    }
 
 
