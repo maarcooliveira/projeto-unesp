@@ -19,7 +19,7 @@
   $queryOutrasTurmas = "SELECT turma.*, usuario.nome AS professor FROM turma
                         INNER JOIN usuario ON turma.id_professor = usuario.id
                         WHERE turma.id_universidade IN (SELECT id_universidade FROM usuario WHERE id = {$_SESSION['id']}) AND turma.id NOT IN (SELECT id_turma FROM usuario_turma WHERE id_usuario = {$_SESSION['id']})";
-  $queryInsertResolucao = "INSERT IGNORE INTO resolucao (id_atividade, id_usuario, concluido) SELECT id, {$_SESSION['id']}, false FROM atividade WHERE id_turma IN (SELECT id_turma FROM usuario_turma WHERE id_usuario = {$_SESSION['id']})";
+  $queryInsertResolucao = "INSERT IGNORE INTO resolucao (id_atividade, id_usuario, concluido) SELECT id, {$_SESSION['id']}, false FROM atividade WHERE id_turma IN (SELECT id_turma FROM usuario_turma WHERE id_usuario = {$_SESSION['id']}) AND liberado = true";
 
   $queryMapas = "SELECT atividade.*, turma.nome AS turma, resolucao.concluido AS concluido FROM atividade
                  INNER JOIN turma ON atividade.id_turma = turma.id

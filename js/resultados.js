@@ -1,172 +1,261 @@
-var width, height, g, renderer, layouter, render, src, dest, edge, canSelectDest = false;
-var complete_graph, incomplete_graph;
-var mapa = {};
-var matriz_t = [];
-var qtd_respostas, distancia_total, np, distancia;
+var width, height, g, renderer, layouter, render, edgeFactory;
+var matriz_turma;
+var distancia;
+var PSAN = "#E33258";
+var PSAS = "#b8e31f";
+var PNAS = "#F8CA00";
+var NODE_C = "#07AEFF";
+var EDGE_C = "#C7C7C7";
 
-//TODO: permitir professor editar enquanto não libera atividade!
+var resolucoes = [];
 
-gabarito = gabarito_txt;
+for (var r = 0; r < resolucoes_txt.length; r++) {
+  resolucoes.push(JSON.parse(resolucoes_txt[r]));
+}
 
 $( document ).ready(function() {
+  $('.psas').css('color', PSAS);
+  $('.psan').css('color', PSAN);
+  $('.pnas').css('color', PNAS);
 
-        toolbar_height = $('#toolbar').height();
-        navbar_heigth = $('#navbar').height();
-        row_width = $('#full-hr').width();
+  toolbar_height = $('#toolbar').height();
+  navbar_heigth = $('#navbar').height();
+  row_width = $('#full-hr').width();
+  $('#full-hr').css("margin", "0");
 
-        width = row_width;
-        height = $(window).height() - toolbar_height - navbar_heigth;
+  width = row_width;
+  height = $(window).height() - toolbar_height - navbar_heigth;
 
-        g = new Graph();
+  edgeFactory = function(source, target) {
+    var e = jQuery.extend(true, {}, this.template);
+    e.source = source;
+    e.target = target;
+    return e;
+  }
 
-        /* modify the edge creation to attach random weights */
-        g.edgeFactory.build = function(source, target) {
-            var e = jQuery.extend(true, {}, this.template);
-            e.source = source;
-            e.target = target;
-            return e;
-        }
+  render = function(r, n) {
+    var color = NODE_C; //Raphael.getColor();
+    /* the Raphael set is obligatory, containing all you want to display */
 
-        render = function(r, n) {
-            var color = "#07AEFF"; //Raphael.getColor();
-            /* the Raphael set is obligatory, containing all you want to display */
+    rec = r.rect(n.point[0], n.point[1], 130, 20);
+    txt = r.text(n.point[0], n.point[1], (n.label || n.id)).attr({"font-size": "12px"});
 
-            rec = r.rect(n.point[0], n.point[1], 130, 20);
-            txt = r.text(n.point[0], n.point[1], (n.label || n.id)).attr({"font-size": "12px"});
+    w = txt.getBBox().width + 20;
+    h = txt.getBBox().height + 20;
+    x = txt.getBBox().x - 10;
+    y = txt.getBBox().y - 10;
 
-            w = txt.getBBox().width + 20;
-            h = txt.getBBox().height + 20;
-            x = txt.getBBox().x - 10;
-            y = txt.getBBox().y - 10;
+    attrs = {"title": (n.label || n.id), "fill": color, "stroke": color, r: "1px", "stroke-width": "1px", "width": w, "height": h, "x": x, "y": y};
+    rec.attr(attrs);
+    var set = r.set().push(rec).push(txt);
+    return set;
+  };
 
-            attrs = {"title": (n.label || n.id), "fill": color, "stroke": color, r: "1px", "stroke-width": "1px", "width": w, "height": h, "x": x, "y": y};
-            rec.attr(attrs);
-            var set = r.set().push(rec).push(txt);
-            return set;
-        };
+  g = new Graph();
+  g.edgeFactory.build = edgeFactory;
 
-        for (i = 0; i < gabarito['nodes'].length; i++) {
-            var newNode = g.addNode(gabarito['nodes'][i], {render:render});
-            newNode.layoutPosX = gabarito['grid'][i]['x'];
-            newNode.layoutPosY = gabarito['grid'][i]['y'];
-        }
+  for (i = 0; i < gabarito['nodes'].length; i++) {
+    var newNode = g.addNode(gabarito['nodes'][i], {render:render});
+    newNode.layoutPosX = gabarito['grid'][i]['x'];
+    newNode.layoutPosY = gabarito['grid'][i]['y'];
+  }
 
-        for (var i = 0; i < gabarito['edges'].length; i++) {
-            // g.addEdge(gabarito['edges'][i]['source'], gabarito['edges'][i]['target'], {label: gabarito['edges'][i]['weight'], stroke : "#C7C7C7", "font-size": "16px"});
-            //TODO mostrar peso quando !== 1
-            g.addEdge(gabarito['edges'][i]['source'], gabarito['edges'][i]['target'], {label: gabarito['edges'][i]['weight'], stroke : "#C7C7C7", "font-size": "0px"});
-        }
+  for (var i = 0; i < gabarito['edges'].length; i++) {
+    // g.addEdge(gabarito['edges'][i]['source'], gabarito['edges'][i]['target'], {label: gabarito['edges'][i]['weight'], stroke : EDGE_C, "font-size": "16px"});
+    //TODO mostrar peso quando !== 1
+    g.addEdge(gabarito['edges'][i]['source'], gabarito['edges'][i]['target'], {label: gabarito['edges'][i]['weight'], stroke : EDGE_C, "font-size": "0px"});
+  }
 
-        layouter = new Graph.Layout.Ordered(g, true, null);
-        // layouter = new Graph.Layout.Grid(g, true);
-        renderer = new Graph.Renderer.Raphael('gabarito', g, width, height);
-        renderer.draw();
-        calcularMatrizes();
+  layouter = new Graph.Layout.Ordered(g, true, null);
+  // layouter = new Graph.Layout.Grid(g, true);
+  renderer = new Graph.Renderer.Raphael('gabarito', g, width, height);
+  renderer.draw();
+  calcularMatrizes();
 });
 
 function calcularMatrizes() {
-    // valores utilizados para calculo da nota
-    var max = gabarito['peso_f'];
-    var min = gabarito['peso_i'];
-    var n = Math.pow(max - min, 2);
-    np = gabarito['nodes'].length;
-    var npr = Math.pow(np, 2) - np; //posicoes relevantes
-    qtd_respostas = resolucoes_txt.length;
-    distancia_total = 0;
-    var distancia_cel;
-    var matriz;
-    distancia = [];
+  // valores utilizados para calculo da nota
+  var max = gabarito['peso_f'];
+  var min = gabarito['peso_i'];
+  var n = Math.pow(max - min, 2);
+  var np = gabarito['nodes'].length; // numero de palavras
+  var npr = Math.pow(np, 2) - np; //posicoes relevantes
+  var qtd_respostas = resolucoes.length;
+  var distancia_total = 0;
+  var distancia_cel;
+  var matriz;
+  distancia = [];
+  matriz_turma = [];
 
-    // repete para cada uma das resolucoes
-    for (var r = 0; r < resolucoes_txt.length; r++) {
-        distancia_cel = 0;
+  $("#dm_aluno").css("display", "none");
 
-        var resolucao = JSON.parse(resolucoes_txt[r]);
-        console.log(resolucao);
+  // repete para cada uma das resolucoes
+  for (var r = 0; r < resolucoes.length; r++) {
+    distancia_cel = 0;
 
-        matriz_t[r] = [];
-        matriz = matriz_t[r];
+    var resolucao = resolucoes[r];
 
-        // inicializa matriz com valores das ligacoes do aluno
-        for (var i = 0; i < np; i++) {
-            matriz[i] = [];
-            for (var j = 0; j < np; j++) {
-                matriz[i][j] = 0;
-                for (var nc = 0; nc < resolucao['edges'].length; nc++) {
-                    if (gabarito['nodes'][i] === resolucao['edges'][nc]['source'] && gabarito['nodes'][j] === resolucao['edges'][nc]['target']) {
-                        matriz[i][j] = resolucao['edges'][nc]['weight'];
-                        break;
-                    }
-                    else if (gabarito['nodes'][i] === resolucao['edges'][nc]['target'] && gabarito['nodes'][j] === resolucao['edges'][nc]['source']) {
-                        matriz[i][j] = resolucao['edges'][nc]['weight'];
-                        break;
-                    }
-                }
-            }
+    matriz_turma[r] = [];
+    matriz = matriz_turma[r];
+
+    // inicializa matriz com valores das ligacoes do aluno
+    for (var i = 0; i < np; i++) {
+      matriz[i] = [];
+      for (var j = 0; j < np; j++) {
+        matriz[i][j] = 0;
+
+        for (var nc = 0; nc < resolucao['edges'].length; nc++) {
+          resolucao['edges'][nc]['color'] = PNAS; // assumimos primeiro que aluno ligou e prof. nao;
+          if (gabarito['nodes'][i] === resolucao['edges'][nc]['source'] && gabarito['nodes'][j] === resolucao['edges'][nc]['target']) {
+            matriz[i][j] = resolucao['edges'][nc]['weight'];
+            break;
+          }
+          else if (gabarito['nodes'][i] === resolucao['edges'][nc]['target'] && gabarito['nodes'][j] === resolucao['edges'][nc]['source']) {
+            matriz[i][j] = resolucao['edges'][nc]['weight'];
+            break;
+          }
         }
 
         // completa matriz subtraindo com valores das ligacoes do professor
-        for (var i = 0; i < np; i++) {
-            for (var j = 0; j < np; j++) {
-                for (var nc = 0; nc < gabarito['edges'].length; nc++) {
-                    if (gabarito['nodes'][i] === gabarito['edges'][nc]['source'] && gabarito['nodes'][j] === gabarito['edges'][nc]['target']) {
-                        matriz[i][j] -= gabarito['edges'][nc]['weight'];
-                        break;
-                    }
-                    else if (gabarito['nodes'][i] === gabarito['edges'][nc]['target'] && gabarito['nodes'][j] === gabarito['edges'][nc]['source']) {
-                        matriz[i][j] -= gabarito['edges'][nc]['weight'];
-                        break;
-                    }
-                }
-                distancia_cel += Math.pow(matriz[i][j], 2);
-            }
+        for (var nc = 0; nc < gabarito['edges'].length; nc++) {
+          if (gabarito['nodes'][i] === gabarito['edges'][nc]['source'] && gabarito['nodes'][j] === gabarito['edges'][nc]['target']) {
+            matriz[i][j] -= gabarito['edges'][nc]['weight'];
+            break;
+          }
+          else if (gabarito['nodes'][i] === gabarito['edges'][nc]['target'] && gabarito['nodes'][j] === gabarito['edges'][nc]['source']) {
+            matriz[i][j] -= gabarito['edges'][nc]['weight'];
+            break;
+          }
         }
-        distancia[r] = Math.sqrt(distancia_cel/(n*npr));
-        distancia_total += distancia[r];
+        distancia_cel += Math.sqrt(Math.pow(matriz[i][j], 2));
+      }
     }
+
+    distancia[r] = distancia_cel/npr;
+    distancia_total += distancia[r];
+  }
+  $("#dmt").text((distancia_total/qtd_respostas).toFixed(3));
 }
 
 $("#aluno_resultado").change(function() {
-    var id = $("#aluno_resultado").val();
-    console.log(id);
-    var pos;
+  var id = $("#aluno_resultado").val();
+  var pos;
 
-    $("#resultados").html("");
+  $("#tabela").html("");
 
-    if (id === "-1") {
-        //TODO: matriz consolidada da sala;
-        $("#resultados").html("<br>Distância média da sala: " + distancia_total/qtd_respostas);
+  if (id === "-1") {
+    //TODO: matriz consolidada da sala;
+    $("#dm_aluno").css("display", "none");
+    $("#compara_aluno").css("display", "none");
+  }
+  else {
+    for (var m = 0; m < resolucoes.length; m++) {
+      var resolucao = resolucoes[m];
+      if (resolucao['aluno'] == id) {
+        pos = m;
+        break;
+      }
     }
-    else {
-        for (var m = 0; m < resolucoes_txt.length; m++) {
-            var resolucao = JSON.parse(resolucoes_txt[m]);
-            if (resolucao['aluno'] == id) {
-                pos = m;
-                break;
-            }
-        }
 
-        var matriz = matriz_t[pos];
+    $("#dm_aluno").css("display", "inline");
+    $("#dma").text(distancia[pos].toFixed(3));
 
-        // cria e preenche elemento table no html
-        var result = "<table>";
-        result += "<tr>"
-        result += "<td></td>";
-        for (var i = 0; i < np; i++) {
-            result += "<td>" + gabarito['nodes'][i] + "</td>";
-        }
-        result += "</tr>"
+    var matriz = matriz_turma[pos];
+    var np = gabarito['nodes'].length;
 
-        for (var i = 0; i < np; i++) {
-            result += "<tr><td>" + gabarito['nodes'][i] + "</td>";
-            for (var j = 0; j < gabarito['nodes'].length; j++) {
-                result += "<td>" + matriz[i][j] + "</td>";
-            }
-            result += "</tr>"
-        }
-
-        result += "</table>";
-        result += "Distancia do aluno: " + distancia[pos] + "<br><br>";
-        $("#resultados").append(result);
+    // cria e preenche elemento table no html
+    var result = "<br><table class='small-12 columns'>";
+    result += "<tr>"
+    result += "<td class='text-center'></td>";
+    for (var i = 0; i < np; i++) {
+      result += "<td class='text-center'>" + gabarito['nodes'][i] + "</td>";
     }
+    result += "</tr>"
+
+    for (var i = 0; i < np; i++) {
+      result += "<tr><td class='text-center'>" + gabarito['nodes'][i] + "</td>";
+      for (var j = 0; j < np; j++) {
+        if (i !== j) {
+          result += "<td class='text-center'>" + matriz[i][j] + "</td>";
+        }
+        else {
+          result += "<td class='text-center'></td>";
+        }
+      }
+      result += "</tr>"
+    }
+
+    result += "</table>";
+    $("#tabela").append(result);
+
+    $("#compara_aluno").fadeOut("slow", function() {
+      mostrarMapa(pos);
+    });
+  }
 });
+
+function mostrarMapa(pos) {
+  $("#compara_aluno").css("display", "inline");
+  $("#compara_aluno").css("visibility", "hidden");
+  $("#compara_aluno").html("");
+  $("#legenda").css("display", "inline");
+
+  var resolucao = resolucoes[pos];
+
+  r = new Graph();
+  r.edgeFactory.build = edgeFactory;
+
+  // Usa gabarito para pegar todos os nós
+  for (i = 0; i < gabarito['nodes'].length; i++) {
+      var newNode = r.addNode(gabarito['nodes'][i], {render:render});
+      newNode.layoutPosX = gabarito['grid'][i]['x'];
+      newNode.layoutPosY = gabarito['grid'][i]['y'];
+  }
+
+  for (var nc = 0; nc < gabarito['edges'].length; nc++) {
+    var both = false;
+    for (var nc2 = 0; nc2 < resolucao['edges'].length; nc2++) {
+      if (gabarito['edges'][nc]['source'] === resolucao['edges'][nc2]['source'] && gabarito['edges'][nc]['target'] === resolucao['edges'][nc2]['target']) {
+        gabarito['edges'][nc]['color'] = PSAS; // os dois ligaram
+        resolucao['edges'][nc2]['color'] = PSAS; // os dois ligaram
+        both = true;
+        break;
+      }
+      if (gabarito['edges'][nc]['source'] === resolucao['edges'][nc2]['target'] && gabarito['edges'][nc]['target'] === resolucao['edges'][nc2]['source']) {
+        gabarito['edges'][nc]['color'] = PSAS; // os dois ligaram
+        resolucao['edges'][nc2]['color'] = PSAS; // os dois ligaram
+        both = true;
+        break;
+      }
+    }
+    if (!both) {
+      gabarito['edges'][nc]['color'] = PSAN; // so um ligou
+    }
+  }
+
+  for (var i = 0; i < gabarito['edges'].length; i++) {
+    // g.addEdge(gabarito['edges'][i]['source'], gabarito['edges'][i]['target'], {label: gabarito['edges'][i]['weight'], stroke : EDGE_C, "font-size": "16px"});
+    //TODO mostrar peso quando !== 1
+    r.addEdge(gabarito['edges'][i]['source'], gabarito['edges'][i]['target'], {label: gabarito['edges'][i]['weight'], stroke: gabarito['edges'][i]['color'], "font-size": "0px"});
+  }
+
+  for (var i = 0; i < resolucao['edges'].length; i++) {
+    // g.addEdge(gabarito['edges'][i]['source'], gabarito['edges'][i]['target'], {label: gabarito['edges'][i]['weight'], stroke : EDGE_C, "font-size": "16px"});
+    //TODO mostrar peso quando !== 1
+    if (resolucao['edges'][i]['color'] !== PSAS) { //PSAS já foi adicionado no for anterior!
+      r.addEdge(resolucao['edges'][i]['source'], resolucao['edges'][i]['target'], {label: resolucao['edges'][i]['weight'], stroke: resolucao['edges'][i]['color'], "font-size": "0px"});
+    }
+  }
+
+  layouter = new Graph.Layout.Ordered(r, true, null);
+  renderer = new Graph.Renderer.Raphael('compara_aluno', r, width, height);
+  renderer.draw();
+
+  $("#compara_aluno").css("display", "none");
+  $("#compara_aluno").css("visibility", "visible");
+  $("#compara_aluno").fadeIn("fast", function() {
+    $('html, body').animate({
+      scrollTop: $("#toolbar").offset().top
+    }, 500);
+  });
+}

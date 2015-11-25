@@ -104,15 +104,19 @@ Raphael.fn.connection = function (obj1, obj2, style) {
     }
     edge.draw();
 
-    /* NEXTEX: A cor da edge ao colocar o mouse sobre ela é definida aqui, assim como a cor inicial para qual
-      deve retornar. */
+    /* NEXTEX: A cor da edge ao colocar o mouse sobre ela é definida aqui, e alterada apenas no modo de
+    avaliação ou criação de atividade */
     var hoverIn = function() {
-        edge.fg.attr({"stroke": "#F8B500"});
+        var old = edge.fg.attr("stroke");
+        edge.fg.oldStroke = old;
+        if (old === "#C7C7C7") {
+          edge.fg.attr({"stroke": "#F8B500"});
+        }
         edge.fg.attr({"stroke-width": 8});
     };
 
     var hoverOut = function() {
-        edge.fg.attr({"stroke": "#C7C7C7"});
+        edge.fg.attr({"stroke": edge.fg.oldStroke});
         edge.fg.attr({"stroke-width": 4});
     }
 

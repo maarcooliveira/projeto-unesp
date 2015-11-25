@@ -7,7 +7,7 @@
 
   $id = isset($_GET['id']) ? $_GET['id'] : "";
 
-  $mapa_txt_php =  file_get_contents(getcwd() . "/atividades/" . $id . "/mapa.json");
+  // $mapa_txt_php =  file_get_contents(getcwd() . "/atividades/" . $id . "/mapa.json");
   $gabarito_txt_php =  file_get_contents(getcwd() . "/atividades/" . $id . "/gabarito.json");
   $nome_resolucoes = preg_grep('/^([^.])/', scandir(getcwd() . "/atividades/" . $id . "/resolucoes"));
   $resolucoes_txt_php = array();
@@ -46,11 +46,8 @@
 
   <body>
     <script type="text/javascript">
-    var mapa_txt = <?php echo ($mapa_txt_php); ?>;
-    var gabarito_txt = <?php echo ($gabarito_txt_php); ?>;
+    var gabarito = <?php echo ($gabarito_txt_php); ?>;
     var resolucoes_txt = <?php echo ($resolucoes_array); ?>;
-    console.log("RESOLUCOES:");
-    console.log(resolucoes_txt);
     </script>
 
     <!-- <div class="contain-to-grid sticky"> -->
@@ -84,32 +81,42 @@
           <h3>Atividade <?php /*echo $_GET['id']*/?></h3>
         </div> -->
 
-        <div id="mapa"></div>
         <div id="gabarito"></div>
 
         <div>
-          <hr id="full-hr">
+          <hr id="full-hr" style="visibility: hidden;">
         </div>
+
         <div class="row" id="toolbar">
-            <div class="small-10 small-offset-1 large-6 large-offset-0 columns">
-              <label>Resultados
+            <hr>
+            <h3 class="small-6 columns">Resultados <?php echo '(' . count($resolucoes_txt_php) . ' entregas)'?></h3>
+            <div class="small-6 columns">
                 <select name="resultado" id="aluno_resultado">
-                  <option disabled selected> -- escolha um aluno -- </option>
-                  <option value="-1">Resumo da turma</option>
+                  <option value="-1" selected>Resumo da turma</option>
                   <?php
                     while($resolucao = mysqli_fetch_assoc($resolucoes)) {
                       echo "<option value='{$resolucao['id_usuario']}'>{$resolucao['aluno']}</option>";
                     } ?>
                 </select>
-              </label>
             </div>
-            <!-- <a href="professor.php" class="button radius small-5 small-offset-1 large-3 large-offset-0">Voltar</a> -->
+        </div>
+        <br>
+        <div class="row">
+          <h4 id="dm_turma" class="small-6 columns"><i class="fa fa-users"></i> Distância média da turma: <span id="dmt"></span></h4>
+          <h4 id="dm_aluno" class="small-6 columns"><i class="fa fa-user"></i> Distância do aluno: <span id="dma"></span></h4>
         </div>
 
-        <div class="row" id="resultados">
+        <div id="compara_turma"></div>
+        <div id="compara_aluno"></div>
 
+        <div class="row" id="legenda" style="display: none">
+          <div class="small-3 columns small-offset-2"><i class="fa fa-square psan"></i> Apenas professor ligou</div>
+          <div class="small-3 columns"><i class="fa fa-square pnas"></i> Apenas aluno ligou</div>
+          <div class="small-3 columns end"><i class="fa fa-square psas"></i> Ambos ligaram</div>
         </div>
-
+        <br>
+        <div id="tabela" class="row"></div>
+        <br>
     </main>
 
     <script src="./js/jquery-2.1.4.min.js"></script>
