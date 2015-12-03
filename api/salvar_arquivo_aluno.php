@@ -14,10 +14,11 @@
      if (!file_exists($path)) {
          mkdir($path, 0777, true);
      }
+     chmod($path, 0777);
      $file = fopen($path . "/" . $nome_arquivo,'w+');
      fwrite($file, $dados_mapa);
      fclose($file);
-     chmod($path . "/" . $nome_arquivo, 0777); 
+     chmod($path . "/" . $nome_arquivo, 0777);
    } else {
    }
 

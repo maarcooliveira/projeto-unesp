@@ -38,7 +38,8 @@
 
      $pathRes = dirname( dirname(__FILE__) ) . "/atividades/" . $id_atividade . "/resolucoes";
      if (!file_exists($pathRes)) {
-         mkdir($pathRes, 0777, true);
+      mkdir($pathRes, 0777, true);
+      chmod($path, 0777);
      }
 
      $file = fopen($path . "/" . $nome_mapa,'w+');
@@ -56,7 +57,7 @@
      $file = fopen($path . "/" . $nome_gabarito,'w+');
      fwrite($file, $dados_gabarito);
      fclose($file);
-     chmod($path . "/" . $nome_gabarito, 0777); 
+     chmod($path . "/" . $nome_gabarito, 0777);
    } else {
    }
    header("Location: ../professor.php");
