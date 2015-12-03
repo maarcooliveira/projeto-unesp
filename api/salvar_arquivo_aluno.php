@@ -17,6 +17,7 @@
      $file = fopen($path . "/" . $nome_arquivo,'w+');
      fwrite($file, $dados_mapa);
      fclose($file);
+     chmod($path . "/" . $nome_arquivo, 0777); 
    } else {
    }
 

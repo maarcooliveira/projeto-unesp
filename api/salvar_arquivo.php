@@ -44,6 +44,7 @@
      $file = fopen($path . "/" . $nome_mapa,'w+');
      fwrite($file, $dados_mapa);
      fclose($file);
+     chmod($path . "/" . $nome_mapa, 0777);
    } else {
    }
 
@@ -55,6 +56,7 @@
      $file = fopen($path . "/" . $nome_gabarito,'w+');
      fwrite($file, $dados_gabarito);
      fclose($file);
+     chmod($path . "/" . $nome_gabarito, 0777); 
    } else {
    }
    header("Location: ../professor.php");
