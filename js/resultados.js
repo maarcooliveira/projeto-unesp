@@ -232,11 +232,20 @@ function mostrarMapa(pos) {
       gabarito['edges'][nc]['color'] = PSAN; // so um ligou
     }
   }
+  var nPSAS = 0;
+  var nPSAN = 0;
+  var nPNAS = 0;
 
   for (var i = 0; i < gabarito['edges'].length; i++) {
     // g.addEdge(gabarito['edges'][i]['source'], gabarito['edges'][i]['target'], {label: gabarito['edges'][i]['weight'], stroke : EDGE_C, "font-size": "16px"});
     //TODO mostrar peso quando !== 1
     r.addEdge(gabarito['edges'][i]['source'], gabarito['edges'][i]['target'], {label: gabarito['edges'][i]['weight'], stroke: gabarito['edges'][i]['color'], "font-size": "0px"});
+    if (gabarito['edges'][i]['color'] === PSAS) {
+      nPSAS++;
+    }
+    else {
+      nPSAN++;
+    }
   }
 
   for (var i = 0; i < resolucao['edges'].length; i++) {
@@ -244,8 +253,15 @@ function mostrarMapa(pos) {
     //TODO mostrar peso quando !== 1
     if (resolucao['edges'][i]['color'] !== PSAS) { //PSAS já foi adicionado no for anterior!
       r.addEdge(resolucao['edges'][i]['source'], resolucao['edges'][i]['target'], {label: resolucao['edges'][i]['weight'], stroke: resolucao['edges'][i]['color'], "font-size": "0px"});
+      nPNAS++;
     }
   }
+
+  var nTOTAL = nPSAS + nPSAN + nPNAS;
+  console.log("PSAS: " + nPSAS);
+  console.log("PSAN: " + nPSAN);
+  console.log("PNAS: " + nPNAS);
+  console.log("TOTAL: " + nTOTAL);
 
   layouter = new Graph.Layout.Ordered(r, true, null);
   renderer = new Graph.Renderer.Raphael('compara_aluno', r, width, height);
