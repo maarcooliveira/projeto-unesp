@@ -142,7 +142,9 @@
                       <label>Turmas na sua universidade
                         <select name="turma">
                           <?php
+                            $cntTurma = 0;
                             while($outraTurma = mysqli_fetch_assoc($outrasTurmas)) {
+                              $cntTurma++;
                               echo "<option value='{$outraTurma['id']}'>{$outraTurma['nome']}" . " - Prof. " . "{$outraTurma['professor']}</option>";
                             } ?>
                         </select>
@@ -153,7 +155,7 @@
                   <div class="row">
                     <br>
                     <a class="button radius secondary small-5 small-offset-1 large-4 large-offset-2" onclick="$('#modalAddTurma').foundation('reveal', 'close');">Cancelar</a>
-                    <input type="submit" name="submit" class="button radius small-5 large-4" value="Confirmar">
+                    <input <?php if($cntTurma == 0) echo "disabled";?> type="submit" name="submit" class="button radius small-5 large-4" value="Confirmar">
                   </div>
                 </form>
 
