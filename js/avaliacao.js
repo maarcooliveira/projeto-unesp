@@ -6,7 +6,6 @@ var complete_graph, incomplete_graph, matriz;
 
 // PROVISORIO P/ ENVIAR LISTA DE NOS E EDGES A SEREM SALVAS;
 var mapa_nodes;
-var mapa_edges = Array();
 var mapa = mapa_txt; //JSON.parse(mapa_txt);
 var gabarito = gabarito_txt; //JSON.parse(gabarito_txt);
 var resolucao = resolucao_txt; //JSON.parse(resolucao_txt);
@@ -267,9 +266,36 @@ function redraw() {
     renderer.draw();
 }
 
+function hasEdge(from, to) {
+  for (var i = 0; i < g['edges'].length; i++) {
+    var src_n = g['edges'][i]['source']['id'];
+    var tgt_n = g['edges'][i]['target']['id'];
+    console.log(src_n + " " + tgt_n + " compare to " + from + " " + to);
+    if ((src_n === from && tgt_n === to) || (src_n === to && tgt_n === from)) {
+      return true;
+    }
+  }
+  return false;
+}
+
 function addEdge(weight) {
-   var from = $(src).parent().attr('title');
-   var to = $(dest).parent().attr('title');
+  var from = $(src).parent().attr('title');
+  var to = $(dest).parent().attr('title');
+
+  if (hasEdge(from, to)) {
+    // Notificação de ligação já existente
+    var n = noty({
+      text: '<i class="fa fa-repeat"></i> \"<strong>' + from + '</strong>\" e \"<strong>' + to + '</strong>\" já estavam relacionados',
+      layout: 'topCenter',
+      type: 'warning',
+      theme: 'relax',
+      timeout: 3000
+    });
+
+    cancelSelect();
+    return;
+  }
+
    // var newEdge = g.addEdge(from, to, {label: weight, stroke : "#C7C7C7", "font-size": "16px"});
    //TODO: temp; deve mostrar o peso das ligações quando o peso não for 1 por padrão
    var newEdge = g.addEdge(from, to, {label: weight, stroke : "#C7C7C7", "font-size": "0px"});
@@ -307,7 +333,7 @@ function removeEdge(edge) {
     var n = noty({
       text: '<i class="fa fa-times"></i> \"<strong>' + from + '</strong>\" e \"<strong>' + to + '</strong>\" foram desrelacionados',
       layout: 'topCenter',
-      type: 'warning',
+      type: 'error',
       theme: 'relax',
       timeout: 3000
     });
@@ -325,6 +351,7 @@ function enviar() {
 }
 
 function enviar_form_salvar() {
+    var mapa_edges = Array();
     for (var i = 0; i < g['edges'].length; i++) {
         var src_n = g['edges'][i]['source']['id'];
         var tgt_n = g['edges'][i]['target']['id'];
@@ -336,7 +363,6 @@ function enviar_form_salvar() {
     console.log(mapa_edges);
 
     mapa['edges'] = mapa_edges;
-   //  mapa['mapa'] = null;
     mapa['aluno'] = id_aluno;
 
     var desc_mapa = mapa; //JSON.decycle(mapa);
