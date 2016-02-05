@@ -1,16 +1,10 @@
 <?php
-  session_start();
-  if (isset($_GET["usuario"])) {
-    $_SESSION["tipo"] = "aluno";
-    $_SESSION["id"] = $_GET["usuario"];
-    $nome = "";
-  }
-  else {
-    include("api/check_login.php");
-    if ($_SESSION["tipo"] != "aluno") {
-      header("Location: index.php");
-    }
-  }
+  include("api/check_login.php");
+  isLoggedIn();
+  if (isset($_GET['id']))
+    hasPermission("avaliacao", $_GET['id']);
+  else
+    hasPermission(NULL, NULL);
 
   // include db connect class
   require_once __DIR__ . '/api/db_connect.php';
@@ -98,7 +92,7 @@
           <li><a id="tb_ajuda" onclick="mostrarDescricao();"><i class="fa fa-info-circle"></i> Ajuda</a></li>
           <li class="divider"></li>
           <li class="has-dropdown">
-            <a href="#"><?php echo $nome; ?></a>
+            <a href="#"><?php echo $_SESSION["nome"]; ?></a>
             <ul class="dropdown">
               <li><a href="api/logout.php">Sair</a></li>
             </ul>

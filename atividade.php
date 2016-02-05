@@ -1,9 +1,10 @@
 <?php
-  session_start();
   include("api/check_login.php");
-  if ($_SESSION["tipo"] != "professor") {
-    header("Location: index.php");
-  }
+  isLoggedIn();
+  if (isset($_GET['id']))
+    hasPermission("atividade", $_GET['id']);
+  else
+    hasPermission(NULL, NULL);
 
   // include db connect class
   require_once __DIR__ . '/api/db_connect.php';
@@ -89,7 +90,7 @@
           <li><a id="tb_salvar" onclick="salvar();"><i class="fa fa-check"></i> Concluído</a></li>
           <li class="divider"></li>
           <li class="has-dropdown">
-            <a href="#"><?php echo $nome; ?></a>
+            <a href="#"><?php echo $_SESSION["nome"]; ?></a>
             <ul class="dropdown">
               <li><a href="api/logout.php">Sair</a></li>
             </ul>

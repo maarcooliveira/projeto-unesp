@@ -1,9 +1,7 @@
 <?php
-  session_start();
   include("api/check_login.php");
-  if ($_SESSION["tipo"] != "aluno") {
-    header("Location: index.php");
-  }
+  isLoggedIn();
+  hasPermission("aluno", NULL);
 
   require_once __DIR__ . '/api/db_connect.php';
 
@@ -66,7 +64,7 @@
         <!-- Right Nav Section -->
         <ul class="right">
           <li class="has-dropdown">
-            <a href="#"><?php echo $nome; ?></a>
+            <a href="#"><?php echo $_SESSION["nome"]; ?></a>
             <ul class="dropdown">
               <li><a href="api/logout.php">Sair</a></li>
             </ul>

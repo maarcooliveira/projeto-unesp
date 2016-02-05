@@ -1,9 +1,9 @@
 <?php
-  session_start();
   include("api/check_login.php");
-  if ($_SESSION["tipo"] != "professor") {
-    header("Location: index.php");
-  }
+  if (isset($_GET['id']))
+    hasPermission("resultados", $_GET['id']);
+  else
+    hasPermission(NULL, NULL);
 
   $id = isset($_GET['id']) ? $_GET['id'] : "";
 
@@ -64,7 +64,7 @@
         <!-- Right Nav Section -->
         <ul class="right">
           <li class="has-dropdown">
-            <a href="#"><?php echo $nome; ?></a>
+            <a href="#"><?php echo $_SESSION["nome"]; ?></a>
             <ul class="dropdown">
               <li><a href="api/logout.php">Sair</a></li>
             </ul>
