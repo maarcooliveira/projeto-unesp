@@ -89,7 +89,7 @@
 
         <div class="row" id="toolbar">
             <hr>
-            <h3 class="small-6 columns">Resultados <?php echo '(' . count($resolucoes_txt_php) . ' entregas)'?></h3>
+            <h3 class="small-6 columns">Resultados<?php echo ' - ' . $resolucoes->num_rows . ' entrega' . ($resolucoes->num_rows != 1 ? 's' : '')?></h3>
             <div class="small-6 columns">
                 <select name="resultado" id="aluno_resultado">
                   <option value="-1" selected>Resumo da turma</option>
