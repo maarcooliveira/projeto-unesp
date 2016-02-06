@@ -166,6 +166,7 @@ $("#aluno_resultado").change(function() {
 
     $("#compara_aluno").fadeOut("slow", function() {
       mostrarMapa(pos);
+      switched = false;
       updateTables(); // Calling responsive-tables.js function
     });
   }
