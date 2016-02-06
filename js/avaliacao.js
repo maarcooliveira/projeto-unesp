@@ -1,14 +1,5 @@
-var width, height, g, renderer, layouter, render, src, dest, edge, canSelectDest = false, edgeCount = 0;
-var complete_graph, incomplete_graph, matriz;
-
-// TODO: Separar em modo editor e modo leitura de resultados
-
-
-// PROVISORIO P/ ENVIAR LISTA DE NOS E EDGES A SEREM SALVAS;
-var mapa_nodes;
-var mapa = mapa_txt; //JSON.parse(mapa_txt);
-var gabarito = gabarito_txt; //JSON.parse(gabarito_txt);
-var resolucao = resolucao_txt; //JSON.parse(resolucao_txt);
+var width, height, g, renderer, layouter, render,
+    src, dest, edge, matriz, canSelectDest, edgeCount, concluido;
 
 $(document).ready(function() {
     $("#tb_remover").css('display', 'none');
@@ -23,6 +14,7 @@ $(document).ready(function() {
         addEdge($("#tb_peso").val());
         $('#myModal').foundation('reveal', 'close');
     });
+    canSelectDest = false;
     edgeCount = 0;
 });
 
@@ -339,62 +331,52 @@ function removeEdge(edge) {
 }
 
 function salvar() {
-    // window.alert("vai salvar");
-    $("#concluido").val("false");
-    enviar_form_salvar();
+  concluido = false;
+  enviar_form_salvar();
 }
 
 function enviar() {
-    $("#concluido").val("true");
-    enviar_form_salvar();
+  concluido = true;
+  enviar_form_salvar();
 }
 
 function enviar_form_salvar() {
-    var mapa_edges = Array();
-    for (var i = 0; i < g['edges'].length; i++) {
-        var src_n = g['edges'][i]['source']['id'];
-        var tgt_n = g['edges'][i]['target']['id'];
-        var wgt_n = g['edges'][i]['style']['label'];
-        var edge_n = {'source': src_n, 'target': tgt_n, 'weight': wgt_n};
-        mapa_edges.push(edge_n);
+  var mapa_edges = Array();
+  for (var i = 0; i < g['edges'].length; i++) {
+    var src_n = g['edges'][i]['source']['id'];
+    var tgt_n = g['edges'][i]['target']['id'];
+    var wgt_n = g['edges'][i]['style']['label'];
+    var edge_n = {'source': src_n, 'target': tgt_n, 'weight': wgt_n};
+    mapa_edges.push(edge_n);
+  }
+
+  mapa['edges'] = mapa_edges;
+  mapa['aluno'] = id_aluno;
+
+  $.ajax({
+    url: "api/salvar_arquivo_aluno.php",
+    type:'POST',
+    data:
+    {
+      dados_mapa: JSON.stringify(mapa),
+      id_atividade: id_atividade,
+      id_aluno: id_aluno,
+      concluido: concluido
+    },
+    success: function(msg)
+    {
+      if (msg === "enviado") {
+        window.location.href = "aluno.php";
+      }
+      var n = noty({
+        text: '<i class="fa fa-floppy-o"></i> Atividade salva',
+        layout: 'topCenter',
+        type: 'success',
+        theme: 'relax',
+        timeout: 3000
+     });
     }
-    console.log("EDGES::");
-    console.log(mapa_edges);
-
-    mapa['edges'] = mapa_edges;
-    mapa['aluno'] = id_aluno;
-
-    var desc_mapa = mapa; //JSON.decycle(mapa);
-    $("#dados_mapa").val(JSON.stringify(desc_mapa));
-    // $("#formSaveMapaAluno").submit();
-
-
-    $.ajax({
-            url: "api/salvar_arquivo_aluno.php",
-            type:'POST',
-            data:
-            {
-                dados_mapa: $("#dados_mapa").val(),
-                id_atividade: $("#id_atividade").val(),
-                id_aluno: $("#id_aluno").val(),
-                concluido: $("#concluido").val()
-            },
-            success: function(msg)
-            {
-              console.log(msg);
-                if (msg === "enviado") {
-                    window.location.href = "aluno.php";
-                }
-                var n = noty({
-                  text: '<i class="fa fa-floppy-o"></i> Atividade salva',
-                  layout: 'topCenter',
-                  type: 'success',
-                  theme: 'relax',
-                  timeout: 3000
-               });
-            }
-        });
-
+  });
 }
 
 
@@ -406,8 +388,6 @@ function mostrarTabela() {
     var np = gabarito['nodes'].length;
     var npr = Math.pow(np, 2) - np; //posicoes relevantes
     var distancia_cel = 0;
-
-   //  console.log(resolucao);
 
     matriz = [];
 

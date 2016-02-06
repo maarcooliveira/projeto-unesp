@@ -52,24 +52,18 @@
 
   <body>
     <script type="text/javascript">
-    var mapa_txt = <?php echo ($mapa_txt_php); ?>;
+    var mapa = <?php echo ($mapa_txt_php); ?>;
+    var gabarito = undefined;
+    var resolucao = undefined;
     var id_aluno = <?php echo ($_SESSION['id']); ?>;
+    var id_atividade = <?php echo ($_GET['id']); ?>;
     <?php
       if (strlen($resolucao_txt_php) > 0)
-        echo ("var resolucao_txt = " . $resolucao_txt_php);
-      else
-        echo "var resolucao_txt = undefined";
+        echo ("resolucao = " . $resolucao_txt_php);
       echo ("\n");
       if (strlen($gabarito_txt_php) > 0)
-        echo ("var gabarito_txt = " . $gabarito_txt_php);
-      else
-        echo "var gabarito_txt = undefined"; ?>;
-    console.log("RESL:");
-    console.log(resolucao_txt);
-    console.log("GAB:");
-    console.log(gabarito_txt);
-    console.log("MAPA:");
-    console.log(mapa_txt);
+        echo ("var gabarito = " . $gabarito_txt_php);
+    ?>;
     </script>
 
     <!-- <div class="contain-to-grid sticky"> -->
@@ -103,15 +97,8 @@
     <!-- </div> -->
 
     <main class="container">
-      <form action="api/salvar_arquivo_aluno.php" method="post" id="formSaveMapaAluno">
-        <div><hr id="full-hr"></div>
-        <input type="hidden" name="dados_mapa" id="dados_mapa">
-        <input type="hidden" name="id_atividade" id="id_atividade" value="<?php echo $_GET['id']?>">
-        <input type="hidden" name="id_aluno" id="id_aluno" value="<?php echo $_SESSION['id']?>">
-        <input type="hidden" name="concluido" id="concluido">
-
-        <div id="canvas"></div>
-      </form>
+      <div><hr id="full-hr"></div>
+      <div id="canvas"></div>
 
       <div id="myModal" class="reveal-modal" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
           <div class="row collapse">
@@ -126,12 +113,9 @@
       <div id="modalDesc" class="reveal-modal" data-reveal aria-labelledby="modalDescTitle" aria-hidden="true" role="dialog">
           <div class="row collapse">
           <h2 id="modalDescTitle">Instruções para esta atividade</h2>
-            <div id="modalDescContent" class="large-10 small-10 columns large-offset-1 small-offset-1">
-
-            </div>
+            <div id="modalDescContent" class="large-10 small-10 columns large-offset-1 small-offset-1"></div>
           </div>
       </div>
-
 
       <div class="row" id="resultados"></div>
       <div class="row" id="gabarito"></div>
