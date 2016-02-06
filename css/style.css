@@ -5,11 +5,11 @@ body, h1, h2, h3, h4, h5, h6, p, a {
 }
 
 .imp {
-	color: #e53935;
+	color: #E33258;
 }
 
 .imp:hover {
-	color: #c62828;
+	color: #d21c44;
 }
 
 .b {

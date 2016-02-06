@@ -115,7 +115,8 @@ function calcularMatrizes() {
 
     $("#dma-" + resolucao['aluno']).text(distancia[r].toFixed(3));
   }
-  $("#dmt").text((distancia_total/qtd_respostas).toFixed(3));
+  var dmt = isNaN(distancia_total/qtd_respostas) ? 0 : (distancia_total/qtd_respostas).toFixed(3);
+  $("#dmt").text(dmt);
 
 
 }

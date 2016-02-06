@@ -89,13 +89,13 @@
     <main class="container">
 
         <br><div class="row">
-          <h2 class="text-center">Resultados da Atividade: <?php echo $atividade['titulo'] ?></h2>
+          <h2 class="text-center"><?php echo $atividade['titulo'] ?></h2>
           <br>
-          <h4>Turma: <?php echo $atividade['turma'] ?></h4>
-          <h4>Alunos na turma: <?php echo $resolucoes->num_rows ?></h4>
-          <h4>Atividades entregues: <?php echo $qtd['qtd'] ?></h4>
-          <h4>Data limite para entrega: <?php echo date("d/m/Y", strtotime($atividade['data_entrega'])) ?></h4>
-          <h4>Distância média da turma: <span id="dmt"></span></h4>
+          <h5>Turma: <strong><?php echo $atividade['turma'] ?></strong></h5>
+          <h5>Alunos na turma: <strong><?php echo $resolucoes->num_rows ?></strong></h5>
+          <h5>Atividades entregues: <strong><?php echo $qtd['qtd'] ?></strong></h5>
+          <h5>Distância média da turma: <strong><span id="dmt"></span></strong></h5>
+          <h5>Data limite para entrega: <strong><?php echo date("d/m/Y", strtotime($atividade['data_entrega'])) ?></strong></h5>
           <br>
           <a class="button radius small-5" data-reveal-id="modalGabarito" onclick="">Ver atividade original</a>
           <a class="button radius small-5 small-offset-1" onclick="" data-reveal-id="modalResultadoTurma">Ver resultado geral</a>
