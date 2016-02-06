@@ -381,6 +381,7 @@ function enviar_form_salvar() {
             },
             success: function(msg)
             {
+              console.log(msg);
                 if (msg === "enviado") {
                     window.location.href = "aluno.php";
                 }

@@ -9,34 +9,29 @@
    // include db connect class
   require_once __DIR__ . '/db_connect.php';
 
-   if (json_decode($dados_mapa) != null) {
-     $path = dirname( dirname(__FILE__) ) . "/atividades/" . $id_atividade . "/resolucoes";
-     if (!file_exists($path)) {
-         mkdir($path, 0777, true);
-     }
-     chmod($path, 0777);
-     $file = fopen($path . "/" . $nome_arquivo,'w+');
-     fwrite($file, $dados_mapa);
-     fclose($file);
-     chmod($path . "/" . $nome_arquivo, 0777);
-   } else {
-   }
-
-
-    $query  = "INSERT INTO resolucao (id_atividade, id_usuario, concluido) VALUES ({$id_atividade}, {$id_aluno}, {$concluido})
-                    ON DUPLICATE KEY UPDATE concluido = {$concluido}";
-    $result = mysqli_query($connection, $query);
-    // echo $query;
-    if (!$result) { die("Database query failed. " . mysqli_error ($connection)); }
-
-    if ($concluido == 1) {
-      echo "enviado";
+  if (json_decode($dados_mapa) != null) {
+    $path = dirname( dirname(__FILE__) ) . "/atividades/" . $id_atividade . "/resolucoes";
+    if (!file_exists($path)) {
+      mkdir($path, 0777, true);
     }
-    else {
-      echo "salvo";
-    }
-    //   header("Location: aluno.php");
-  // else
-  //   header("Location: avaliacao.php?id=" . $id_atividade); //TODO: alterar para ajax
+    chmod($path, 0777);
+    $file = fopen($path . "/" . $nome_arquivo,'w+');
+    fwrite($file, $dados_mapa);
+    fclose($file);
+    chmod($path . "/" . $nome_arquivo, 0777);
+  }
 
+  $date = new DateTime("NOW");
+  $formattedDate = $date->format('Y-m-d H:i:s');
+  $query  = "INSERT INTO resolucao (id_atividade, id_usuario, concluido) VALUES ({$id_atividade}, {$id_aluno}, {$concluido}) ON DUPLICATE KEY UPDATE concluido = {$concluido}, data_entrega = '{$formattedDate}'";
+  $result = mysqli_query($connection, $query);
+
+  if (!$result) { die("Database query failed. " . mysqli_error ($connection)); }
+
+  if ($concluido == 1) {
+    echo "enviado";
+  }
+  else {
+    echo "salvo";
+  }
 ?>
