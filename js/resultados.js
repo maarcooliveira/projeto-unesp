@@ -140,7 +140,7 @@ $("#aluno_resultado").change(function() {
     var np = gabarito['nodes'].length;
 
     // cria e preenche elemento table no html
-    var result = "<br><table class='small-12 columns'>";
+    var result = "<br><table class='responsive'>";
     result += "<tr>"
     result += "<td class='text-center'></td>";
     for (var i = 0; i < np; i++) {
@@ -166,6 +166,7 @@ $("#aluno_resultado").change(function() {
 
     $("#compara_aluno").fadeOut("slow", function() {
       mostrarMapa(pos);
+      updateTables(); // Calling responsive-tables.js function
     });
   }
 });

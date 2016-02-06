@@ -40,6 +40,7 @@
     <title>NextEx - Análise de resultados</title>
     <link rel="stylesheet" href="./css/foundation.min.css" />
     <link rel="stylesheet" href="./css/style.css" />
+    <link rel="stylesheet" href="./css/responsive-tables.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
     <link rel="shortcut icon" href="./images/icon.png">
   </head>
@@ -127,6 +128,7 @@
     <script src="./js/dracula_graffle.js"></script>
     <script src="./js/variables.js"></script>
     <script src="./js/resultados.js"></script>
+    <script src="./js/responsive-tables.js"></script>
     <script>
       $(document).foundation();
     </script>
