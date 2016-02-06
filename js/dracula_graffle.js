@@ -109,8 +109,8 @@ Raphael.fn.connection = function (obj1, obj2, style) {
     var hoverIn = function() {
         var old = edge.fg.attr("stroke");
         edge.fg.oldStroke = old;
-        if (old === "#C7C7C7") {
-          edge.fg.attr({"stroke": "#F8B500"});
+        if (old === "#b0bec5") {
+          edge.fg.attr({"stroke": "#556270"});
         }
         edge.fg.attr({"stroke-width": 8});
     };

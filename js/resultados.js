@@ -1,12 +1,6 @@
 var width, height, g, renderer, layouter, render, edgeFactory;
 var matriz_turma;
 var distancia;
-var PSAN = "#E33258";
-var PSAS = "#b8e31f";
-var PNAS = "#F8CA00";
-var NODE_C = "#07AEFF";
-var EDGE_C = "#C7C7C7";
-
 var resolucoes = [];
 
 for (var r = 0; r < resolucoes_txt.length; r++) {
@@ -14,9 +8,9 @@ for (var r = 0; r < resolucoes_txt.length; r++) {
 }
 
 $( document ).ready(function() {
-  $('.psas').css('color', PSAS);
-  $('.psan').css('color', PSAN);
-  $('.pnas').css('color', PNAS);
+  $('.psas').css('color', PSAS_C);
+  $('.psan').css('color', PSAN_C);
+  $('.pnas').css('color', PNAS_C);
 
   toolbar_height = $('#toolbar').height();
   navbar_heigth = $('#navbar').height();
@@ -32,24 +26,6 @@ $( document ).ready(function() {
     e.target = target;
     return e;
   }
-
-  render = function(r, n) {
-    var color = NODE_C; //Raphael.getColor();
-    /* the Raphael set is obligatory, containing all you want to display */
-
-    rec = r.rect(n.point[0], n.point[1], 130, 20);
-    txt = r.text(n.point[0], n.point[1], (n.label || n.id)).attr({"font-size": "12px"});
-
-    w = txt.getBBox().width + 20;
-    h = txt.getBBox().height + 20;
-    x = txt.getBBox().x - 10;
-    y = txt.getBBox().y - 10;
-
-    attrs = {"title": (n.label || n.id), "fill": color, "stroke": color, r: "1px", "stroke-width": "1px", "width": w, "height": h, "x": x, "y": y};
-    rec.attr(attrs);
-    var set = r.set().push(rec).push(txt);
-    return set;
-  };
 
   g = new Graph();
   g.edgeFactory.build = edgeFactory;
@@ -105,7 +81,7 @@ function calcularMatrizes() {
         matriz[i][j] = 0;
 
         for (var nc = 0; nc < resolucao['edges'].length; nc++) {
-          resolucao['edges'][nc]['color'] = PNAS; // assumimos primeiro que aluno ligou e prof. nao;
+          resolucao['edges'][nc]['color'] = PNAS_C; // assumimos primeiro que aluno ligou e prof. nao;
           if (gabarito['nodes'][i] === resolucao['edges'][nc]['source'] && gabarito['nodes'][j] === resolucao['edges'][nc]['target']) {
             matriz[i][j] = resolucao['edges'][nc]['weight'];
             break;
@@ -216,20 +192,20 @@ function mostrarMapa(pos) {
     var both = false;
     for (var nc2 = 0; nc2 < resolucao['edges'].length; nc2++) {
       if (gabarito['edges'][nc]['source'] === resolucao['edges'][nc2]['source'] && gabarito['edges'][nc]['target'] === resolucao['edges'][nc2]['target']) {
-        gabarito['edges'][nc]['color'] = PSAS; // os dois ligaram
-        resolucao['edges'][nc2]['color'] = PSAS; // os dois ligaram
+        gabarito['edges'][nc]['color'] = PSAS_C; // os dois ligaram
+        resolucao['edges'][nc2]['color'] = PSAS_C; // os dois ligaram
         both = true;
         break;
       }
       if (gabarito['edges'][nc]['source'] === resolucao['edges'][nc2]['target'] && gabarito['edges'][nc]['target'] === resolucao['edges'][nc2]['source']) {
-        gabarito['edges'][nc]['color'] = PSAS; // os dois ligaram
-        resolucao['edges'][nc2]['color'] = PSAS; // os dois ligaram
+        gabarito['edges'][nc]['color'] = PSAS_C; // os dois ligaram
+        resolucao['edges'][nc2]['color'] = PSAS_C; // os dois ligaram
         both = true;
         break;
       }
     }
     if (!both) {
-      gabarito['edges'][nc]['color'] = PSAN; // so um ligou
+      gabarito['edges'][nc]['color'] = PSAN_C; // so um ligou
     }
   }
   var nPSAS = 0;
@@ -240,7 +216,7 @@ function mostrarMapa(pos) {
     // g.addEdge(gabarito['edges'][i]['source'], gabarito['edges'][i]['target'], {label: gabarito['edges'][i]['weight'], stroke : EDGE_C, "font-size": "16px"});
     //TODO mostrar peso quando !== 1
     r.addEdge(gabarito['edges'][i]['source'], gabarito['edges'][i]['target'], {label: gabarito['edges'][i]['weight'], stroke: gabarito['edges'][i]['color'], "font-size": "0px"});
-    if (gabarito['edges'][i]['color'] === PSAS) {
+    if (gabarito['edges'][i]['color'] === PSAS_C) {
       nPSAS++;
     }
     else {
@@ -251,7 +227,7 @@ function mostrarMapa(pos) {
   for (var i = 0; i < resolucao['edges'].length; i++) {
     // g.addEdge(gabarito['edges'][i]['source'], gabarito['edges'][i]['target'], {label: gabarito['edges'][i]['weight'], stroke : EDGE_C, "font-size": "16px"});
     //TODO mostrar peso quando !== 1
-    if (resolucao['edges'][i]['color'] !== PSAS) { //PSAS já foi adicionado no for anterior!
+    if (resolucao['edges'][i]['color'] !== PSAS_C) { //PSAS já foi adicionado no for anterior!
       r.addEdge(resolucao['edges'][i]['source'], resolucao['edges'][i]['target'], {label: resolucao['edges'][i]['weight'], stroke: resolucao['edges'][i]['color'], "font-size": "0px"});
       nPNAS++;
     }
