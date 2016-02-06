@@ -60,18 +60,57 @@
   }
 
   function canProfessorEdit($activityId, $professorId) {
-    //TODO: conferir se a atividade é do professor
-    return True;
+    require_once __DIR__ . '/db_connect.php';
+    $queryAtividade = "SELECT * FROM atividade WHERE id = {$activityId}";
+    $atividades = mysqli_query($connection, $queryAtividade);
+    $atividade = mysqli_fetch_assoc($atividades);
+
+    if ($atividade && !$atividade['liberado']) {
+      $idTurma = $atividade['id_turma'];
+      $queryTurma = "SELECT * FROM turma WHERE id = {$idTurma}";
+      $turmas = mysqli_query($connection, $queryTurma);
+      $turma = mysqli_fetch_assoc($turmas);
+      if ($turma && $turma['id_professor'] == $professorId) {
+        return True;
+      }
+    }
+    return False;
   }
 
   function canStudentAccess($activityId, $studentId) {
-    //TODO: conferir se o estudante está na turma e se a atividade está liberada
-    return True;
+    require_once __DIR__ . '/db_connect.php';
+    $queryAtividade = "SELECT * FROM atividade WHERE id = {$activityId}";
+    $atividades = mysqli_query($connection, $queryAtividade);
+    $atividade = mysqli_fetch_assoc($atividades);
+
+    if ($atividade && $atividade['liberado']) {
+      $idTurma = $atividade['id_turma'];
+      $queryUsuarioTurma = "SELECT * FROM usuario_turma WHERE id_usuario = {$studentId} AND id_turma = {$idTurma}";
+      $listaUsuarioTurma = mysqli_query($connection, $queryUsuarioTurma);
+      $usuarioTurma = mysqli_fetch_assoc($listaUsuarioTurma);
+      if ($usuarioTurma) {
+        return True;
+      }
+    }
+    return False;
   }
 
   function canProfessorAccessResults($activityId, $professorId) {
-    //TODO: conferir se a atividade já foi liberada e o professor é o dono da atividade
-    return True;
+    require_once __DIR__ . '/db_connect.php';
+    $queryAtividade = "SELECT * FROM atividade WHERE id = {$activityId}";
+    $atividades = mysqli_query($connection, $queryAtividade);
+    $atividade = mysqli_fetch_assoc($atividades);
+
+    if ($atividade && $atividade['liberado']) {
+      $idTurma = $atividade['id_turma'];
+      $queryTurma = "SELECT * FROM turma WHERE id = {$idTurma}";
+      $turmas = mysqli_query($connection, $queryTurma);
+      $turma = mysqli_fetch_assoc($turmas);
+      if ($turma && $turma['id_professor'] == $professorId) {
+        return True;
+      }
+    }
+    return False;
   }
 
   // Não utilizado;
