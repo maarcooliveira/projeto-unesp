@@ -1,16 +1,29 @@
 <?php
   if (session_status() == PHP_SESSION_NONE) {
-      session_start();
+    session_start();
+  }
+
+  function redirectIfLoggedIn() {
+    if (isLoggedInHelper()) {
+      if ($_SESSION["tipo"] == "professor")
+        header("Location: professor.php");
+      else if ($_SESSION["tipo"] == "aluno")
+        header("Location: aluno.php");
+    }
   }
 
   function isLoggedIn() {
-    if (isset($_SESSION["id"]) && isset($_SESSION["tipo"])) {
-      if ($_SESSION["id"] != null && $_SESSION["tipo"] != null) {
-        $nome = $_SESSION["nome"];
+    if (isLoggedInHelper())
+      return True;
+    else
+      header("Location: index.php");
+  }
+
+  function isLoggedInHelper() {
+    if (isset($_SESSION["id"]) && isset($_SESSION["tipo"]))
+      if ($_SESSION["id"] != null && $_SESSION["tipo"] != null)
         return True;
-      }
-    }
-    header("Location: index.php");
+    return False;
   }
 
   function hasPermission($pageType, $pageId) {
@@ -36,7 +49,7 @@
           header("Location: 403.php");
         break;
       case 'atividade':
-        if ($userProfile == "professor" && canProfessorEdit($pageId, $userId))
+        if ($userProfile == "professor" && ($pageId == NULL || canProfessorEdit($pageId, $userId)))
           return True;
         else
           header("Location: 403.php");

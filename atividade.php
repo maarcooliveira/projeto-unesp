@@ -4,7 +4,7 @@
   if (isset($_GET['id']))
     hasPermission("atividade", $_GET['id']);
   else
-    hasPermission(NULL, NULL);
+    hasPermission("atividade", NULL);
 
   // include db connect class
   require_once __DIR__ . '/api/db_connect.php';
