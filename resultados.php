@@ -21,13 +21,23 @@
   // include db connect class
   require_once __DIR__ . '/api/db_connect.php';
 
+  $queryAtividade = "SELECT atividade.*, turma.nome AS turma FROM atividade
+                     INNER JOIN turma ON atividade.id_turma = turma.id
+                     WHERE atividade.id = {$id}";
+
   $queryResolucoes = "SELECT resolucao.*, usuario.nome AS aluno FROM resolucao
                       INNER JOIN usuario ON usuario.id = resolucao.id_usuario
-                      WHERE id_atividade = {$id} AND concluido = true
-                      ORDER BY usuario.nome";
+                      WHERE id_atividade = {$id} ORDER BY usuario.nome";
 
+  $queryQtdEntrega = "SELECT COUNT(*) as qtd FROM resolucao r WHERE r.id_atividade = {$id} AND r.concluido = true";
+
+  $atividades = mysqli_query($connection, $queryAtividade);
   $resolucoes = mysqli_query($connection, $queryResolucoes);
-  if (!($resolucoes)) { die("Database query failed." . mysqli_error ($connection));}
+  $qtdEntrega = mysqli_query($connection, $queryQtdEntrega);
+  if (!($resolucoes || $qtdEntrega || $atividades)) { die("Database query failed." . mysqli_error ($connection));}
+
+  $atividade = mysqli_fetch_assoc($atividades);
+  $qtd = mysqli_fetch_assoc($qtdEntrega);
 ?>
 
 
@@ -78,46 +88,80 @@
 
     <main class="container">
 
-        <!-- <br><div class="row">
-          <h3>Atividade <?php /*echo $_GET['id']*/?></h3>
-        </div> -->
-
-        <div id="gabarito"></div>
-
-        <div>
-          <hr id="full-hr" style="visibility: hidden;">
+        <br><div class="row">
+          <h2 class="text-center">Resultados da Atividade: <?php echo $atividade['titulo'] ?></h2>
+          <br>
+          <h4>Turma: <?php echo $atividade['turma'] ?></h4>
+          <h4>Alunos na turma: <?php echo $resolucoes->num_rows ?></h4>
+          <h4>Atividades entregues: <?php echo $qtd['qtd'] ?></h4>
+          <h4>Data limite para entrega: <?php echo date("d/m/Y", strtotime($atividade['data_entrega'])) ?></h4>
+          <h4>Distância média da turma: <span id="dmt"></span></h4>
+          <br>
+          <a class="button radius small-5" data-reveal-id="modalGabarito" onclick="">Ver atividade original</a>
+          <a class="button radius small-5 small-offset-1" onclick="" data-reveal-id="modalResultadoTurma">Ver resultado geral</a>
         </div>
 
-        <div class="row" id="toolbar">
-            <hr>
-            <h3 class="small-6 columns">Resultados<?php echo ' - ' . $resolucoes->num_rows . ' entrega' . ($resolucoes->num_rows != 1 ? 's' : '')?></h3>
-            <div class="small-6 columns">
-                <select name="resultado" id="aluno_resultado">
-                  <option value="-1" selected>Resumo da turma</option>
-                  <?php
-                    while($resolucao = mysqli_fetch_assoc($resolucoes)) {
-                      echo "<option value='{$resolucao['id_usuario']}'>{$resolucao['aluno']}</option>";
-                    } ?>
-                </select>
-            </div>
-        </div>
         <br>
         <div class="row">
-          <h4 id="dm_turma" class="small-6 columns"><i class="fa fa-users"></i> Distância média da turma: <span id="dmt"></span></h4>
-          <h4 id="dm_aluno" class="small-6 columns"><i class="fa fa-user"></i> Distância do aluno: <span id="dma"></span></h4>
+          <h5 class="small-7 columns b">Aluno</h5>
+          <h5 class="small-3 columns b">Status</h5>
+          <h5 class="small-2 columns b text-center">Distância</h5>
         </div>
 
-        <div id="compara_turma"></div>
-        <div id="compara_aluno"></div>
 
-        <div class="row" id="legenda" style="display: none">
-          <div class="small-3 columns small-offset-2"><i class="fa fa-square psan"></i> Apenas professor ligou</div>
-          <div class="small-3 columns"><i class="fa fa-square pnas"></i> Apenas aluno ligou</div>
-          <div class="small-3 columns end"><i class="fa fa-square psas"></i> Ambos ligaram</div>
+        <?php
+          $count = 0;
+          while($resolucao = mysqli_fetch_assoc($resolucoes)) {
+        ?>
+          <div class="row">
+            <a class="no-color-a" <?php if($resolucao['concluido']) echo "data-reveal-id='modalResultadoAluno'" ?> onclick="lastSelected(<?php echo $resolucao['id_usuario'] ?>)">
+              <div class="row add-hover <?php if($count%2 == 0) echo "darker"?>">
+                <br>
+                <span class="small-7 columns"><?php echo $resolucao['aluno'] ?></span>
+                <?php if ($resolucao['concluido']) { ?>
+                  <span class="small-3 columns"><i class="fa fa-check-circle-o ok"></i> Entregue</span>
+                  <span class="small-2 columns text-center" id='<?php echo 'dma-' . $resolucao['id_usuario']?>'>-</span>
+                <?php } else { ?>
+                  <span class="small-3 columns"><i class="fa fa-times-circle-o not-ok"></i> Não Entregue</span>
+                  <span class="small-2 columns text-center">-</span>
+                <?php } ?>
+                <br><br>
+              </div>
+            </a>
+          </div>
+        <?php $count++; } ?>
+        <br><br>
+
+
+        <div id="modalGabarito" class="reveal-modal full" data-reveal aria-labelledby="modalTitle" aria-hidden="false" role="dialog">
+            <div id="gabarito"></div>
+            <div><hr id="full-hr" class="invisible"></div>
+          <a class="close-reveal-modal" aria-label="Close">&#215;</a>
         </div>
-        <br>
-        <div id="tabela" class="row"></div>
-        <br>
+
+
+        <div id="modalResultadoTurma" class="reveal-modal full" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="">
+          <h2 id="modalTitle">Resultado gráfico da turma</h2>
+          <p class="lead">Traremos esta funcionalidade em breve. Aguarde!</p>
+          <a class="close-reveal-modal" aria-label="Close">&#215;</a>
+        </div>
+
+
+        <div id="modalResultadoAluno" class="reveal-modal full" data-reveal aria-labelledby="modalTitle" aria-hidden="false" role="dialog">
+          <div class="row" id="legenda">
+            <div class="small-3 columns small-offset-2"><i class="fa fa-square psan"></i> Apenas professor ligou</div>
+            <div class="small-3 columns"><i class="fa fa-square pnas"></i> Apenas aluno ligou</div>
+            <div class="small-3 columns end"><i class="fa fa-square psas"></i> Ambos ligaram</div>
+          </div>
+          <div id="compara_aluno"></div>
+
+            <br>
+            <h3 class="text-center">Tabela de distâncias</h3>
+            <div id="tabela"></div>
+            <br>
+          <a class="close-reveal-modal" aria-label="Close">&#215;</a>
+        </div>
+
     </main>
 
     <script src="./js/jquery-2.1.4.min.js"></script>

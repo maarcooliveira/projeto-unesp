@@ -1,33 +1,39 @@
-var width, height, g, renderer, layouter, render, edgeFactory;
+var renderer, layouter, render;
 var matriz_turma;
 var distancia;
 var resolucoes = [];
+var id = -1;
 
 for (var r = 0; r < resolucoes_txt.length; r++) {
   resolucoes.push(JSON.parse(resolucoes_txt[r]));
 }
 
-$( document ).ready(function() {
-  $('.psas').css('color', PSAS_C);
-  $('.psan').css('color', PSAN_C);
-  $('.pnas').css('color', PNAS_C);
+$(document).ready(function() {
 
-  toolbar_height = $('#toolbar').height();
-  navbar_heigth = $('#navbar').height();
-  row_width = $('#full-hr').width();
-  $('#full-hr').css("margin", "0");
+  $(document).on('opened.fndtn.reveal', '#modalGabarito[data-reveal]', function () {
+    var modal = $(this);
+    mostrarGabarito();
+  });
 
-  width = row_width;
-  height = $(window).height() - toolbar_height - navbar_heigth;
+  $(document).on('opened.fndtn.reveal', '#modalResultadoAluno[data-reveal]', function () {
+    var modal = $(this);
+    mostrarResultadoAluno();
+  });
 
-  edgeFactory = function(source, target) {
-    var e = jQuery.extend(true, {}, this.template);
-    e.source = source;
-    e.target = target;
-    return e;
-  }
+  calcularMatrizes();
+});
 
-  g = new Graph();
+function lastSelected(selId) {
+  id = selId;
+}
+
+function mostrarGabarito() {
+  $("#gabarito").html("");
+
+  var height = $(window).height() - $('#navbar').height();
+  var width = $(window).width() - 40;
+  var g = new Graph();
+
   g.edgeFactory.build = edgeFactory;
 
   for (i = 0; i < gabarito['nodes'].length; i++) {
@@ -46,8 +52,7 @@ $( document ).ready(function() {
   // layouter = new Graph.Layout.Grid(g, true);
   renderer = new Graph.Renderer.Raphael('gabarito', g, width, height);
   renderer.draw();
-  calcularMatrizes();
-});
+}
 
 function calcularMatrizes() {
   // valores utilizados para calculo da nota
@@ -62,8 +67,6 @@ function calcularMatrizes() {
   var matriz;
   distancia = [];
   matriz_turma = [];
-
-  $("#dm_aluno").css("display", "none");
 
   // repete para cada uma das resolucoes
   for (var r = 0; r < resolucoes.length; r++) {
@@ -109,22 +112,20 @@ function calcularMatrizes() {
 
     distancia[r] = distancia_cel/npr;
     distancia_total += distancia[r];
+
+    $("#dma-" + resolucao['aluno']).text(distancia[r].toFixed(3));
   }
   $("#dmt").text((distancia_total/qtd_respostas).toFixed(3));
+
+
 }
 
-$("#aluno_resultado").change(function() {
-  var id = $("#aluno_resultado").val();
+function mostrarResultadoAluno() {
   var pos;
 
   $("#tabela").html("");
 
-  if (id === "-1") {
-    //TODO: matriz consolidada da sala;
-    $("#dm_aluno").css("display", "none");
-    $("#compara_aluno").css("display", "none");
-  }
-  else {
+  if (id !== -1) {
     for (var m = 0; m < resolucoes.length; m++) {
       var resolucao = resolucoes[m];
       if (resolucao['aluno'] == id) {
@@ -132,9 +133,6 @@ $("#aluno_resultado").change(function() {
         break;
       }
     }
-
-    $("#dm_aluno").css("display", "inline");
-    $("#dma").text(distancia[pos].toFixed(3));
 
     var matriz = matriz_turma[pos];
     var np = gabarito['nodes'].length;
@@ -164,20 +162,17 @@ $("#aluno_resultado").change(function() {
     result += "</table>";
     $("#tabela").append(result);
 
-    $("#compara_aluno").fadeOut("slow", function() {
-      mostrarMapa(pos);
-      switched = false;
-      updateTables(); // Calling responsive-tables.js function
-    });
+    switched = false;
+    updateTables(); // Calling responsive-tables.js function
+    mostrarMapa(pos);
   }
-});
+}
 
 function mostrarMapa(pos) {
-  $("#compara_aluno").css("display", "inline");
-  $("#compara_aluno").css("visibility", "hidden");
   $("#compara_aluno").html("");
-  $("#legenda").css("display", "inline");
 
+  var width = $(window).width() - 40;
+  var height = $(window).height() - $('#legenda').height();
   var resolucao = resolucoes[pos];
 
   r = new Graph();
@@ -244,12 +239,4 @@ function mostrarMapa(pos) {
   layouter = new Graph.Layout.Ordered(r, true, null);
   renderer = new Graph.Renderer.Raphael('compara_aluno', r, width, height);
   renderer.draw();
-
-  $("#compara_aluno").css("display", "none");
-  $("#compara_aluno").css("visibility", "visible");
-  $("#compara_aluno").fadeIn("fast", function() {
-    $('html, body').animate({
-      scrollTop: $("#toolbar").offset().top
-    }, 500);
-  });
 }

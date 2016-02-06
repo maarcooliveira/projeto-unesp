@@ -22,3 +22,10 @@ var render = function(r, n) {
   var set = r.set().push(rec).push(txt);
   return set;
 };
+
+var edgeFactory = function(source, target) {
+  var e = jQuery.extend(true, {}, this.template);
+  e.source = source;
+  e.target = target;
+  return e;
+}

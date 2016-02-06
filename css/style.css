@@ -19,3 +19,45 @@ body, h1, h2, h3, h4, h5, h6, p, a {
 .darker {
 	background-color: #f6f6f6;
 }
+
+.no-color-a {
+	color: #000;
+}
+
+.no-color-a:hover {
+	color: #000;
+	background-color: #000;
+}
+
+.ok {
+	color: #1565c0;
+}
+
+.not-ok {
+	color: #E33258;
+}
+
+.add-hover:hover {
+	background-color: #d9dee0;
+}
+
+.invisible {
+	visibility: hidden;
+}
+
+.psas {
+	color: #4ECDC4;
+}
+
+.psan {
+	color:#E33258;
+}
+
+.pnas {
+	color: #F8CA00;
+}
+
+.reveal-modal{
+	overflow: auto;
+  /*position: fixed;*/
+}
