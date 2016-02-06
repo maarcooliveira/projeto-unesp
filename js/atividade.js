@@ -4,13 +4,9 @@ var mapa = {};
 var gabarito = {};
 var editado = false;
 
-// PROVISORIO P/ ENVIAR LISTA DE NOS E EDGES A SEREM SALVAS;
-var mapa_nodes;
-var mapa_edges = Array();
-var node_positions = Array();
 if (continuacao) {
-    var mapa = mapa_txt;
-    var gabarito = gabarito_txt;
+  var mapa = mapa_txt;
+  var gabarito = gabarito_txt;
 }
 
 
@@ -306,9 +302,36 @@ function addNode(name) {
   newNode.layoutPosY = 0.5;
 }
 
+function hasEdge(from, to) {
+  for (var i = 0; i < g['edges'].length; i++) {
+    var src_n = g['edges'][i]['source']['id'];
+    var tgt_n = g['edges'][i]['target']['id'];
+    if ((src_n === from && tgt_n === to) || (src_n === to && tgt_n === from)) {
+      return true;
+    }
+  }
+  return false;
+}
+
 function addEdge(weight) {
 	var from = $(src).parent().attr('title');
-   var to = $(dest).parent().attr('title');
+  var to = $(dest).parent().attr('title');
+
+  if (hasEdge(from, to)) {
+    // Notificação de ligação já existente
+    var n = noty({
+      text: '<i class="fa fa-repeat"></i> \"<strong>' + from + '</strong>\" e \"<strong>' + to + '</strong>\" já estavam relacionados',
+      layout: 'topCenter',
+      type: 'warning',
+      theme: 'relax',
+      timeout: 3000
+    });
+
+    cancelSelect();
+    return;
+  }
+
+
 	// var newEdge = g.addEdge(from, to, {label: weight, stroke : "#C7C7C7", "font-size": "16px"});
    //TODO: temp; deve mostrar o peso das ligações quando o peso não for 1 por padrão
    var newEdge = g.addEdge(from, to, {label: weight, stroke : "#C7C7C7", "font-size": "0px"});
@@ -346,14 +369,14 @@ function removeEdge(edge) {
     var n = noty({
       text: '<i class="fa fa-times"></i> \"<strong>' + from + '</strong>\" e \"<strong>' + to + '</strong>\" foram desrelacionados',
       layout: 'topCenter',
-      type: 'warning',
+      type: 'error',
       theme: 'relax',
       timeout: 3000
     });
 }
 
 function salvar() {
-    mapa_nodes = Object.keys(g['nodes']);
+    var mapa_nodes = Object.keys(g['nodes']);
 
     var titulo = $("#titulo").val();
     var descricao = $("#descricao").val();
@@ -370,6 +393,7 @@ function salvar() {
     gabarito['peso_i'] = peso_i;
     gabarito['peso_f'] = peso_f;
 
+    var mapa_edges = Array();
     for (var i = 0; i < g['edges'].length; i++) {
         var src_n = g['edges'][i]['source']['id'];
         var tgt_n = g['edges'][i]['target']['id'];
@@ -378,6 +402,7 @@ function salvar() {
         mapa_edges.push(edge_n);
     }
 
+    var node_positions = Array();
     for (var n = 0; n < mapa_nodes.length; n++) {
       var pos = {};
       pos.x = g.nodes[mapa_nodes[n]].layoutPosX;

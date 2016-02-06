@@ -270,7 +270,6 @@ function hasEdge(from, to) {
   for (var i = 0; i < g['edges'].length; i++) {
     var src_n = g['edges'][i]['source']['id'];
     var tgt_n = g['edges'][i]['target']['id'];
-    console.log(src_n + " " + tgt_n + " compare to " + from + " " + to);
     if ((src_n === from && tgt_n === to) || (src_n === to && tgt_n === from)) {
       return true;
     }
