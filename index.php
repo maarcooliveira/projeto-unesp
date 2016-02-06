@@ -1,3 +1,8 @@
+<?php
+  include("api/check_login.php");
+  redirectIfLoggedIn();
+?>
+
 <!doctype html>
 <html lang="pt">
   <head>
