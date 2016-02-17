@@ -17,20 +17,19 @@
   </head>
 
   <body>
-
     <main>
-
       <br>
       <div class="row">
         <img src="./images/logo.png" alt="NextEx Logo" class="small-10 small-offset-1 medium-6 medium-offset-3 columns"/>
       </div>
       <h4 class="text-center">Examination Tool</h4>
-      <br><br><br>
+      <br><br>
+      <!-- Login COM facebook -->
       <!-- <div class="row">
-        <a onClick="statusFacebook();" class="medium-4 medium-offset-4 columns button radius">Login</a>
+        <a onClick="statusFacebook();" class="button radius small-10 small-offset-1 medium-6 medium-offset-3 columns">Login</a>
       </div> -->
 
-      <!-- TEMP: login sem facebook -->
+      <!-- Login SEM facebook -->
       <form action="welcome.php" method="post" id="formLogin">
         <div class="row">
             <div class="row">
@@ -54,6 +53,7 @@
           <br><input type="submit" class="button radius small-10 small-offset-1 medium-6 medium-offset-3 columns" value="Login">
         </div>
       </form>
+      <br><br>
     </main>
 
     <script src="./js/jquery-2.1.4.min.js"></script>

@@ -15,7 +15,7 @@ function loginFacebook() {
             console.log(response.email);
           });
 
-          window.location.href = "welcome.php";          
+          window.location.href = "welcome.php";
          }
       }, {scope: 'email' });
 }
@@ -38,5 +38,3 @@ function statusFacebook() {
             loginFacebook(); // nao autorizado, solicitar login
       }})
 }
-
-

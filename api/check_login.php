@@ -128,8 +128,8 @@
 
   // Não utilizado;
   function fbLogin() {
-    require_once("base_facebook.php");
-    require_once("facebook.php");
+    require_once("facebook/base_facebook.php");
+    require_once("facebook/facebook.php");
 
     $config = array();
     $config['appId'] = '165128130491436';
