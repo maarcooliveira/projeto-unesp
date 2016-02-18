@@ -3,28 +3,13 @@
   isLoggedIn();
   hasPermission("aluno", NULL);
 
-  require_once __DIR__ . '/api/db_connect.php';
+  include("api/atividade_aux.php");
+  include("api/turma_aux.php");
 
-  $queryOutrasTurmas = "SELECT turma.*, usuario.nome AS professor FROM turma
-                        INNER JOIN usuario ON turma.id_professor = usuario.id
-                        WHERE turma.id_universidade IN (SELECT id_universidade FROM usuario WHERE id = {$_SESSION['id']}) AND turma.id NOT IN (SELECT id_turma FROM usuario_turma WHERE id_usuario = {$_SESSION['id']})";
-  $queryInsertResolucao = "INSERT IGNORE INTO resolucao (id_atividade, id_usuario, concluido) SELECT id, {$_SESSION['id']}, false FROM atividade WHERE id_turma IN (SELECT id_turma FROM usuario_turma WHERE id_usuario = {$_SESSION['id']}) AND liberado = true";
-
-  $queryMapas = "SELECT atividade.*, turma.nome AS turma, resolucao.concluido AS concluido FROM atividade
-                 INNER JOIN turma ON atividade.id_turma = turma.id
-                 INNER JOIN resolucao ON (atividade.id = resolucao.id_atividade AND resolucao.id_usuario = {$_SESSION['id']})
-                 WHERE id_turma IN (SELECT id_turma FROM usuario_turma WHERE id_usuario = {$_SESSION['id']})
-                 AND liberado = true";
-
-  $queryTurmas = "SELECT turma.*, usuario.nome AS professor FROM turma
-                  INNER JOIN usuario ON turma.id_professor = usuario.id
-                  WHERE turma.id IN (SELECT id_turma FROM usuario_turma WHERE id_usuario = {$_SESSION['id']})";
-
-  $insertResolucao = mysqli_query($connection, $queryInsertResolucao);
-  $mapas = mysqli_query($connection, $queryMapas);
-  $turmas = mysqli_query($connection, $queryTurmas);
-  $outrasTurmas = mysqli_query($connection, $queryOutrasTurmas);
-  if (!($insertResolucao && $outrasTurmas && $mapas && $turmas)) { die("Database query failed." . mysqli_error ($connection));}
+  $turmas = getTurmasAluno($_SESSION['id']);
+  $turmasNaoInscrito = getTurmasAlunoNaoInscrito($_SESSION['id']);
+  $atividades = getAtividadesAluno($_SESSION['id']);
+  insertResolucoesAluno($_SESSION['id']);
 ?>
 
 <!doctype html>
@@ -73,21 +58,21 @@
       </div>
 
       <div class="row">
-        <h5 class="small-3 columns b">Título</h5>
+        <h5 class="small-3 columns b">Atividade</h5>
         <h5 class="small-3 columns b">Turma</h5>
-        <h5 class="small-3 columns b">Entrega</h5>
+        <h5 class="small-3 columns b">Prazo</h5>
         <h5 class="small-3 columns b">Status</h5>
       </div>
 
 
       <?php $count = 0;
-        while($mapa = mysqli_fetch_assoc($mapas)) { ?>
+        foreach($atividades as $atividade) { ?>
           <div class="row <?php if($count%2 == 0) echo "darker"?>">
             <br>
-            <a class="small-3 columns" href="avaliacao.php?id=<?php echo $mapa['id'] ?>"><?php echo $mapa['titulo'] ?></a>
-            <span class="small-3 columns"><?php echo $mapa['turma'] ?></span>
-            <span class="small-3 columns"><?php echo date("d/m/Y", strtotime($mapa['data_entrega'])) ?></span>
-            <span class="small-3 columns"><?php if ($mapa['concluido'] == 1) echo "Entregue"; else echo "Não entregue"; ?></span>
+            <a class="small-3 columns" href="avaliacao.php?id=<?php echo $atividade['id'] ?>"><?php echo $atividade['titulo'] ?></a>
+            <span class="small-3 columns"><?php echo $atividade['turma'] ?></span>
+            <span class="small-3 columns"><?php echo date("d/m/Y", strtotime($atividade['data_entrega'])) ?></span>
+            <span class="small-3 columns"><?php if ($atividade['concluido'] == 1) echo "Entregue"; else echo "Não entregue"; ?></span>
             <br><br>
           </div>
       <?php $count++; } ?>
@@ -105,7 +90,7 @@
       </div>
 
       <?php $count = 0;
-        while($turma = mysqli_fetch_assoc($turmas)) { ?>
+        foreach($turmas as $turma) { ?>
           <div class="row <?php if($count%2 == 0) echo "darker"?>">
             <br>
             <span class="small-6 columns"><?php echo $turma['nome'] ?></span>
@@ -129,9 +114,9 @@
                       <select id="turma">
                         <?php
                           $cntTurma = 0;
-                          while($outraTurma = mysqli_fetch_assoc($outrasTurmas)) {
+                          foreach($turmasNaoInscrito as $turma) {
                             $cntTurma++;
-                            echo "<option value='{$outraTurma['id']}'>{$outraTurma['nome']}" . " - Prof. " . "{$outraTurma['professor']}</option>";
+                            echo "<option value='{$turma['id']}'>{$turma['nome']}" . " - Prof. " . "{$turma['professor']}</option>";
                           } ?>
                       </select>
                     </label>
@@ -162,8 +147,5 @@
 </html>
 
 <?php
-  // mysqli_free_result($universidades);
-  // mysqli_free_result($mapas);
-  // mysqli_free_result($turmas);
   mysqli_close($connection);
 ?>

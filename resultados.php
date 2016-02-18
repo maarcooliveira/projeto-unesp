@@ -166,10 +166,10 @@
 
     <script src="./js/jquery-2.1.4.min.js"></script>
     <script src="./js/foundation.min.js"></script>
-    <script src="./js/raphael-min.js" type="text/javascript" charset="utf-8"></script>
-    <script src="./js/dracula_graph.js"></script>
-    <script src="./js/dracula_algorithms.js"></script>
-    <script src="./js/dracula_graffle.js"></script>
+    <script src="./js/dracula/raphael-min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="./js/dracula/dracula_graph.js"></script>
+    <script src="./js/dracula/dracula_algorithms.js"></script>
+    <script src="./js/dracula/dracula_graffle.js"></script>
     <script src="./js/variables.js"></script>
     <script src="./js/resultados.js"></script>
     <script src="./js/responsive-tables.js"></script>

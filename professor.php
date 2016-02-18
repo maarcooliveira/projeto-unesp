@@ -3,21 +3,13 @@
   isLoggedIn();
   hasPermission("professor", NULL);
 
-  // include db connect class
-  require_once __DIR__ . '/api/db_connect.php';
+  include("api/atividade_aux.php");
+  include("api/universidade_aux.php");
+  include("api/turma_aux.php");
 
-  $queryUni  = "SELECT * FROM universidade ORDER BY nome";
-  $queryMapas = "SELECT atividade.*, turma.nome AS turma FROM atividade
-                 INNER JOIN turma ON atividade.id_turma = turma.id
-                 WHERE id_turma IN (SELECT id FROM turma WHERE id_professor = {$_SESSION['id']})";
-  $queryTurmas = "SELECT turma.*, universidade.nome AS universidade FROM turma
-                  INNER JOIN universidade ON turma.id_universidade = universidade.id
-                  WHERE id_professor = {$_SESSION['id']}";
-
-  $universidades = mysqli_query($connection, $queryUni);
-  $mapas = mysqli_query($connection, $queryMapas);
-  $turmas = mysqli_query($connection, $queryTurmas);
-  if (!($universidades && $mapas && $turmas)) { die("Database query failed."); }
+  $universidades = getUniversidades();
+  $atividades = getAtividadesProfessor($_SESSION['id']);
+  $turmas = getTurmasProfessor($_SESSION['id']);
 ?>
 
 <!doctype html>
@@ -65,35 +57,37 @@
       </div>
 
       <div class="row">
-        <h5 class="small-3 columns b">Título</h5>
+        <h5 class="small-3 columns b">Atividade</h5>
         <h5 class="small-3 columns b">Turma</h5>
-        <h5 class="small-2 columns b">Entrega</h5>
+        <h5 class="small-2 columns b">Prazo</h5>
         <h5 class="small-2 columns b">Status</h5>
         <h5 class="small-2 columns b"><a href="atividade.php"><i class="fa fa-plus"></i> Criar</a></h5>
       </div>
 
       <?php
         $count = 0;
-        while($mapa = mysqli_fetch_assoc($mapas)) {
-          $link = "atividade.php?id=" . $mapa['id'];
-          if ($mapa['liberado']) {
-            $link = "resultados.php?id=" . $mapa['id'];
+        foreach ($atividades as $atividade) {
+          $link = "atividade.php?id=" . $atividade['id'];
+          if ($atividade['liberado']) {
+            $link = "resultados.php?id=" . $atividade['id'];
           }
       ?>
         <div class="row <?php if($count%2 == 0) echo "darker"?>">
           <br>
-          <a class="small-3 columns" href="<?php echo $link ?>"><?php echo $mapa['titulo'] ?></a>
-          <span class="small-3 columns"><?php echo $mapa['turma'] ?></span>
-          <span class="small-2 columns"><?php echo date("d/m/Y", strtotime($mapa['data_entrega'])) ?></span>
-          <?php if ($mapa['liberado']) { ?>
+          <a class="small-3 columns" href="<?php echo $link ?>"><?php echo $atividade['titulo'] ?></a>
+          <span class="small-3 columns"><?php echo $atividade['turma'] ?></span>
+          <span class="small-2 columns"><?php echo date("d/m/Y", strtotime($atividade['data_entrega'])) ?></span>
+          <?php if ($atividade['liberado']) { ?>
             <span class="small-2 columns"><i class="fa fa-check-square-o"></i> Liberado</span>
           <?php } else { ?>
-            <a class="small-2 columns" onclick="liberar('<?php echo $mapa['id'] ?>');"><i class="fa fa-square-o"></i> Liberar</a>
-            <a class="small-2 columns imp" onclick="removerAtividade('<?php echo $mapa['id'] ?>');"><i class="fa fa-minus-circle"></i> Excluir</a>
+            <a class="small-2 columns" onclick="liberar('<?php echo $atividade['id'] ?>');"><i class="fa fa-square-o"></i> Liberar</a>
           <?php } ?>
+          <a class="small-2 columns imp" onclick="removerAtividade('<?php echo $atividade['id'] ?>');"><i class="fa fa-minus-circle"></i> Excluir</a>
           <br><br>
         </div>
-      <?php $count++; } ?>
+      <?php
+          $count++;
+        } ?>
 
       <br><br>
       <div class="row">
@@ -110,7 +104,7 @@
 
       <?php
         $count = 0;
-        while($turma = mysqli_fetch_assoc($turmas)) { ?>
+        foreach($turmas as $turma) { ?>
         <div class="row <?php if($count%2 == 0) echo "darker"?>">
           <br>
           <span class="small-4 columns"><?php echo $turma['nome'] ?></span>
@@ -119,7 +113,9 @@
           <a class="small-2 columns imp" onclick="removerTurma('<?php echo $turma['id'] ?>');"><i class="fa fa-minus-circle"></i> Excluir</a>
           <br><br>
         </div>
-      <?php $count++; } ?>
+      <?php
+          $count++;
+        } ?>
       <br><br>
 
       <div id="modalAddTurma" class="reveal-modal " data-reveal aria-labelledby="modalAddTurmaTitle" aria-hidden="true" role="dialog">
@@ -133,7 +129,7 @@
                       <label>Universidade
                         <select name="universidade" id="universidade">
                           <?php
-                            while($universidade = mysqli_fetch_assoc($universidades)) {
+                            foreach($universidades as $universidade) {
                               echo "<option value='{$universidade['id']}'>{$universidade['nome']}</option>";
                             } ?>
                         </select>
@@ -171,8 +167,5 @@
 </html>
 
 <?php
-  mysqli_free_result($universidades);
-  mysqli_free_result($mapas);
-  mysqli_free_result($turmas);
   mysqli_close($connection);
 ?>

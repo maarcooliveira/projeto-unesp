@@ -334,7 +334,7 @@ function enviar_form_salvar() {
   mapa['aluno'] = id_aluno;
 
   $.ajax({
-    url: "api/salvar_arquivo_aluno.php",
+    url: "api/salvar_resolucao.php",
     type:'POST',
     data:
     {

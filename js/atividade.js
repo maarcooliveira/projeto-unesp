@@ -5,10 +5,9 @@ var gabarito = {};
 var editado = false;
 
 if (continuacao) {
-  var mapa = mapa_txt;
-  var gabarito = gabarito_txt;
+  mapa = _mapa;
+  gabarito = _gabarito;
 }
-
 
 $(document).ready(function() {
     $("#tb_remover").css('display', 'none');
@@ -401,7 +400,7 @@ function salvar() {
     var desc_gabarito = gabarito; //JSON.decycle(gabarito);
     $("#dados_gabarito").val(JSON.stringify(desc_gabarito));
     $("#continuacao").val(continuacao);
-    $("#id_atividade").val(id_atividade);
+    $("#id_atividade").val(_id);
     $("#formAddMapa").submit();
 }
 

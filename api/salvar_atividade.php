@@ -7,25 +7,28 @@
    $continuacao = isset($_POST['continuacao']) ? $_POST['continuacao'] : "";
    $id_atividade = isset($_POST['id_atividade']) ? $_POST['id_atividade'] : "";
 
-   // print_r($_POST);
-
-   // include db connect class
   require_once __DIR__ . '/db_connect.php';
 
    $nome_mapa = "mapa.json";
    $nome_gabarito = "gabarito.json";
 
    if (!$continuacao) {
-    $query  = "INSERT INTO atividade (id_turma, titulo, data_entrega, liberado) VALUES ({$id_turma}, '{$titulo}', '{$data_entrega}', false)";
-    $result = mysqli_query($connection, $query);
-    // echo $query;
-    if (!$result) { die("Database query failed. " . mysqli_error ($connection)); }
+    $queryAtividade  = "INSERT INTO atividade (id_turma, titulo, data_entrega, liberado) VALUES ({$id_turma}, '{$titulo}', '{$data_entrega}', false)";
+    $resultAtividade = mysqli_query($connection, $queryAtividade);
+
+    if (!$resultAtividade) { die("Database query failed. " . mysqli_error ($connection)); }
     $id_atividade = mysqli_insert_id($connection);
+
+    $queryInsertResolucao = "INSERT INTO resolucao (id_usuario, id_atividade, concluido) SELECT id, {$id_atividade}, false FROM usuario WHERE id IN (SELECT id_usuario FROM usuario_turma WHERE id_turma = {$id_turma})";
+
+    $resultResolucao = mysqli_query($connection, $queryInsertResolucao);
+
+    if (!$resultResolucao) { die("Database query failed. " . mysqli_error ($connection)); }
    }
    else {
      $query  = "UPDATE atividade SET id_turma = {$id_turma}, titulo = '{$titulo}', data_entrega = '{$data_entrega}', liberado = false WHERE id = {$id_atividade}";
      $result = mysqli_query($connection, $query);
-     // echo $query;
+
      if (!$result) { die("Database query failed. " . mysqli_error ($connection)); }
    }
 

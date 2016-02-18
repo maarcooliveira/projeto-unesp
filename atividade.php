@@ -6,44 +6,25 @@
   else
     hasPermission("atividade", NULL);
 
-  // include db connect class
-  require_once __DIR__ . '/api/db_connect.php';
+  include("api/turma_aux.php");
+  include("api/atividade_aux.php");
 
-  // if (isset($_POST['submit'])) {
-  //
-  //   $turma = isset($_POST['turma']) ? $_POST['turma'] : "";
-  //   $titulo = isset($_POST['titulo']) ? $_POST['titulo'] : "";
-  //   $entrega = isset($_POST['entrega']) ? $_POST['entrega'] : "";
-  //
-  //   $query  = "INSERT INTO atividade (id_turma, titulo, data_entrega) VALUES ({$turma}, '{$titulo}', '{$entrega}')";
-  //   $result = mysqli_query($connection, $query);
-  //   echo $query;
-  //   if (!$result) { die("Database query failed. " . mysqli_error ($connection)); }
-  // }
+  $turmas = getTurmasProfessor($_SESSION['id']);
 
-  $id = isset($_GET['id']) ? $_GET['id'] : "undefined";
-  $continuacao = 0;
-  $mapa_txt_php = "undefined";
-  $gabarito_txt_php = "undefined";
-
-  if($id !== "undefined") {
+  if(isset($_GET['id'])) {
+    $id = $_GET['id'];
+    $continuacao = 1;
     $mapa_txt_php =  file_get_contents(getcwd() . "/atividades/" . $id . "/mapa.json");
     $gabarito_txt_php =  file_get_contents(getcwd() . "/atividades/" . $id . "/gabarito.json");
-    $continuacao = 1;
-    $queryAtividade = "SELECT * FROM atividade WHERE id = {$id}";
-    $atividade = mysqli_query($connection, $queryAtividade);
-    if (!$atividade) { die("Database query failed. " . mysqli_error ($connection)); }
-    $a = mysqli_fetch_assoc($atividade);
+    $atividade = getAtividade($_GET['id']);
   }
   else {
-    $a['titulo'] = "";
-    $a['id_turma'] = "";
-    $a['data_entrega'] = "";
+    $id = "undefined";
+    $continuacao = 0;
+    $mapa_txt_php = "undefined";
+    $gabarito_txt_php = "undefined";
+    $atividade = null;
   }
-
-  $queryTurmas = "SELECT * FROM turma WHERE id_professor = {$_SESSION['id']}";
-  $turmas = mysqli_query($connection, $queryTurmas);
-  if (!$turmas) { die("Database query failed."); }
 ?>
 
 <!doctype html>
@@ -64,11 +45,10 @@
   <script type="text/javascript">
     var continuacao = <?php echo ($continuacao); ?>;
     if (continuacao) {
-      var mapa_txt = <?php echo $mapa_txt_php; ?>;
-      var gabarito_txt = <?php echo $gabarito_txt_php; ?>;
-      var id_atividade = <?php echo $id; ?>;
+      var _mapa = <?php echo $mapa_txt_php; ?>;
+      var _gabarito = <?php echo $gabarito_txt_php; ?>;
+      var _id = <?php echo $id; ?>;
     }
-
   </script>
 
     <!-- <div class="contain-to-grid sticky"> -->
@@ -102,11 +82,11 @@
 
     <main class="container">
 
-      <form action="api/salvar_arquivo.php" method="post" id="formAddMapa">
+      <form action="api/salvar_atividade.php" method="post" id="formAddMapa">
 
         <div id="form-p1" style="display: none;">
           <br><div class="row">
-            <h3 class="text-center"><?php if($id == "undefined") echo "Nova Atividade"; else echo "Editar: {$a['titulo']}"; ?></h3>
+            <h3 class="text-center"><?php if ($id == "undefined") echo "Nova Atividade"; else echo "Editar Atividade" ?></h3>
           </div>
           <br>
           <div class="row">
@@ -114,8 +94,8 @@
               <label>Turma
                 <select name="id_turma">
                   <?php
-                    while($turma = mysqli_fetch_assoc($turmas)) {
-                      if ($turma['id'] == $a['id_turma'])
+                    foreach ($turmas as $turma) {
+                      if ($turma['id'] == $atividade['id_turma'])
                         $selected = "selected";
                       else
                         $selected = "";
@@ -129,7 +109,7 @@
           <div class="row">
             <div class="small-10 small-offset-1 large-8 large-offset-2 columns">
               <label>Título
-                <input type="text" id="titulo" name="titulo" placeholder="Insira um nome para a atividade" value="<?php echo $a['titulo'] ?>"/>
+                <input type="text" id="titulo" name="titulo" placeholder="Insira um nome para a atividade" value="<?php echo $atividade['titulo'] ?>"/>
               </label>
             </div>
           </div>
@@ -159,7 +139,7 @@
           <div class="row">
             <div class="small-10 small-offset-1 large-8 large-offset-2 columns">
               <label>Data de entrega
-                <input type="date" name="data_entrega" <?php if (!$a['data_entrega'] == "") echo "value='" . date("Y-m-d", strtotime($a['data_entrega'])) . "'" ?>/>
+                <input type="date" name="data_entrega" <?php if (!$atividade['data_entrega'] == "") echo "value='" . date("Y-m-d", strtotime($atividade['data_entrega'])) . "'" ?>/>
               </label>
             </div>
           </div>
@@ -167,7 +147,7 @@
           <div class="row">
             <div class="small-10 small-offset-1 large-8 large-offset-2 columns">
               <label>Termos
-                <input name="termos" id="termos" placeholder="Insira os termos separados por vírgula" <?php if($id !== "undefined") echo "disabled" ?>/>
+                <input name="termos" id="termos" placeholder="Insira os termos separados por vírgula" <?php if($id != "undefined") echo "disabled" ?>/>
               </label>
             </div>
           </div>
@@ -203,10 +183,10 @@
     <script src="./js/jquery-2.1.4.min.js"></script>
     <script src="./js/foundation.min.js"></script>
     <script src="./js/foundation.reveal.js"></script>
-    <script src="./js/raphael-min.js" type="text/javascript" charset="utf-8"></script>
-    <script src="./js/dracula_graph.js"></script>
-    <script src="./js/dracula_algorithms.js"></script>
-    <script src="./js/dracula_graffle.js"></script>
+    <script src="./js/dracula/raphael-min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="./js/dracula/dracula_graph.js"></script>
+    <script src="./js/dracula/dracula_algorithms.js"></script>
+    <script src="./js/dracula/dracula_graffle.js"></script>
     <script src="./js/noty/packaged/jquery.noty.packaged.min.js"></script>
     <script src="./js/bootstrap-tokenfield.min.js"></script>
     <script src="./js/variables.js"></script>
@@ -218,6 +198,5 @@
 </html>
 
 <?php
-  mysqli_free_result($turmas);
   mysqli_close($connection);
 ?>
