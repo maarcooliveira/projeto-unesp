@@ -30,7 +30,7 @@
       </div> -->
 
       <!-- Login SEM facebook -->
-      <form action="welcome.php" method="post" id="formLogin">
+      <form action="cadastro.php" method="post" id="formLogin">
         <div class="row">
             <div class="row">
               <div class="small-10 small-offset-1 medium-6 medium-offset-3 columns">

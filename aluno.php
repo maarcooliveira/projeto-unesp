@@ -5,15 +5,6 @@
 
   require_once __DIR__ . '/api/db_connect.php';
 
-  if (isset($_POST['submit'])) {
-
-    $turma = isset($_POST['turma']) ? $_POST['turma'] : "";
-
-    $query  = "INSERT INTO usuario_turma (id_usuario, id_turma) VALUES ({$_SESSION['id']}, {$turma})";
-    $result = mysqli_query($connection, $query);
-    if (!$result) { die("Database query failed. " . mysqli_error ($connection)); }
-  }
-
   $queryOutrasTurmas = "SELECT turma.*, usuario.nome AS professor FROM turma
                         INNER JOIN usuario ON turma.id_professor = usuario.id
                         WHERE turma.id_universidade IN (SELECT id_universidade FROM usuario WHERE id = {$_SESSION['id']}) AND turma.id NOT IN (SELECT id_turma FROM usuario_turma WHERE id_usuario = {$_SESSION['id']})";
@@ -113,14 +104,13 @@
         <h5 class="small-3 columns b"><a href="#" data-reveal-id="modalAddTurma"><i class="fa fa-plus"></i> Nova turma</a></h5>
       </div>
 
-
       <?php $count = 0;
         while($turma = mysqli_fetch_assoc($turmas)) { ?>
           <div class="row <?php if($count%2 == 0) echo "darker"?>">
             <br>
             <span class="small-6 columns"><?php echo $turma['nome'] ?></span>
             <span class="small-3 columns"><?php echo $turma['professor'] ?></span>
-            <a class="small-3 columns imp" onclick="remover('usuario_turma', '<?php echo $turma['id'] ?>');"><i class="fa fa-minus-circle"></i> Sair da turma</a>
+            <a class="small-3 columns imp" onclick="deixarTurma('<?php echo $turma['id'] ?>');"><i class="fa fa-minus-circle"></i> Sair da turma</a>
             <br><br>
           </div>
       <?php $count++; } ?>
@@ -132,30 +122,28 @@
             <h3 id="modalAddTurmaTitle" class="text-center">Participar de nova turma</h3>
               <div id="modalAddTurmaContent" class="large-10 small-10 columns large-offset-1 small-offset-1">
 
-
-                <form action="aluno.php" method="post" id="formAddTurma">
-                  <br><br>
-                  <div class="row">
-                    <div class="small-10 small-offset-1 large-8 large-offset-2 columns">
-                      <label>Turmas na sua universidade
-                        <select name="turma">
-                          <?php
-                            $cntTurma = 0;
-                            while($outraTurma = mysqli_fetch_assoc($outrasTurmas)) {
-                              $cntTurma++;
-                              echo "<option value='{$outraTurma['id']}'>{$outraTurma['nome']}" . " - Prof. " . "{$outraTurma['professor']}</option>";
-                            } ?>
-                        </select>
-                      </label>
-                    </div>
+                <br><br>
+                <div class="row">
+                  <div class="small-10 small-offset-1 large-8 large-offset-2 columns">
+                    <label>Turmas na sua universidade
+                      <select id="turma">
+                        <?php
+                          $cntTurma = 0;
+                          while($outraTurma = mysqli_fetch_assoc($outrasTurmas)) {
+                            $cntTurma++;
+                            echo "<option value='{$outraTurma['id']}'>{$outraTurma['nome']}" . " - Prof. " . "{$outraTurma['professor']}</option>";
+                          } ?>
+                      </select>
+                    </label>
                   </div>
+                  <input id="usuario" type="hidden" value="<?php echo $_SESSION['id'];?>">
+                </div>
 
-                  <div class="row">
-                    <br>
-                    <a class="button radius secondary small-5 small-offset-1 large-4 large-offset-2" onclick="$('#modalAddTurma').foundation('reveal', 'close');">Cancelar</a>
-                    <input <?php if($cntTurma == 0) echo "disabled";?> type="submit" name="submit" class="button radius small-5 large-4" value="Confirmar">
-                  </div>
-                </form>
+                <div class="row">
+                  <br>
+                  <button onclick="$('#modalAddTurma').foundation('reveal', 'close');" class="button radius secondary small-5 small-offset-1 large-4 large-offset-2">Cancelar</button>
+                  <button <?php if($cntTurma == 0) echo "disabled";?> onclick="entrarNaTurma()" class="button radius small-5 large-4">Confirmar</button>
+                </div>
 
               </div>
           </div>

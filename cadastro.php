@@ -90,7 +90,7 @@
       <h4 class="text-center">Por favor, confirme alguns dados para continuar.</h4>
       <br><br>
       <div class="row">
-        <form action="welcome.php" method="post">
+        <form action="cadastro.php" method="post">
 
           <div class="row">
             <div class="large-6 columns">

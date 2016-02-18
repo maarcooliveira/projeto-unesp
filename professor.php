@@ -89,7 +89,7 @@
             <span class="small-2 columns"><i class="fa fa-check-square-o"></i> Liberado</span>
           <?php } else { ?>
             <a class="small-2 columns" onclick="liberar('<?php echo $mapa['id'] ?>');"><i class="fa fa-square-o"></i> Liberar</a>
-            <a class="small-2 columns imp" onclick="remover('atividade', '<?php echo $mapa['id'] ?>');"><i class="fa fa-minus-circle"></i> Excluir</a>
+            <a class="small-2 columns imp" onclick="removerAtividade('<?php echo $mapa['id'] ?>');"><i class="fa fa-minus-circle"></i> Excluir</a>
           <?php } ?>
           <br><br>
         </div>
@@ -116,7 +116,7 @@
           <span class="small-4 columns"><?php echo $turma['nome'] ?></span>
           <span class="small-4 columns"><?php echo $turma['universidade'] ?></span>
           <span class="small-2 columns"><?php echo date("d/m/Y", strtotime($turma['data_criacao'])) ?></span>
-          <a class="small-2 columns imp" onclick="remover('turma', '<?php echo $turma['id'] ?>');"><i class="fa fa-minus-circle"></i> Excluir</a>
+          <a class="small-2 columns imp" onclick="removerTurma('<?php echo $turma['id'] ?>');"><i class="fa fa-minus-circle"></i> Excluir</a>
           <br><br>
         </div>
       <?php $count++; } ?>

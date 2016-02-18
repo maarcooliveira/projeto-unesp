@@ -15,7 +15,7 @@ function loginFacebook() {
             console.log(response.email);
           });
 
-          window.location.href = "welcome.php";
+          window.location.href = "cadastro.php";
          }
       }, {scope: 'email' });
 }
@@ -31,7 +31,7 @@ function statusFacebook() {
             console.log(response.email);
           });
 
-          window.location.href = "welcome.php";
+          window.location.href = "cadastro.php";
         } else if (response.status === 'not_authorized') {
             loginFacebook(); // nao autorizado, solicitar login
         } else {
