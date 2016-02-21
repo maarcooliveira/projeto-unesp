@@ -1,0 +1,45 @@
+{
+  "en-US": {
+    "atividades": "Activities",
+    "atividade": "Activity",
+    "turma": "Class",
+    "prazo": "Deadline",
+    "status": "Status",
+    "criar": "Create",
+    "liberado": "Released",
+    "liberar": "Release",
+    "excluir": "Delete",
+    "turmas": "Classes",
+    "turma": "Class",
+    "universidade": "University",
+    "criado_em": "Created in",
+    "nova_turma": "New class",
+    "nome_da_turma": "Class name",
+    "cancelar": "Cancel",
+    "confirmar": "Confirm",
+    "sair": "Logout",
+    "nome_turma_placeholder": "e.g.: Data Structures"
+  },
+
+  "pt-BR": {
+    "atividades": "Atividades",
+    "atividade": "Atividade",
+    "turma": "Turma",
+    "prazo": "Prazo",
+    "status": "Status",
+    "criar": "Criar",
+    "liberado": "Liberado",
+    "liberar": "Liberar",
+    "excluir": "Excluir",
+    "turmas": "Turmas",
+    "turma": "Turma",
+    "universidade": "Universidade",
+    "criado_em": "Criado em",
+    "nova_turma": "Nova turma",
+    "nome_da_turma": "Nome da turma",
+    "cancelar": "Cancelar",
+    "confirmar": "Confirmar",
+    "sair": "Sair",
+    "nome_turma_placeholder": "Ex: Algoritmos e Programação I"
+  }
+}

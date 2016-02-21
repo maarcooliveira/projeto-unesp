@@ -13,7 +13,7 @@
 ?>
 
 <!doctype html>
-<html lang="pt">
+<html lang="pt" ng-app="nextex" ng-controller="langController">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -42,7 +42,7 @@
           <li class="has-dropdown">
             <a href="#"><?php echo $_SESSION["nome"]; ?></a>
             <ul class="dropdown">
-              <li><a href="api/logout.php">Sair</a></li>
+              <li><a href="api/logout.php">{{str.sair}}</a></li>
             </ul>
           </li>
         </ul>
@@ -52,16 +52,16 @@
     <main class="container">
       <br>
       <div class="row">
-        <h3>Atividades</h3>
+        <h3>{{ str.atividades }}</h3>
         <br>
       </div>
 
       <div class="row">
-        <h5 class="small-3 columns b">Atividade</h5>
-        <h5 class="small-3 columns b">Turma</h5>
-        <h5 class="small-2 columns b">Prazo</h5>
-        <h5 class="small-2 columns b">Status</h5>
-        <h5 class="small-2 columns b"><a href="atividade.php"><i class="fa fa-plus"></i> Criar</a></h5>
+        <h5 class="small-3 columns b">{{str.atividade}}</h5>
+        <h5 class="small-3 columns b">{{str.turma}}</h5>
+        <h5 class="small-2 columns b">{{str.prazo}}</h5>
+        <h5 class="small-2 columns b">{{str.status}}</h5>
+        <h5 class="small-2 columns b"><a href="atividade.php"><i class="fa fa-plus"></i> {{str.criar}}</a></h5>
       </div>
 
       <?php
@@ -78,11 +78,11 @@
           <span class="small-3 columns"><?php echo $atividade['turma'] ?></span>
           <span class="small-2 columns"><?php echo date("d/m/Y", strtotime($atividade['data_entrega'])) ?></span>
           <?php if ($atividade['liberado']) { ?>
-            <span class="small-2 columns"><i class="fa fa-check-square-o"></i> Liberado</span>
+            <span class="small-2 columns"><i class="fa fa-check-square-o"></i> {{str.liberado}}</span>
           <?php } else { ?>
-            <a class="small-2 columns" onclick="liberar('<?php echo $atividade['id'] ?>');"><i class="fa fa-square-o"></i> Liberar</a>
+            <a class="small-2 columns" onclick="liberar('<?php echo $atividade['id'] ?>');"><i class="fa fa-square-o"></i> {{str.liberar}}</a>
           <?php } ?>
-          <a class="small-2 columns imp" onclick="removerAtividade('<?php echo $atividade['id'] ?>');"><i class="fa fa-minus-circle"></i> Excluir</a>
+          <a class="small-2 columns imp" onclick="removerAtividade('<?php echo $atividade['id'] ?>');"><i class="fa fa-minus-circle"></i> {{str.excluir}}</a>
           <br><br>
         </div>
       <?php
@@ -91,15 +91,15 @@
 
       <br><br>
       <div class="row">
-        <h3>Turmas</h3>
+        <h3>{{str.turmas}}</h3>
         <br>
       </div>
 
       <div class="row">
-        <h5 class="small-4 columns b">Turma</h5>
-        <h5 class="small-4 columns b">Universidade</h5>
-        <h5 class="small-2 columns b">Criado em</h5>
-        <h5 class="small-2 columns b"><a href="#" data-reveal-id="modalAddTurma"><i class="fa fa-plus"></i> Criar</a></h5>
+        <h5 class="small-4 columns b">{{str.turma}}</h5>
+        <h5 class="small-4 columns b">{{str.university}}</h5>
+        <h5 class="small-2 columns b">{{str.criado_em}}</h5>
+        <h5 class="small-2 columns b"><a href="#" data-reveal-id="modalAddTurma"><i class="fa fa-plus"></i> {{str.criar}}</a></h5>
       </div>
 
       <?php
@@ -110,7 +110,7 @@
           <span class="small-4 columns"><?php echo $turma['nome'] ?></span>
           <span class="small-4 columns"><?php echo $turma['universidade'] ?></span>
           <span class="small-2 columns"><?php echo date("d/m/Y", strtotime($turma['data_criacao'])) ?></span>
-          <a class="small-2 columns imp" onclick="removerTurma('<?php echo $turma['id'] ?>');"><i class="fa fa-minus-circle"></i> Excluir</a>
+          <a class="small-2 columns imp" onclick="removerTurma('<?php echo $turma['id'] ?>');"><i class="fa fa-minus-circle"></i> {{str.excluir}}</a>
           <br><br>
         </div>
       <?php
@@ -120,13 +120,13 @@
 
       <div id="modalAddTurma" class="reveal-modal " data-reveal aria-labelledby="modalAddTurmaTitle" aria-hidden="true" role="dialog">
           <div class="row collapse">
-            <h3 id="modalAddTurmaTitle" class="text-center">Nova turma</h3>
+            <h3 id="modalAddTurmaTitle" class="text-center">{{str.nova_turma}}</h3>
               <div id="modalAddTurmaContent" class="large-10 small-10 columns large-offset-1 small-offset-1">
                 <form id="formAddTurma">
                   <br><br>
                   <div class="row">
                     <div class="small-10 small-offset-1 large-8 large-offset-2 columns">
-                      <label>Universidade
+                      <label>{{str.universidade}}
                         <select name="universidade" id="universidade">
                           <?php
                             foreach($universidades as $universidade) {
@@ -139,15 +139,15 @@
 
                   <div class="row">
                     <div class="small-10 small-offset-1 large-8 large-offset-2 columns">
-                      <label>Nome da turma
-                        <input type="text" name="turma" id="turma" placeholder="Ex: Algoritmos e Programação I" />
+                      <label>{{str.nome_da_turma}}
+                        <input type="text" name="turma" id="turma" placeholder="{{str.nome_turma_placeholder}}" />
                       </label>
                     </div>
                   </div>
                   <div class="row">
                     <br>
-                    <a class="button radius secondary small-5 small-offset-1 large-4 large-offset-2" onclick="$('#modalAddTurma').foundation('reveal', 'close');">Cancelar</a>
-                    <a class="button radius small-5 large-4" onclick="adicionar()">Confirmar</a>
+                    <a class="button radius secondary small-5 small-offset-1 large-4 large-offset-2" onclick="$('#modalAddTurma').foundation('reveal', 'close');">{{str.cancelar}}</a>
+                    <a class="button radius small-5 large-4" onclick="adicionar()">{{str.confirmar}}</a>
                   </div>
                 </form>
               </div>
@@ -160,6 +160,8 @@
     <script src="./js/foundation.min.js"></script>
     <script src="http://connect.facebook.net/en_US/all.js"></script>
     <script src="./js/professor.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
+    <script src="./js/lang-controller.js"></script>
     <script>
       $(document).foundation();
     </script>
