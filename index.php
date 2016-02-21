@@ -4,7 +4,7 @@
 ?>
 
 <!doctype html>
-<html lang="pt">
+<html lang="pt" ng-app="nextex" ng-controller="langController">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -22,7 +22,7 @@
       <div class="row">
         <img src="./images/logo.png" alt="NextEx Logo" class="small-10 small-offset-1 medium-6 medium-offset-3 columns"/>
       </div>
-      <h4 class="text-center">Examination Tool</h4>
+      <h4 class="text-center">{{str.ferramenta_de_avaliacao}}</h4>
       <br><br>
       <!-- Login COM facebook -->
       <!-- <div class="row">
@@ -34,15 +34,15 @@
         <div class="row">
             <div class="row">
               <div class="small-10 small-offset-1 medium-6 medium-offset-3 columns">
-                <label>Usuário
-                  <input type="text" name="usuario" placeholder="RA" autofocus="true"/>
+                <label>{{str.usuario}}
+                  <input type="text" name="usuario" placeholder="" autofocus="true"/>
                 </label>
               </div>
             </div>
 
             <div class="row">
               <div class="small-10 small-offset-1 medium-6 medium-offset-3 columns">
-                <label>Senha
+                <label>{{str.senha}}
                   <input type="password" name="senha" placeholder="••••••••" />
                 </label>
               </div>
@@ -50,7 +50,7 @@
         </div>
 
         <div class="row">
-          <br><input type="submit" class="button radius small-10 small-offset-1 medium-6 medium-offset-3 columns" value="Login">
+          <br><input type="submit" class="button radius small-10 small-offset-1 medium-6 medium-offset-3 columns" value="{{str.login}}">
         </div>
       </form>
       <br><br>
@@ -58,7 +58,9 @@
 
     <script src="./js/jquery-2.1.4.min.js"></script>
     <script src="./js/foundation.min.js"></script>
-    <script src="http://connect.facebook.net/en_US/all.js"></script>
+    <script src="./js/angular.min.js"></script>
+    <script src="./js/lang-controller.js"></script>
+    <!-- <script src="http://connect.facebook.net/en_US/all.js"></script> -->
     <script src="./js/login.js"></script>
     <script>
       $(document).foundation();

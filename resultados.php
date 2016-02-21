@@ -42,12 +42,12 @@
 
 
 <!doctype html>
-<html lang="pt">
+<html lang="pt" ng-app="nextex" ng-controller="langController">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Construtor de Mapa Mental">
-    <title>NextEx - Análise de resultados</title>
+    <title>NextEx - {{str.analise_de_resultados}}</title>
     <link rel="stylesheet" href="./css/foundation.min.css" />
     <link rel="stylesheet" href="./css/style.css" />
     <link rel="stylesheet" href="./css/responsive-tables.css">
@@ -77,7 +77,7 @@
           <li class="has-dropdown">
             <a href="#"><?php echo $_SESSION["nome"]; ?></a>
             <ul class="dropdown">
-              <li><a href="api/logout.php">Sair</a></li>
+              <li><a href="api/logout.php">{{str.sair}}</a></li>
             </ul>
           </li>
         </ul>
@@ -91,21 +91,21 @@
         <br><div class="row">
           <h2 class="text-center"><?php echo $atividade['titulo'] ?></h2>
           <br>
-          <h5>Turma: <strong><?php echo $atividade['turma'] ?></strong></h5>
-          <h5>Alunos na turma: <strong><?php echo $resolucoes->num_rows ?></strong></h5>
-          <h5>Atividades entregues: <strong><?php echo $qtd['qtd'] ?></strong></h5>
-          <h5>Distância média da turma: <strong><span id="dmt"></span></strong></h5>
-          <h5>Data limite para entrega: <strong><?php echo date("d/m/Y", strtotime($atividade['data_entrega'])) ?></strong></h5>
+          <h5>{{str.turma}}: <strong><?php echo $atividade['turma'] ?></strong></h5>
+          <h5>{{str.alunos_na_turma}}: <strong><?php echo $resolucoes->num_rows ?></strong></h5>
+          <h5>{{str.atividades_entregues}}: <strong><?php echo $qtd['qtd'] ?></strong></h5>
+          <h5>{{str.distancia_media_turma}}: <strong><span id="dmt"></span></strong></h5>
+          <h5>{{str.data_limite_entrega}}: <strong><?php echo date("d/m/Y", strtotime($atividade['data_entrega'])) ?></strong></h5>
           <br>
-          <a class="button radius small-5" data-reveal-id="modalGabarito" onclick="">Ver atividade original</a>
-          <a class="button radius small-5 small-offset-1" onclick="" data-reveal-id="modalResultadoTurma">Ver resultado geral</a>
+          <a class="button radius small-5" data-reveal-id="modalGabarito" onclick="">{{str.ver_atividade_original}}</a>
+          <a class="button radius small-5 small-offset-1" onclick="" data-reveal-id="modalResultadoTurma">{{str.ver_resultado_geral}}</a>
         </div>
 
         <br>
         <div class="row">
-          <h5 class="small-7 columns b">Aluno</h5>
-          <h5 class="small-3 columns b">Status</h5>
-          <h5 class="small-2 columns b text-center">Distância</h5>
+          <h5 class="small-7 columns b">{{str.aluno}}</h5>
+          <h5 class="small-3 columns b">{{str.status}}</h5>
+          <h5 class="small-2 columns b text-center">{{str.distancia}}</h5>
         </div>
 
 
@@ -119,10 +119,10 @@
                 <br>
                 <span class="small-7 columns"><?php echo $resolucao['aluno'] ?></span>
                 <?php if ($resolucao['concluido']) { ?>
-                  <span class="small-3 columns"><i class="fa fa-check-circle-o ok"></i> Entregue</span>
+                  <span class="small-3 columns"><i class="fa fa-check-circle-o ok"></i> {{str.entregue}}</span>
                   <span class="small-2 columns text-center" id='<?php echo 'dma-' . $resolucao['id_usuario']?>'>-</span>
                 <?php } else { ?>
-                  <span class="small-3 columns"><i class="fa fa-times-circle-o not-ok"></i> Não Entregue</span>
+                  <span class="small-3 columns"><i class="fa fa-times-circle-o not-ok"></i> {{str.nao_entregue}}</span>
                   <span class="small-2 columns text-center">-</span>
                 <?php } ?>
                 <br><br>
@@ -141,22 +141,22 @@
 
 
         <div id="modalResultadoTurma" class="reveal-modal full" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="">
-          <h2 id="modalTitle">Resultado gráfico da turma</h2>
-          <p class="lead">Traremos esta funcionalidade em breve. Aguarde!</p>
+          <h2 id="modalTitle">{{str.resultado_grafico_turma}}</h2>
+          <p class="lead">{{str.funcionalidade_em_breve}}</p>
           <a class="close-reveal-modal" aria-label="Close">&#215;</a>
         </div>
 
 
         <div id="modalResultadoAluno" class="reveal-modal full" data-reveal aria-labelledby="modalTitle" aria-hidden="false" role="dialog">
           <div class="row" id="legenda">
-            <div class="small-3 columns small-offset-2"><i class="fa fa-square psan"></i> Apenas professor ligou</div>
-            <div class="small-3 columns"><i class="fa fa-square pnas"></i> Apenas aluno ligou</div>
-            <div class="small-3 columns end"><i class="fa fa-square psas"></i> Ambos ligaram</div>
+            <div class="small-3 columns small-offset-2"><i class="fa fa-square psan"></i> {{str.apenas_professor_ligou}}</div>
+            <div class="small-3 columns"><i class="fa fa-square pnas"></i> {{str.apenas_aluno_ligou}}</div>
+            <div class="small-3 columns end"><i class="fa fa-square psas"></i> {{str.ambos_ligaram}}</div>
           </div>
           <div id="compara_aluno"></div>
 
             <br>
-            <h3 class="text-center">Tabela de distâncias</h3>
+            <h3 class="text-center">{{str.tabela_de_distancias}}</h3>
             <div id="tabela"></div>
             <br>
           <a class="close-reveal-modal" aria-label="Close">&#215;</a>
@@ -166,6 +166,8 @@
 
     <script src="./js/jquery-2.1.4.min.js"></script>
     <script src="./js/foundation.min.js"></script>
+    <script src="./js/angular.min.js"></script>
+    <script src="./js/lang-controller.js"></script>
     <script src="./js/dracula/raphael-min.js" type="text/javascript" charset="utf-8"></script>
     <script src="./js/dracula/dracula_graph.js"></script>
     <script src="./js/dracula/dracula_algorithms.js"></script>

@@ -28,12 +28,12 @@
 ?>
 
 <!doctype html>
-<html lang="pt">
+<html lang="pt" ng-app="nextex" ng-controller="langController">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Construtor de Mapa Mental">
-    <title>NextEx - Nova Atividade</title>
+    <title>NextEx - {{str.nova_atividade}}</title>
     <link rel="stylesheet" href="./css/foundation.min.css" />
     <link rel="stylesheet" href="./css/style.css" />
     <link rel="stylesheet" href="./css/bootstrap-tokenfield.css" />
@@ -64,15 +64,15 @@
       <section class="top-bar-section">
         <!-- Right Nav Section -->
         <ul class="right">
-          <li><a id="tb_editar" onclick="editar();"><i class="fa fa-pencil-square-o"></i> Editar</a></li>
-          <li><a id="tb_remover" onclick="removeEdge();"><i class="fa fa-chain-broken"></i> Remover</a></li>
-          <li><a id="tb_cancelar" onclick="cancelSelect();"><i class="fa fa-times"></i> Cancelar</a></li>
-          <li><a id="tb_salvar" onclick="salvar();"><i class="fa fa-check"></i> Concluído</a></li>
+          <li><a id="tb_editar" onclick="editar();"><i class="fa fa-pencil-square-o"></i> {{str.editar}}</a></li>
+          <li><a id="tb_remover" onclick="removeEdge();"><i class="fa fa-chain-broken"></i> {{str.remover}}</a></li>
+          <li><a id="tb_cancelar" onclick="cancelSelect();"><i class="fa fa-times"></i> {{str.cancelar}}</a></li>
+          <li><a id="tb_salvar" onclick="salvar();"><i class="fa fa-check"></i> {{str.concluido}}</a></li>
           <li class="divider"></li>
           <li class="has-dropdown">
             <a href="#"><?php echo $_SESSION["nome"]; ?></a>
             <ul class="dropdown">
-              <li><a href="api/logout.php">Sair</a></li>
+              <li><a href="api/logout.php">{{str.sair}}</a></li>
             </ul>
           </li>
         </ul>
@@ -86,12 +86,12 @@
 
         <div id="form-p1" style="display: none;">
           <br><div class="row">
-            <h3 class="text-center"><?php if ($id == "undefined") echo "Nova Atividade"; else echo "Editar Atividade" ?></h3>
+            <h3 class="text-center"><?php if ($id == "undefined") echo "{{str.nova_atividade}}"; else echo "{{str.editar_atividade}}" ?></h3>
           </div>
           <br>
           <div class="row">
             <div class="small-10 small-offset-1 large-8 large-offset-2 columns">
-              <label>Turma
+              <label>{{str.turma}}
                 <select name="id_turma">
                   <?php
                     foreach ($turmas as $turma) {
@@ -108,37 +108,37 @@
 
           <div class="row">
             <div class="small-10 small-offset-1 large-8 large-offset-2 columns">
-              <label>Título
-                <input type="text" id="titulo" name="titulo" placeholder="Insira um nome para a atividade" value="<?php echo $atividade['titulo'] ?>"/>
+              <label>{{str.nome_atividade}}
+                <input type="text" id="titulo" name="titulo" placeholder="{{str.nome_atividade_placeholder}}" value="<?php echo $atividade['titulo'] ?>"/>
               </label>
             </div>
           </div>
 
           <div class="row">
             <div class="small-5 small-offset-1 large-4 large-offset-2 columns">
-              <label>Peso inicial
-                <input type="number" id="peso_i" name="peso_i" placeholder="Peso inicial" value="1"/>
+              <label>{{str.peso_inicial}}
+                <input type="number" id="peso_i" name="peso_i" placeholder="{{str.peso_inicial}}" value="1"/>
               </label>
             </div>
 
             <div class="small-5 large-4 columns end">
-              <label>Peso final
-                <input type="number" id="peso_f" name="peso_f" placeholder="Peso final" value="1" />
+              <label>{{str.peso_final}}
+                <input type="number" id="peso_f" name="peso_f" placeholder="{{str.peso_final}}" value="1" />
               </label>
             </div>
           </div>
 
           <div class="row">
             <div class="small-10 small-offset-1 large-8 large-offset-2 columns">
-              <label>Descrição
-                <textarea name="descricao" id="descricao" placeholder="Descreva como a atividade deve ser realizada"></textarea>
+              <label>{{str.descricao}}
+                <textarea name="descricao" id="descricao" placeholder="{{str.descricao_placeholder}}"></textarea>
               </label>
             </div>
           </div>
 
           <div class="row">
             <div class="small-10 small-offset-1 large-8 large-offset-2 columns">
-              <label>Data de entrega
+              <label>{{str.data_limite_entrega}}
                 <input type="date" name="data_entrega" <?php if (!$atividade['data_entrega'] == "") echo "value='" . date("Y-m-d", strtotime($atividade['data_entrega'])) . "'" ?>/>
               </label>
             </div>
@@ -146,15 +146,15 @@
 
           <div class="row">
             <div class="small-10 small-offset-1 large-8 large-offset-2 columns">
-              <label>Termos
-                <input name="termos" id="termos" placeholder="Insira os termos separados por vírgula" <?php if($id != "undefined") echo "disabled" ?>/>
+              <label>{{str.termos_placeholder}}
+                <input name="termos" id="termos" placeholder="" <?php if($id != "undefined") echo "disabled" ?>/>
               </label>
             </div>
           </div>
 
           <div class="row">
-            <a href="professor.php" class="button radius secondary small-5 small-offset-1 large-4 large-offset-2" id="btn-cancelar">Cancelar</a>
-            <a onclick="continuar();" class="button radius small-5 large-4">Continuar</a>
+            <a href="professor.php" class="button radius secondary small-5 small-offset-1 large-4 large-offset-2" id="btn-cancelar">{{str.cancelar}}</a>
+            <a onclick="continuar();" class="button radius small-5 large-4">{{str.continuar}}</a>
 
           </div>
         </div>
@@ -170,11 +170,11 @@
 
       <div id="myModal" class="reveal-modal" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
           <div class="row collapse">
-          <h2 id="modalTitle">Peso da ligação</h2>
+          <h2 id="modalTitle">{{str.peso_da_ligacao}}</h2>
             <div class="large-12 small-12 columns">
               <input id="tb_peso" type="number" placeholder="Peso" value="0">
             </div>
-            <button id="confirma_peso">Confirmar</button>
+            <button id="confirma_peso">{{str.confirmar}}</button>
           </div>
       </div>
 
@@ -183,6 +183,8 @@
     <script src="./js/jquery-2.1.4.min.js"></script>
     <script src="./js/foundation.min.js"></script>
     <script src="./js/foundation.reveal.js"></script>
+    <script src="./js/angular.min.js"></script>
+    <script src="./js/lang-controller.js"></script>
     <script src="./js/dracula/raphael-min.js" type="text/javascript" charset="utf-8"></script>
     <script src="./js/dracula/dracula_graph.js"></script>
     <script src="./js/dracula/dracula_algorithms.js"></script>

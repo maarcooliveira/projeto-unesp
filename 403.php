@@ -4,7 +4,7 @@
 ?>
 
 <!doctype html>
-<html lang="pt">
+<html lang="pt" ng-app="nextex" ng-controller="langController">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -33,7 +33,7 @@
           <li class="has-dropdown">
             <a href="#"><?php echo $_SESSION["nome"]; ?></a>
             <ul class="dropdown">
-              <li><a href="api/logout.php">Sair</a></li>
+              <li><a href="api/logout.php">{{str.sair}}</a></li>
             </ul>
           </li>
         </ul>
@@ -45,16 +45,17 @@
 
       <div class="row">
         <br><br>
-        <h2>Oooops...</h2>
+        <h2>{{str.ops}}</h2>
         <br>
-        <h4>Parece que você não tem permissão para acessar esta página.</h4>
+        <h4>{{str.sem_permissao_acesso}}</h4>
       </div>
 
     </main>
 
     <script src="./js/jquery-2.1.4.min.js"></script>
     <script src="./js/foundation.min.js"></script>
-    <script src="http://connect.facebook.net/en_US/all.js"></script>
+    <script src="./js/angular.min.js"></script>
+    <script src="./js/lang-controller.js"></script>
     <script>
       $(document).foundation();
     </script>

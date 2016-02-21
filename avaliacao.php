@@ -38,12 +38,12 @@
 ?>
 
 <!doctype html>
-<html lang="pt">
+<html lang="pt" ng-app="nextex" ng-controller="langController">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Construtor de Mapa Mental">
-    <title>NextEx - Atividade</title>
+    <title>NextEx - {{str.atividade}}</title>
     <link rel="stylesheet" href="./css/foundation.min.css" />
     <link rel="stylesheet" href="./css/style.css" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
@@ -79,16 +79,16 @@
       <section class="top-bar-section">
         <!-- Right Nav Section -->
         <ul class="right">
-          <li><a id="tb_remover" onclick="removeEdge();"><i class="fa fa-chain-broken"></i> Remover</a></li>
-          <li><a id="tb_cancelar" onclick="cancelSelect();"><i class="fa fa-times"></i> Cancelar</a></li>
-          <li><a id="tb_salvar" onclick="salvar();"><i class="fa fa-floppy-o"></i> Salvar</a></li>
-          <li><a id="tb_enviar" onclick="enviar();"><i class="fa fa-check"></i> Enviar</a></li>
-          <li><a id="tb_ajuda" onclick="mostrarDescricao();"><i class="fa fa-info-circle"></i> Ajuda</a></li>
+          <li><a id="tb_remover" onclick="removeEdge();"><i class="fa fa-chain-broken"></i> {{str.remover}}</a></li>
+          <li><a id="tb_cancelar" onclick="cancelSelect();"><i class="fa fa-times"></i> {{str.cancelar}}</a></li>
+          <li><a id="tb_salvar" onclick="salvar();"><i class="fa fa-floppy-o"></i> {{str.salvar}}</a></li>
+          <li><a id="tb_enviar" onclick="enviar();"><i class="fa fa-check"></i> {{str.enviar}}</a></li>
+          <li><a id="tb_ajuda" onclick="mostrarDescricao();"><i class="fa fa-info-circle"></i> {{str.ajuda}}</a></li>
           <li class="divider"></li>
           <li class="has-dropdown">
             <a href="#"><?php echo $_SESSION["nome"]; ?></a>
             <ul class="dropdown">
-              <li><a href="api/logout.php">Sair</a></li>
+              <li><a href="api/logout.php">{{str.sair}}</a></li>
             </ul>
           </li>
         </ul>
@@ -112,7 +112,7 @@
 
       <div id="modalDesc" class="reveal-modal" data-reveal aria-labelledby="modalDescTitle" aria-hidden="true" role="dialog">
           <div class="row collapse">
-          <h2 id="modalDescTitle">Instruções para esta atividade</h2>
+          <h2 id="modalDescTitle">{{str.instrucoes_atividade}}</h2>
             <div id="modalDescContent" class="large-10 small-10 columns large-offset-1 small-offset-1"></div>
           </div>
       </div>
@@ -123,6 +123,8 @@
 
     <script src="./js/jquery-2.1.4.min.js"></script>
     <script src="./js/foundation.min.js"></script>
+    <script src="./js/angular.min.js"></script>
+    <script src="./js/lang-controller.js"></script>
     <script src="./js/dracula/raphael-min.js" type="text/javascript" charset="utf-8"></script>
     <script src="./js/dracula/dracula_graph.js"></script>
     <script src="./js/dracula/dracula_algorithms.js"></script>

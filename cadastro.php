@@ -71,12 +71,12 @@
 ?>
 
 <!doctype html>
-<html lang="pt">
+<html lang="pt" ng-app="nextex" ng-controller="langController">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Construtor de Mapa Mental">
-    <title>NextEx - Novo usuário</title>
+    <title>NextEx</title>
     <link rel="stylesheet" href="./css/foundation.min.css" />
     <link rel="stylesheet" href="./css/style.css" />
     <link rel="shortcut icon" href="./images/icon.png">
@@ -130,15 +130,17 @@
 
     <main>
       <br>
-      <h4 class="text-center">Usuário/senha inválidos</h4>
+      <h4 class="text-center">{{str.usuario_senha_invalido}}</h4>
       <br><br>
-      <a href="index.php" class="button radius small-6 large-4 small-offset-3 large-offset-4 columns">Tentar novamente</a>
+      <a href="index.php" class="button radius small-6 large-4 small-offset-3 large-offset-4 columns">{{str.tentar_novamente}}</a>
     </main>
 
     <script src="./js/jquery-2.1.4.min.js"></script>
     <script src="./js/welcome.js"></script>
     <script src="./js/foundation.min.js"></script>
-    <script src="http://connect.facebook.net/en_US/all.js"></script>
+    <script src="./js/angular.min.js"></script>
+    <script src="./js/lang-controller.js"></script>
+    <!-- <script src="http://connect.facebook.net/en_US/all.js"></script> -->
     <script>
       $(document).foundation();
     </script>

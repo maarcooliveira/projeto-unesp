@@ -158,9 +158,8 @@
 
     <script src="./js/jquery-2.1.4.min.js"></script>
     <script src="./js/foundation.min.js"></script>
-    <script src="http://connect.facebook.net/en_US/all.js"></script>
     <script src="./js/professor.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
+    <script src="./js/angular.min.js"></script>
     <script src="./js/lang-controller.js"></script>
     <script>
       $(document).foundation();
