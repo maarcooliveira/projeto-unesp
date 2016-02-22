@@ -3,6 +3,7 @@ var complete_graph, incomplete_graph;
 var mapa = {};
 var gabarito = {};
 var editado = false;
+var str;
 
 if (continuacao) {
   mapa = _mapa;
@@ -35,7 +36,22 @@ $(document).ready(function() {
         $('#myModal').foundation('reveal', 'close');
     });
     edgeCount = 0;
+
+    getInterfaceStr();
 });
+
+function getInterfaceStr() {
+  $.getJSON( "./data/strings.json", function(data) {
+    var userLang = navigator.language || navigator.userLanguage;
+
+    if (userLang.split('-')[0] !== 'pt') {
+      str = data["en-US"];
+    }
+    else {
+      str = data["pt-BR"];
+    }
+  });
+}
 
 function editar() {
   $("#form-p1").css('display', 'inline');
@@ -299,7 +315,7 @@ function addEdge(weight) {
   if (hasEdge(from, to)) {
     // Notificação de ligação já existente
     var n = noty({
-      text: '<i class="fa fa-repeat"></i> \"<strong>' + from + '</strong>\" e \"<strong>' + to + '</strong>\" já estavam relacionados',
+      text: '<i class="fa fa-repeat"></i> \"<strong>' + from + '</strong>\" ' + str.e + ' \"<strong>' + to + '</strong>\" ' + str.ja_relacionados,
       layout: 'topCenter',
       type: 'warning',
       theme: 'relax',
@@ -319,7 +335,7 @@ function addEdge(weight) {
 
   // Notificação de ligação inserida
   var n = noty({
-    text: '<i class="fa fa-check"></i> \"<strong>' + from + '</strong>\" e \"<strong>' + to + '</strong>\" foram relacionados',
+    text: '<i class="fa fa-repeat"></i> \"<strong>' + from + '</strong>\" ' + str.e + ' \"<strong>' + to + '</strong>\" ' + str.foram_relacionados,
     layout: 'topCenter',
     type: 'information',
     theme: 'relax',
@@ -346,7 +362,7 @@ function removeEdge(edge) {
     var from = edge.source.id;
     var to = edge.target.id;
     var n = noty({
-      text: '<i class="fa fa-times"></i> \"<strong>' + from + '</strong>\" e \"<strong>' + to + '</strong>\" foram desrelacionados',
+      text: '<i class="fa fa-repeat"></i> \"<strong>' + from + '</strong>\" ' + str.e + ' \"<strong>' + to + '</strong>\" ' + str.foram_desrelacionados,
       layout: 'topCenter',
       type: 'error',
       theme: 'relax',

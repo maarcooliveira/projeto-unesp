@@ -1,5 +1,5 @@
 var width, height, g, renderer, layouter,
-    src, dest, edge, matriz, canSelectDest, edgeCount, concluido;
+    src, dest, edge, matriz, canSelectDest, edgeCount, concluido, str;
 
 $(document).ready(function() {
     $("#tb_remover").css('display', 'none');
@@ -16,12 +16,27 @@ $(document).ready(function() {
     });
     canSelectDest = false;
     edgeCount = 0;
+
+    getInterfaceStr();
 });
 
 var ua = navigator.userAgent.toLowerCase();
 var isAndroid = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
 if(isAndroid) {
     initAndroid();
+}
+
+function getInterfaceStr() {
+  $.getJSON( "./data/strings.json", function(data) {
+    var userLang = navigator.language || navigator.userLanguage;
+
+    if (userLang.split('-')[0] !== 'pt') {
+      str = data["en-US"];
+    }
+    else {
+      str = data["pt-BR"];
+    }
+  });
 }
 
 
@@ -256,7 +271,7 @@ function addEdge(weight) {
   if (hasEdge(from, to)) {
     // Notificação de ligação já existente
     var n = noty({
-      text: '<i class="fa fa-repeat"></i> \"<strong>' + from + '</strong>\" e \"<strong>' + to + '</strong>\" já estavam relacionados',
+      text: '<i class="fa fa-repeat"></i> \"<strong>' + from + '</strong>\" ' + str.e + ' \"<strong>' + to + '</strong>\" ' + str.ja_relacionados,
       layout: 'topCenter',
       type: 'warning',
       theme: 'relax',
@@ -275,7 +290,7 @@ function addEdge(weight) {
 
     // Notificação de ligação inserida
     var n = noty({
-      text: '<i class="fa fa-check"></i> \"<strong>' + from + '</strong>\" e \"<strong>' + to + '</strong>\" foram relacionados',
+      text: '<i class="fa fa-repeat"></i> \"<strong>' + from + '</strong>\" ' + str.e + ' \"<strong>' + to + '</strong>\" ' + str.foram_relacionados,
       layout: 'topCenter',
       type: 'information',
       theme: 'relax',
@@ -302,7 +317,7 @@ function removeEdge(edge) {
     var from = edge.source.id;
     var to = edge.target.id;
     var n = noty({
-      text: '<i class="fa fa-times"></i> \"<strong>' + from + '</strong>\" e \"<strong>' + to + '</strong>\" foram desrelacionados',
+      text: '<i class="fa fa-repeat"></i> \"<strong>' + from + '</strong>\" ' + str.e + ' \"<strong>' + to + '</strong>\" ' + str.foram_desrelacionados,
       layout: 'topCenter',
       type: 'error',
       theme: 'relax',
@@ -349,7 +364,7 @@ function enviar_form_salvar() {
         window.location.href = "aluno.php";
       }
       var n = noty({
-        text: '<i class="fa fa-floppy-o"></i> Atividade salva',
+        text: '<i class="fa fa-floppy-o"></i> ' + str.atividade_salva,
         layout: 'topCenter',
         type: 'success',
         theme: 'relax',

@@ -72,7 +72,9 @@
     "enviar": "Send",
     "ajuda": "Help",
     "atividade_salva": "Activity saved",
-    "instrucoes_atividade": "Instructor tips for this assignment"
+    "instrucoes_atividade": "Instructor tips for this assignment",
+    "confirma_excluir_atividade": "This activity, student solutions and its results will be permanently deleted. You still want to delete it?",
+    "confirma_excluir_turma": "This class will only be deleted if there is no activity assigned to it. You still want to delete it?"
   },
 
   "pt-BR": {
@@ -148,7 +150,9 @@
     "enviar": "Enviar",
     "ajuda": "Ajuda",
     "atividade_salva": "Atividade salva",
-    "instrucoes_atividade": "Instruções para esta atividade"
+    "instrucoes_atividade": "Instruções para esta atividade",
+    "confirma_excluir_atividade": "Esta atividade e todas as resoluções enviadas serão excluídas permanentemente, assim como seus resultados. Deseja mesmo excluir?",
+    "confirma_excluir_turma": "Esta turma só será excluída se não houverem mais atividades associadas à ela. Deseja realmente excluir?"
 
   }
 }
