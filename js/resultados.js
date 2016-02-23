@@ -4,8 +4,8 @@ var distancia;
 var resolucoes = [];
 var id = -1;
 
-for (var r = 0; r < resolucoes_txt.length; r++) {
-  resolucoes.push(JSON.parse(resolucoes_txt[r]));
+for (var r = 0; r < _resolucoes.length; r++) {
+  resolucoes.push(JSON.parse(_resolucoes[r]));
 }
 
 $(document).ready(function() {

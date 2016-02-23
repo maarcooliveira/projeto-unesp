@@ -57,6 +57,8 @@ function editar() {
   $("#form-p1").css('display', 'inline');
   $("#btn-cancelar").css('visibility', 'hidden');
   $("#canvas").css('display', 'none');
+  $("#termos").tokenfield("destroy");
+  $("#termos").val("");
   $("#termos").tokenfield();
   for (t in mapa['nodes']) {
     $('#termos').tokenfield('createToken', mapa['nodes'][t]);
@@ -371,53 +373,84 @@ function removeEdge(edge) {
 }
 
 function salvar() {
-    var mapa_nodes = Object.keys(g['nodes']);
+  var mapa_nodes = Object.keys(g['nodes']);
+  var titulo = $("#titulo").val();
+  var descricao = $("#descricao").val();
+  var peso_i = $("#peso_i").val();
+  var peso_f = $("#peso_f").val();
+  var id_turma = $('#id_turma').val();
+  var data_entrega = $('#data_entrega').val();
 
-    var titulo = $("#titulo").val();
-    var descricao = $("#descricao").val();
-    var peso_i = $("#peso_i").val();
-    var peso_f = $("#peso_f").val();
+  mapa['titulo'] = titulo;
+  mapa['descricao'] = descricao;
+  mapa['peso_i'] = peso_i;
+  mapa['peso_f'] = peso_f;
 
-    mapa['titulo'] = titulo;
-    mapa['descricao'] = descricao;
-    mapa['peso_i'] = peso_i;
-    mapa['peso_f'] = peso_f;
+  gabarito['titulo'] = titulo;
+  gabarito['descricao'] = descricao;
+  gabarito['peso_i'] = peso_i;
+  gabarito['peso_f'] = peso_f;
 
-    gabarito['titulo'] = titulo;
-    gabarito['descricao'] = descricao;
-    gabarito['peso_i'] = peso_i;
-    gabarito['peso_f'] = peso_f;
+  var mapa_edges = Array();
+  for (var i = 0; i < g['edges'].length; i++) {
+    var src_n = g['edges'][i]['source']['id'];
+    var tgt_n = g['edges'][i]['target']['id'];
+    var wgt_n = g['edges'][i]['style']['label'];
+    var edge_n = {'source': src_n, 'target': tgt_n, 'weight': wgt_n};
+    mapa_edges.push(edge_n);
+  }
 
-    var mapa_edges = Array();
-    for (var i = 0; i < g['edges'].length; i++) {
-        var src_n = g['edges'][i]['source']['id'];
-        var tgt_n = g['edges'][i]['target']['id'];
-        var wgt_n = g['edges'][i]['style']['label'];
-        var edge_n = {'source': src_n, 'target': tgt_n, 'weight': wgt_n};
-        mapa_edges.push(edge_n);
+  var node_positions = Array();
+  for (var n = 0; n < mapa_nodes.length; n++) {
+    var pos = {};
+    pos.x = g.nodes[mapa_nodes[n]].layoutPosX;
+    pos.y = g.nodes[mapa_nodes[n]].layoutPosY;
+    node_positions.push(pos);
+  }
+
+  mapa['nodes'] = mapa_nodes;
+  mapa['grid'] = node_positions;
+  gabarito['nodes'] = mapa_nodes;
+  gabarito['edges'] = mapa_edges;
+  gabarito['grid'] = node_positions;
+
+  $.ajax({
+    url: "api/salvar_atividade.php",
+    type:'POST',
+    data:
+    {
+      dados_mapa: JSON.stringify(mapa),
+      dados_gabarito: JSON.stringify(gabarito),
+      id_turma: id_turma,
+      data_entrega: data_entrega,
+      titulo: titulo,
+      continuacao: continuacao,
+      id_atividade: _id,
+    },
+    success: function(msg)
+    {
+      console.log(msg);
+      if (msg === "salvo") {
+        var n = noty({
+          text: '<i class="fa fa-floppy-o"></i> ' + str.atividade_salva,
+          layout: 'topCenter',
+          type: 'success',
+          theme: 'relax',
+          timeout: 3000
+        });
+      }
+      else if (msg === "erro") {
+        var n = noty({
+          text: '<i class="fa fa-floppy-o"></i> ' + str.erro_salvar_atividade,
+          layout: 'topCenter',
+          type: 'error',
+          theme: 'relax',
+          timeout: 3000
+        });
+      }
+      continuacao = 1;
     }
-
-    var node_positions = Array();
-    for (var n = 0; n < mapa_nodes.length; n++) {
-      var pos = {};
-      pos.x = g.nodes[mapa_nodes[n]].layoutPosX;
-      pos.y = g.nodes[mapa_nodes[n]].layoutPosY;
-      node_positions.push(pos);
-    }
-
-    mapa['nodes'] = mapa_nodes;
-    mapa['grid'] = node_positions;
-    gabarito['nodes'] = mapa_nodes;
-    gabarito['edges'] = mapa_edges;
-   //  gabarito['mapa'] = g;
-    gabarito['grid'] = node_positions;
-    var desc_mapa = mapa; //JSON.decycle(mapa);
-    $("#dados_mapa").val(JSON.stringify(desc_mapa));
-    var desc_gabarito = gabarito; //JSON.decycle(gabarito);
-    $("#dados_gabarito").val(JSON.stringify(desc_gabarito));
-    $("#continuacao").val(continuacao);
-    $("#id_atividade").val(_id);
-    $("#formAddMapa").submit();
+  });
 }
 
 function removeNode() {

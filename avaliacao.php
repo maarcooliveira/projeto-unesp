@@ -6,35 +6,14 @@
   else
     hasPermission(NULL, NULL);
 
-  // include db connect class
-  require_once __DIR__ . '/api/db_connect.php';
+  include("api/arquivo_aux.php");
+  include("api/atividade_aux.php");
 
   $id = isset($_GET['id']) ? $_GET['id'] : "";
-
-  $resolucao_txt_php = "";
-  if (file_exists(getcwd() . "/atividades/" . $id ."/resolucoes/" . $_SESSION['id'] . "_mapa.json")) {
-    $resolucao_txt_php =  file_get_contents(getcwd() . "/atividades/" . $id ."/resolucoes/" . $_SESSION['id'] . "_mapa.json");
-  }
-
-  $queryResolucao = "SELECT * FROM resolucao WHERE id_atividade = {$id} AND id_usuario = {$_SESSION['id']}";
-  $resolucao = mysqli_query($connection, $queryResolucao);
-  if (!$resolucao) { die("Database query failed." . mysqli_error ($connection));}
-
-  $foiResolvido = false;
-  while($res = mysqli_fetch_assoc($resolucao)) {
-    if ($res['concluido'])
-      $foiResolvido = true;
-  }
-  //pode fechar conexão com db neste ponto
-
-  $mapa_txt_php =  file_get_contents(getcwd() . "/atividades/" . $id . "/mapa.json");
-
-  if ($foiResolvido) {
-    $gabarito_txt_php =  file_get_contents(getcwd() . "/atividades/" . $id . "/gabarito.json");
-  }
-  else {
-    $gabarito_txt_php = null;
-  }
+  $resolucao = getResolucao($id, $_SESSION['id']);
+  $atividade_json = getJsonAtividade($id);
+  $resolucao_json = getJsonResolucao($id, $_SESSION['id']);
+  $gabarito_json = $resolucao['concluido'] ? getJsonGabarito($id) : null;
 ?>
 
 <!doctype html>
@@ -52,17 +31,17 @@
 
   <body>
     <script type="text/javascript">
-    var mapa = <?php echo ($mapa_txt_php); ?>;
+    var mapa = <?php echo ($atividade_json); ?>;
     var gabarito = undefined;
     var resolucao = undefined;
     var id_aluno = <?php echo ($_SESSION['id']); ?>;
     var id_atividade = <?php echo ($_GET['id']); ?>;
     <?php
-      if (strlen($resolucao_txt_php) > 0)
-        echo ("resolucao = " . $resolucao_txt_php);
+      if (strlen($resolucao_json) > 0)
+        echo ("resolucao = " . $resolucao_json);
       echo ("\n");
-      if (strlen($gabarito_txt_php) > 0)
-        echo ("var gabarito = " . $gabarito_txt_php);
+      if (strlen($gabarito_json) > 0)
+        echo ("gabarito = " . $gabarito_json);
     ?>;
     </script>
 

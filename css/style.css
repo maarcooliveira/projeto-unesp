@@ -97,10 +97,3 @@ body, h1, h2, h3, h4, h5, h6, p, a {
 .grey-bg {
 	background: #f9f9f9;
 }
-
-input[type="text"], input[type="password"], input[type="date"], input[type="datetime"], input[type="datetime-local"], input[type="month"], input[type="week"], input[type="email"], input[type="number"], input[type="search"], input[type="tel"], input[type="time"], input[type="url"], input[type="color"], textarea {
-	/*background: #000;*/
-	/*-moz-border-radius: 2px;
-  -webkit-border-radius: 2px;
-  border-radius: 2px;*/
-}

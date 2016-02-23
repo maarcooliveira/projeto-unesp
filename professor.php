@@ -99,7 +99,7 @@
 
       <div class="row">
         <h5 class="small-4 columns b">{{str.turma}}</h5>
-        <h5 class="small-4 columns b">{{str.university}}</h5>
+        <h5 class="small-4 columns b">{{str.universidade}}</h5>
         <h5 class="small-2 columns b">{{str.criado_em}}</h5>
         <h5 class="small-2 columns b"><a href="#" data-reveal-id="modalAddTurma"><i class="fa fa-plus"></i> {{str.criar}}</a></h5>
       </div>

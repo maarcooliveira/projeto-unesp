@@ -8,21 +8,22 @@
 
   include("api/turma_aux.php");
   include("api/atividade_aux.php");
+  include("api/arquivo_aux.php");
 
   $turmas = getTurmasProfessor($_SESSION['id']);
 
   if(isset($_GET['id'])) {
     $id = $_GET['id'];
     $continuacao = 1;
-    $mapa_txt_php =  file_get_contents(getcwd() . "/atividades/" . $id . "/mapa.json");
-    $gabarito_txt_php =  file_get_contents(getcwd() . "/atividades/" . $id . "/gabarito.json");
+    $atividade_json =  getJsonAtividade($id);
+    $gabarito_json =  getJsonGabarito($id);
     $atividade = getAtividade($_GET['id']);
   }
   else {
     $id = "undefined";
     $continuacao = 0;
-    $mapa_txt_php = "undefined";
-    $gabarito_txt_php = "undefined";
+    $atividade_json = "undefined";
+    $gabarito_json = "undefined";
     $atividade = null;
   }
 ?>
@@ -45,8 +46,8 @@
   <script type="text/javascript">
     var continuacao = <?php echo ($continuacao); ?>;
     if (continuacao) {
-      var _mapa = <?php echo $mapa_txt_php; ?>;
-      var _gabarito = <?php echo $gabarito_txt_php; ?>;
+      var _mapa = <?php echo $atividade_json; ?>;
+      var _gabarito = <?php echo $gabarito_json; ?>;
       var _id = <?php echo $id; ?>;
     }
   </script>
@@ -67,7 +68,7 @@
           <li><a id="tb_editar" onclick="editar();"><i class="fa fa-pencil-square-o"></i> {{str.editar}}</a></li>
           <li><a id="tb_remover" onclick="removeEdge();"><i class="fa fa-chain-broken"></i> {{str.remover}}</a></li>
           <li><a id="tb_cancelar" onclick="cancelSelect();"><i class="fa fa-times"></i> {{str.cancelar}}</a></li>
-          <li><a id="tb_salvar" onclick="salvar();"><i class="fa fa-check"></i> {{str.concluido}}</a></li>
+          <li><a id="tb_salvar" onclick="salvar();"><i class="fa fa-check"></i> {{str.salvar}}</a></li>
           <li class="divider"></li>
           <li class="has-dropdown">
             <a class="dropdown-caller" href="#"><?php echo $_SESSION["nome"]; ?></a>
@@ -92,7 +93,7 @@
           <div class="row">
             <div class="small-10 small-offset-1 large-8 large-offset-2 columns">
               <label>{{str.turma}}
-                <select name="id_turma">
+                <select name="id_turma" id="id_turma">
                   <?php
                     foreach ($turmas as $turma) {
                       if ($turma['id'] == $atividade['id_turma'])
@@ -139,7 +140,7 @@
           <div class="row">
             <div class="small-10 small-offset-1 large-8 large-offset-2 columns">
               <label>{{str.data_limite_entrega}}
-                <input type="date" name="data_entrega" <?php if (!$atividade['data_entrega'] == "") echo "value='" . date("Y-m-d", strtotime($atividade['data_entrega'])) . "'" ?>/>
+                <input type="date" id="data_entrega" name="data_entrega" <?php if (!$atividade['data_entrega'] == "") echo "value='" . date("Y-m-d", strtotime($atividade['data_entrega'])) . "'" ?>/>
               </label>
             </div>
           </div>
@@ -155,16 +156,10 @@
           <div class="row">
             <a href="professor.php" class="button radius secondary small-5 small-offset-1 large-4 large-offset-2" id="btn-cancelar">{{str.cancelar}}</a>
             <a onclick="continuar();" class="button radius small-5 large-4">{{str.continuar}}</a>
-
           </div>
         </div>
+
         <hr id="full-hr" style="visibility: hidden">
-        <input type="hidden" name="dados_mapa" id="dados_mapa">
-        <input type="hidden" name="dados_gabarito" id="dados_gabarito">
-        <input type="hidden" name="continuacao" id="continuacao">
-        <input type="hidden" name="id_atividade" id="id_atividade">
-
-
         <div id="canvas"></div>
       </form>
 
