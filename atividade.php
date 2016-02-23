@@ -65,15 +65,15 @@
       <section class="top-bar-section">
         <!-- Right Nav Section -->
         <ul class="right">
-          <li><a id="tb_editar" onclick="editar();"><i class="fa fa-pencil-square-o"></i> {{str.editar}}</a></li>
-          <li><a id="tb_remover" onclick="removeEdge();"><i class="fa fa-chain-broken"></i> {{str.remover}}</a></li>
-          <li><a id="tb_cancelar" onclick="cancelSelect();"><i class="fa fa-times"></i> {{str.cancelar}}</a></li>
-          <li><a id="tb_salvar" onclick="salvar();"><i class="fa fa-check"></i> {{str.salvar}}</a></li>
+          <li><a id="tb_editar" onclick="editar();"><i class="fa fa-pencil-square-o pad-r"></i> {{str.editar}}</a></li>
+          <li><a id="tb_remover" onclick="removeEdge();"><i class="fa fa-chain-broken pad-r"></i> {{str.remover}}</a></li>
+          <li><a id="tb_cancelar" onclick="cancelSelect();"><i class="fa fa-times pad-r"></i> {{str.cancelar}}</a></li>
+          <li><a id="tb_salvar" onclick="salvar();"><i class="fa fa-floppy-o pad-r"></i> {{str.salvar}}</a></li>
           <li class="divider"></li>
           <li class="has-dropdown">
-            <a class="dropdown-caller" href="#"><?php echo $_SESSION["nome"]; ?></a>
+            <a class="dropdown-caller" href="#"><i class="fa fa-user pad-l-r"></i> <?php echo $_SESSION["nome"]; ?></a>
             <ul class="dropdown">
-              <li><a href="api/logout.php"><i class="fa fa-sign-out"></i> {{str.sair}}</a></li>
+              <li><a href="api/logout.php"><i class="fa fa-sign-out pad-l-r"></i> {{str.sair}}</a></li>
             </ul>
           </li>
         </ul>

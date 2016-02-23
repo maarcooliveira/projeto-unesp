@@ -35,6 +35,7 @@
     <script type="text/javascript">
     var gabarito = <?php echo ($gabarito_json); ?>;
     var _resolucoes = <?php echo ($resolucoes_json); ?>;
+    var resolucoes_db = <?php echo json_encode($resolucoes); ?>;
     </script>
 
     <div class="contain-to-grid sticky">
@@ -51,9 +52,9 @@
         <!-- Right Nav Section -->
         <ul class="right">
           <li class="has-dropdown">
-            <a class="dropdown-caller" href="#"><?php echo $_SESSION["nome"]; ?></a>
+            <a class="dropdown-caller" href="#"><i class="fa fa-user pad-l-r"></i> <?php echo $_SESSION["nome"]; ?></a>
             <ul class="dropdown">
-              <li><a href="api/logout.php"><i class="fa fa-sign-out"></i> {{str.sair}}</a></li>
+              <li><a href="api/logout.php"><i class="fa fa-sign-out pad-l-r"></i> {{str.sair}}</a></li>
             </ul>
           </li>
         </ul>

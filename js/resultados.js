@@ -61,7 +61,7 @@ function calcularMatrizes() {
   var n = Math.pow(max - min, 2);
   var np = gabarito['nodes'].length; // numero de palavras
   var npr = Math.pow(np, 2) - np; //posicoes relevantes
-  var qtd_respostas = resolucoes.length;
+  var qtd_respostas = 0;
   var distancia_total = 0;
   var distancia_cel;
   var matriz;
@@ -111,14 +111,32 @@ function calcularMatrizes() {
     }
 
     distancia[r] = distancia_cel/npr;
-    distancia_total += distancia[r];
+
+    if (alunoEntregou(resolucao.aluno)) {
+      distancia_total += distancia[r];
+      qtd_respostas++;
+    }
 
     $("#dma-" + resolucao['aluno']).text(distancia[r].toFixed(3));
   }
+
   var dmt = isNaN(distancia_total/qtd_respostas) ? 0 : (distancia_total/qtd_respostas).toFixed(3);
   $("#dmt").text(dmt);
 
+}
 
+function alunoEntregou(id) {
+  for (var r = 0; r < resolucoes_db.length; r++) {
+    if (Number(resolucoes_db[r].id_usuario) === id) {
+      if (resolucoes_db[r].concluido === "1") {
+        return true;
+      }
+      else {
+        return false;
+      }
+    }
+  }
+  return false;
 }
 
 function mostrarResultadoAluno() {
