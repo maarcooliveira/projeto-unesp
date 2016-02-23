@@ -27,10 +27,11 @@
 
   <body>
 
+    <div class="contain-to-grid sticky">
     <nav class="top-bar" data-topbar role="navigation">
       <ul class="title-area">
         <li class="name">
-          <h1><a href="#"><i class="fa fa-bars"></i> NextEx</a></h1>
+          <h1><a href="#"><i class="fa fa-chevron-right"></i> NextEx</a></h1>
         </li>
          <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
         <li class="toggle-topbar menu-icon"><a href="#"><span></span></a></li>
@@ -40,14 +41,15 @@
         <!-- Right Nav Section -->
         <ul class="right">
           <li class="has-dropdown">
-            <a href="#"><?php echo $_SESSION["nome"]; ?></a>
+            <a class="dropdown-caller" href="#"><?php echo $_SESSION["nome"]; ?></a>
             <ul class="dropdown">
-              <li><a href="api/logout.php">{{str.sair}}</a></li>
+              <li><a href="api/logout.php"><i class="fa fa-sign-out"></i> {{str.sair}}</a></li>
             </ul>
           </li>
         </ul>
       </section>
     </nav>
+    </div>
 
     <main class="container">
       <br>
@@ -72,7 +74,11 @@
             <a class="small-3 columns" href="avaliacao.php?id=<?php echo $atividade['id'] ?>"><?php echo $atividade['titulo'] ?></a>
             <span class="small-3 columns"><?php echo $atividade['turma'] ?></span>
             <span class="small-3 columns"><?php echo date("d/m/Y", strtotime($atividade['data_entrega'])) ?></span>
-            <span class="small-3 columns"><?php if ($atividade['concluido'] == 1) echo "{{str.entregue}}"; else echo "{{str.nao_entregue}}"; ?></span>
+            <?php if($atividade['concluido'] == 1) { ?>
+              <span class="small-3 columns"><i class="fa fa-check-circle-o ok"></i> {{str.entregue}}</span>
+            <?php } else { ?>
+              <span class="small-3 columns"><i class="fa fa-times-circle-o not-ok"></i> {{str.nao_entregue}}</span>
+            <?php } ?>
             <br><br>
           </div>
       <?php $count++; } ?>

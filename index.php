@@ -16,7 +16,27 @@
     <link rel="shortcut icon" href="./images/icon.png">
   </head>
 
-  <body>
+  <body class="grey-bg">
+
+    <div class="contain-to-grid sticky">
+    <nav class="top-bar" data-topbar role="navigation">
+      <ul class="title-area">
+        <li class="name">
+          <h1><a href="#"><i class="fa fa-chevron-right"></i> NextEx</a></h1>
+        </li>
+         <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
+        <li class="toggle-topbar menu-icon"><a href="#"><span></span></a></li>
+      </ul>
+
+      <section class="top-bar-section">
+        <!-- Right Nav Section -->
+        <ul class="right">
+          <!-- <li><a onclick="login();"><i class="fa fa-sign-in"></i> {{str.login}}</a></li> -->
+        </ul>
+      </section>
+    </nav>
+    </div>
+
     <main>
       <br>
       <div class="row">
@@ -24,6 +44,7 @@
       </div>
       <h4 class="text-center">{{str.ferramenta_de_avaliacao}}</h4>
       <br><br>
+
       <!-- Login COM facebook -->
       <!-- <div class="row">
         <a onClick="statusFacebook();" class="button radius small-10 small-offset-1 medium-6 medium-offset-3 columns">Login</a>
@@ -32,10 +53,12 @@
       <!-- Login SEM facebook -->
       <form action="cadastro.php" method="post" id="formLogin">
         <div class="row">
+          <div class="medium-10 medium-offset-1 columns">
+
             <div class="row">
               <div class="small-10 small-offset-1 medium-6 medium-offset-3 columns">
                 <label>{{str.usuario}}
-                  <input type="text" name="usuario" placeholder="" autofocus="true"/>
+                  <input type="text" name="usuario" placeholder="{{str.usuario_placeholder}}" autofocus="true"/>
                 </label>
               </div>
             </div>
@@ -46,14 +69,17 @@
                   <input type="password" name="senha" placeholder="••••••••" />
                 </label>
               </div>
+            </div>
+
           </div>
         </div>
 
         <div class="row">
-          <br><input type="submit" class="button radius small-10 small-offset-1 medium-6 medium-offset-3 columns" value="{{str.login}}">
+          <div class="medium-10 medium-offset-1 columns">
+            <br><input type="submit" class="button radius small-10 small-offset-1 medium-6 medium-offset-3 columns" value="{{str.login}}">
+          </div>
         </div>
       </form>
-      <br><br>
     </main>
 
     <script src="./js/jquery-2.1.4.min.js"></script>

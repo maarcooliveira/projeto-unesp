@@ -61,3 +61,46 @@ body, h1, h2, h3, h4, h5, h6, p, a {
 	overflow: auto;
   /*position: fixed;*/
 }
+
+.top-bar {
+	background: #1565c0;
+	margin: 0 !important;
+	max-width: none !important;
+}
+
+.top-bar-section li:not(.has-form) a:not(.button) {
+	background: #1565c0;
+}
+
+.top-bar-section li a:hover {
+	background: #064d9e !important;
+}
+
+.top-bar-section .dropdown li:not(.has-form):not(.active)>a:not(.button) {
+	background: #1565c0;
+}
+
+
+.top-bar-section>ul>.divider, .top-bar-section>ul>[role="separator"] {
+	border-right: solid 0px #064d9e;
+}
+
+.dropdown-caller {
+	background: #1565c0 !important;
+}
+
+.pad-l-r {
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+.grey-bg {
+	background: #f9f9f9;
+}
+
+input[type="text"], input[type="password"], input[type="date"], input[type="datetime"], input[type="datetime-local"], input[type="month"], input[type="week"], input[type="email"], input[type="number"], input[type="search"], input[type="tel"], input[type="time"], input[type="url"], input[type="color"], textarea {
+	/*background: #000;*/
+	/*-moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  border-radius: 2px;*/
+}

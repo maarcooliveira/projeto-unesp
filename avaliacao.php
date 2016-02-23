@@ -66,11 +66,11 @@
     ?>;
     </script>
 
-    <!-- <div class="contain-to-grid sticky"> -->
+    <div class="contain-to-grid sticky">
     <nav class="top-bar" data-topbar role="navigation" id="navbar">
       <ul class="title-area">
         <li class="name">
-          <h1><a href="aluno.php"><i class="fa fa-arrow-left"></i> NextEx</a></h1>
+          <h1><a href="aluno.php">NextEx <i class="fa fa-angle-right pad-l-r"></i> {{str.atividade}}</a></h1>
         </li>
          <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
         <li class="toggle-topbar menu-icon"><a href="#"><span></span></a></li>
@@ -86,15 +86,15 @@
           <li><a id="tb_ajuda" onclick="mostrarDescricao();"><i class="fa fa-info-circle"></i> {{str.ajuda}}</a></li>
           <li class="divider"></li>
           <li class="has-dropdown">
-            <a href="#"><?php echo $_SESSION["nome"]; ?></a>
+            <a class="dropdown-caller" href="#"><?php echo $_SESSION["nome"]; ?></a>
             <ul class="dropdown">
-              <li><a href="api/logout.php">{{str.sair}}</a></li>
+              <li><a href="api/logout.php"><i class="fa fa-sign-out"></i> {{str.sair}}</a></li>
             </ul>
           </li>
         </ul>
       </section>
     </nav>
-    <!-- </div> -->
+    </div>
 
     <main class="container">
       <div><hr id="full-hr"></div>
