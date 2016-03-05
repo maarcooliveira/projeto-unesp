@@ -143,71 +143,67 @@ Graph.Renderer = {};
 
 /*
  * Renderer implementation using RaphaelJS
+ * NEXTEX: parâmetro disableDragger adicionado para informar quando os termos não
+ * devem ser arrastados.
  */
-Graph.Renderer.Raphael = function(element, graph, width, height) {
-    this.width = width || 400;
-    this.height = height || 400;
-    var selfRef = this;
-    this.r = Raphael(element, this.width, this.height);
-    this.radius = 40; /* max dimension of a node */
-    this.graph = graph;
-    this.mouse_in = false;
+Graph.Renderer.Raphael = function(element, graph, width, height, disableDragger) {
+  this.width = width || 400;
+  this.height = height || 400;
+  var selfRef = this;
+  this.r = Raphael(element, this.width, this.height);
+  this.radius = 40; /* max dimension of a node */
+  this.graph = graph;
+  this.mouse_in = false;
 
-    /* TODO default node rendering function */
-    if(!this.graph.render) {
-        this.graph.render = function() {
-            return;
-        }
+  /* TODO default node rendering function */
+  if(!this.graph.render) {
+    this.graph.render = function() {
+      return;
     }
+  }
 
 
-
-    /*
-     * Dragging
-     */
+  if(!disableDragger) {
     this.isDrag = false;
     this.dragger = function (e) {
-        this.dx = e.clientX;
-        this.dy = e.clientY;
-        selfRef.isDrag = this;
-        this.set && this.set.animate({"fill-opacity": .3}, 200) && this.set.toFront();
-        e.preventDefault && e.preventDefault();
+      this.dx = e.clientX;
+      this.dy = e.clientY;
+      selfRef.isDrag = this;
+      this.set && this.set.animate({"fill-opacity": .3}, 200) && this.set.toFront();
+      e.preventDefault && e.preventDefault();
     };
 
     var d = document.getElementById(element);
     d.onmousemove = function (e) {
-        e = e || window.event;
-        if (selfRef.isDrag) {
-            var bBox = selfRef.isDrag.set.getBBox();
-            // TODO round the coordinates here (eg. for proper image representation)
-            var newX = e.clientX - selfRef.isDrag.dx + (bBox.x + bBox.width / 2);
-            var newY = e.clientY - selfRef.isDrag.dy + (bBox.y + bBox.height / 2);
-            /* prevent shapes from being dragged out of the canvas */
-            var clientX = e.clientX - (newX < 20 ? newX - 20 : newX > selfRef.width - 20 ? newX - selfRef.width + 20 : 0);
-            var clientY = e.clientY - (newY < 20 ? newY - 20 : newY > selfRef.height - 20 ? newY - selfRef.height + 20 : 0);
-            selfRef.isDrag.set.translate(clientX - Math.round(selfRef.isDrag.dx), clientY - Math.round(selfRef.isDrag.dy));
-            //            console.log(clientX - Math.round(selfRef.isDrag.dx), clientY - Math.round(selfRef.isDrag.dy));
-            for (var i in selfRef.graph.edges) {
-                selfRef.graph.edges[i].connection && selfRef.graph.edges[i].connection.draw();
-            }
-            //selfRef.r.safari();
-            selfRef.isDrag.dx = clientX;
-            selfRef.isDrag.dy = clientY;
-
-            //NEXTEX:
-            var nodeId = selfRef.r.top.attrs.text;
-            selfRef.graph.nodes[nodeId].layoutPosX = clientX/selfRef.width;
-            selfRef.graph.nodes[nodeId].layoutPosY = clientY/selfRef.height;
-            selfRef.draw();
+      e = e || window.event;
+      if (selfRef.isDrag) {
+        var bBox = selfRef.isDrag.set.getBBox();
+        var newX = e.clientX - selfRef.isDrag.dx + (bBox.x + bBox.width / 2);
+        var newY = e.clientY - selfRef.isDrag.dy + (bBox.y + bBox.height / 2);
+        /* prevent shapes from being dragged out of the canvas */
+        var clientX = e.clientX - (newX < 20 ? newX - 20 : newX > selfRef.width - 20 ? newX - selfRef.width + 20 : 0);
+        var clientY = e.clientY - (newY < 20 ? newY - 20 : newY > selfRef.height - 20 ? newY - selfRef.height + 20 : 0);
+        selfRef.isDrag.set.translate(clientX - Math.round(selfRef.isDrag.dx), clientY - Math.round(selfRef.isDrag.dy));
+        for (var i in selfRef.graph.edges) {
+          selfRef.graph.edges[i].connection && selfRef.graph.edges[i].connection.draw();
         }
+        selfRef.isDrag.dx = clientX;
+        selfRef.isDrag.dy = clientY;
+
+        // NEXTEX: modificado para salvar a nova posição
+        var nodeId = selfRef.r.top.attrs.text;
+        selfRef.graph.nodes[nodeId].layoutPosX = clientX/selfRef.width;
+        selfRef.graph.nodes[nodeId].layoutPosY = clientY/selfRef.height;
+        selfRef.draw();
+      }
     };
     d.onmouseup = function () {
-        selfRef.isDrag && selfRef.isDrag.set.animate({"fill-opacity": .8}, 500);
-        selfRef.isDrag = false;
+      selfRef.isDrag && selfRef.isDrag.set.animate({"fill-opacity": .8}, 500);
+      selfRef.isDrag = false;
     };
-    //END DRAGGING
+  }
 
-    this.draw();
+  this.draw();
 };
 Graph.Renderer.Raphael.prototype = {
     translate: function(point) {
@@ -273,7 +269,7 @@ Graph.Renderer.Raphael.prototype = {
 
         shape.attr({"fill-opacity": .8});
         /* re-reference to the node an element belongs to, needed for dragging all elements of a node */
-        shape.items.forEach(function(item){ item.set = shape; item.node.style.cursor = "move"; });
+        shape.items.forEach(function(item){ item.set = shape; item.node.style.cursor = "pointer"; });
         shape.mousedown(this.dragger);
 
         var box = shape.getBBox();

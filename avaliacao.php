@@ -58,7 +58,6 @@
       <section class="top-bar-section">
         <!-- Right Nav Section -->
         <ul class="right">
-          <li><a id="tb_remover" onclick="removeEdge();"><i class="fa fa-chain-broken pad-r"></i> {{str.remover}}</a></li>
           <li><a id="tb_cancelar" onclick="cancelSelect();"><i class="fa fa-times pad-r"></i> {{str.cancelar}}</a></li>
           <li><a id="tb_salvar" onclick="salvar();"><i class="fa fa-floppy-o pad-r"></i> {{str.salvar}}</a></li>
           <li><a id="tb_enviar" onclick="enviar();"><i class="fa fa-check pad-r"></i> {{str.enviar}}</a></li>
@@ -97,7 +96,7 @@
       </div>
 
       <div class="row" id="resultados"></div>
-      <div class="row" id="gabarito"></div>
+      <div id="gabarito"></div>
     </main>
 
     <script src="./js/jquery-2.1.4.min.js"></script>
@@ -109,7 +108,7 @@
     <script src="./js/dracula/dracula_algorithms.js"></script>
     <script src="./js/dracula/dracula_graffle.js"></script>
     <script src="./js/noty/packaged/jquery.noty.packaged.min.js"></script>
-    <script src="./js/variables.js"></script>
+    <script src="./js/nextex_graph.js"></script>
     <script src="./js/avaliacao.js"></script>
     <script>
       $(document).foundation();

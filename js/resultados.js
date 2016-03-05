@@ -1,8 +1,4 @@
-var renderer, layouter, render;
-var matriz_turma;
-var distancia;
-var resolucoes = [];
-var id = -1;
+var renderer, layouter, matriz_turma, distancia, id = -1, resolucoes = [];
 
 for (var r = 0; r < _resolucoes.length; r++) {
   resolucoes.push(JSON.parse(_resolucoes[r]));
@@ -43,13 +39,11 @@ function mostrarGabarito() {
   }
 
   for (var i = 0; i < gabarito['edges'].length; i++) {
-    // g.addEdge(gabarito['edges'][i]['source'], gabarito['edges'][i]['target'], {label: gabarito['edges'][i]['weight'], stroke : EDGE_C, "font-size": "16px"});
-    //TODO mostrar peso quando !== 1
+    // TODO: alterar font-size para exibir peso das ligações quando não for padrão (1)
     g.addEdge(gabarito['edges'][i]['source'], gabarito['edges'][i]['target'], {label: gabarito['edges'][i]['weight'], stroke : EDGE_C, "font-size": "0px"});
   }
 
   layouter = new Graph.Layout.Ordered(g, true, null);
-  // layouter = new Graph.Layout.Grid(g, true);
   renderer = new Graph.Renderer.Raphael('gabarito', g, width, height);
   renderer.draw();
 }
@@ -199,9 +193,9 @@ function mostrarMapa(pos) {
 
   // Usa gabarito para pegar todos os nós
   for (i = 0; i < gabarito['nodes'].length; i++) {
-      var newNode = r.addNode(gabarito['nodes'][i], {render:render});
-      newNode.layoutPosX = gabarito['grid'][i]['x'];
-      newNode.layoutPosY = gabarito['grid'][i]['y'];
+    var newNode = r.addNode(gabarito['nodes'][i], {render:render});
+    newNode.layoutPosX = gabarito['grid'][i]['x'];
+    newNode.layoutPosY = gabarito['grid'][i]['y'];
   }
 
   for (var nc = 0; nc < gabarito['edges'].length; nc++) {
@@ -229,9 +223,9 @@ function mostrarMapa(pos) {
   var nPNAS = 0;
 
   for (var i = 0; i < gabarito['edges'].length; i++) {
-    // g.addEdge(gabarito['edges'][i]['source'], gabarito['edges'][i]['target'], {label: gabarito['edges'][i]['weight'], stroke : EDGE_C, "font-size": "16px"});
-    //TODO mostrar peso quando !== 1
+    // TODO: alterar font-size para exibir peso das ligações quando não for padrão (1)
     r.addEdge(gabarito['edges'][i]['source'], gabarito['edges'][i]['target'], {label: gabarito['edges'][i]['weight'], stroke: gabarito['edges'][i]['color'], "font-size": "0px"});
+
     if (gabarito['edges'][i]['color'] === PSAS_C) {
       nPSAS++;
     }
@@ -241,9 +235,8 @@ function mostrarMapa(pos) {
   }
 
   for (var i = 0; i < resolucao['edges'].length; i++) {
-    // g.addEdge(gabarito['edges'][i]['source'], gabarito['edges'][i]['target'], {label: gabarito['edges'][i]['weight'], stroke : EDGE_C, "font-size": "16px"});
-    //TODO mostrar peso quando !== 1
-    if (resolucao['edges'][i]['color'] !== PSAS_C) { //PSAS já foi adicionado no for anterior!
+    // TODO: alterar font-size para exibir peso das ligações quando não for padrão (1)
+    if (resolucao['edges'][i]['color'] !== PSAS_C) { // Ligações tipo PSAS já adicionadas no passo anterior!
       r.addEdge(resolucao['edges'][i]['source'], resolucao['edges'][i]['target'], {label: resolucao['edges'][i]['weight'], stroke: resolucao['edges'][i]['color'], "font-size": "0px"});
       nPNAS++;
     }
