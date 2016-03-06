@@ -105,7 +105,7 @@ function mostrarResultadoTurma() {
   }
 
   layouter = new Graph.Layout.Ordered(geral, true, null);
-  renderer = new Graph.Renderer.Raphael('compara_turma', geral, width, height);
+  renderer = new Graph.Renderer.Raphael('compara_turma', geral, width, height, true);
   renderer.draw();
 
   mostrarLigacoesNoIntervalo(0.45,0.55);
