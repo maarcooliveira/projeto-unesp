@@ -4,7 +4,7 @@
    *
    * Página de exibição de resultados de atividade para professores
   */
-  
+
   include("api/check_login.php");
   if (isset($_GET['id']))
     hasPermission("resultados", $_GET['id']);
@@ -122,6 +122,11 @@
           <div class="row" id="legenda_turma">
             <h2 id="modalTitle" class="text-center">{{str.resultado_grafico_turma}}</h2>
             <div id="gradient"></div>
+            <div id="slider" class="range-slider radius" data-slider>
+              <span class="range-slider-handle" role="slider" tabindex="0"></span>
+              <span class="range-slider-active-segment"></span>
+              <input type="hidden">
+            </div>
             <div class="small-3 columns">{{str.melhor_resultado}}</div>
             <div class="small-3 columns text-right">{{str.pior_resultado}}</div>
           </div>

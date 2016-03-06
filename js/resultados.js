@@ -7,7 +7,7 @@
  * geral da turma.
 */
 
-var renderer, layouter, matriz_turma, matriz_geral, distancia, id = -1, resolucoes = [];
+var renderer, layouter, matriz_turma, matriz_geral, geral, distancia, id = -1, resolucoes = [];
 
 for (var r = 0; r < _resolucoes.length; r++) {
   resolucoes.push(JSON.parse(_resolucoes[r]));
@@ -38,6 +38,21 @@ function lastSelected(selId) {
   id = selId;
 }
 
+// Oculta ligações que não estão com peso definido no intervalo (min,max)
+function mostrarLigacoesNoIntervalo(min, max) {
+  for (var i = 0; i < geral['edges'].length; i++) {
+    var valor = Number(geral.edges[i].connection.label.attrs.text);
+    if (valor < max && valor > min) {
+      geral.edges[i].connection.fg.show();
+      geral.edges[i].connection.label.show();
+    }
+    else {
+      geral.edges[i].connection.fg.hide();
+      geral.edges[i].connection.label.hide();
+    }
+  }
+}
+
 // Mostra o resultado gráfico da turma, com dados obtidos em calcularMatrizes() e
 // coloração das ligações definidas de acordo com o peso dos acertos/erros dos
 // alunos
@@ -46,7 +61,7 @@ function mostrarResultadoTurma() {
 
   var height = $(window).height() - $('#legenda_turma').height();;
   var width = $(window).width() - 40;
-  var geral = new Graph();
+  geral = new Graph();
 
   geral.edgeFactory.build = edgeFactory;
 
@@ -92,6 +107,17 @@ function mostrarResultadoTurma() {
   layouter = new Graph.Layout.Ordered(geral, true, null);
   renderer = new Graph.Renderer.Raphael('compara_turma', geral, width, height);
   renderer.draw();
+
+  mostrarLigacoesNoIntervalo(0.45,0.55);
+
+  $('[data-slider]').on('change.fndtn.slider', function() {
+    var valor = $('#slider').attr('data-slider');
+    var min = Number(valor) - 5;
+    var max = Number(valor) + 5;
+    if (max > 100) max = 100;
+    if (min < 0) min = 0;
+    mostrarLigacoesNoIntervalo(min/100, max/100);
+  });
 }
 
 // Mostra o gráfico gabarito feito pelo professor
