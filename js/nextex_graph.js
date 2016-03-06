@@ -1,11 +1,21 @@
-var PSAN_C = "#E33258";
-var PSAS_C = "#4ECDC4";
-var PNAS_C = "#F8CA00";
-var NODE_C = "#1565c0";
-var EDGE_C = "#b0bec5";
-var FILL_C = "#ffffff";
-var NODE_SEL_C = "#F8B500";
+/* NextEx - Ferramenta de Avaliação
+ * js/nextex_graph.js
+ *
+ * Variáveis e funções utilizadas em diferentes páginas da aplicação, relacionadas
+ * à configuração dos gráficos. Funções e variáveis aqui definidas são utilizadas
+ * em atividade.js, avaliação.js e resultados.js
+*/
 
+var PSAN_C = "#E33258"; // Cor para ligações feitas apenas pelo professor
+var PSAS_C = "#4ECDC4"; // Cor para ligações feitas pelo professor e aluno
+var PNAS_C = "#F8CA00"; // Cor para ligações feitas apenas pelo aluno
+var NODE_C = "#1565c0"; // Cor da caixa dos termos
+var EDGE_C = "#b0bec5"; // Cor padrão das ligações
+var FILL_C = "#ffffff"; // Cor do texto dos termos
+var NODE_SEL_C = "#F8B500"; // Cor da caixa dos termos selecionados
+
+// Aqui são definidos o tamanho, padding, etc da caixa dos termos (rec) e propriedades
+// do texto dos termos (txt) como cor e tamanho da fonte
 var render = function(r, n) {
   var color = NODE_C;
 
@@ -30,6 +40,7 @@ var edgeFactory = function(source, target) {
   return e;
 }
 
+// Aqui fica a lógica do click nos termos, quando realizar ligação, quando descelecionar, etc
 function addBoxClickListener() {
   $(document).on('click', '#canvas rect', function () {
     // Se o elemento clicado já estava selecionado, remover seleção;
@@ -66,6 +77,11 @@ function addBoxClickListener() {
   });
 }
 
+/* Sempre que um item é selecionado, o contexto do menu na navbar também muda.
+ Se o usuário estiver no app android, a mudança deve ser feita no app criando
+ uma função changeMenuContext, que vai receber como parâmetro 'srcSelected'
+ para quando um termo foi selecionado ou 'noneSelected' quando não há termos
+ selecionados. */
 function toggleItemSelected() {
   if (src) {
     if(typeof Android != 'undefined')
@@ -95,18 +111,21 @@ function toggleDestSelection(val) {
   canSelectDest = val;
 }
 
+// Retorna a caixa do termo para a cor padrão
 function removeSelectColor(obj) {
   $(obj).attr('class', '');
   $(obj).attr('fill', NODE_C);
   text = $(obj).parent().next();
 }
 
+// Coloca a cor de seleção para a caixa de texto
 function addSelectColor(obj) {
   $(obj).attr('class', 'selected');
   $(obj).attr('fill', NODE_SEL_C);
   text = $(obj).parent().next();
 }
 
+// Cancela a seleção de termos
 function cancelSelect() {
   removeSelectColor(src);
   src = undefined;
@@ -116,6 +135,7 @@ function cancelSelect() {
   toggleItemSelected();
 }
 
+// Adiciona uma ligação entre os termos em src e dest
 function addEdge(weight) {
   var from = $(src).parent().attr('title');
   var to = $(dest).parent().attr('title');
@@ -160,6 +180,7 @@ function addEdge(weight) {
   edgeCount++;
 }
 
+// Remove uma ligação
 function removeEdge(edge) {
   var index = g.edges.indexOf(edge);
   edge.remove();
@@ -176,6 +197,7 @@ function removeEdge(edge) {
   });
 }
 
+// Verifica se já há uma ligação entre dois termos
 function hasEdge(from, to) {
   for (var i = 0; i < g['edges'].length; i++) {
     var src_n = g['edges'][i]['source']['id'];
@@ -187,6 +209,8 @@ function hasEdge(from, to) {
   return false;
 }
 
+// Exibe caixa de entrada do peso da ligação. Devido pedidos para simplicidade
+// nesta fase do projeto, todas as ligações tem como padrão o peso 1
 function showInput() {
   // TODO: descomentar código abaixo e remover addEdge(1) quando o peso não for (1) como padrão
   // if(typeof Android != 'undefined') {
@@ -199,6 +223,8 @@ function showInput() {
   addEdge(1);
 }
 
+// Carrega strings de acordo com o idioma do usuário para ser utilizado nas notificações
+// de ligação
 function getInterfaceStr() {
   $.getJSON( "./data/strings.json", function(data) {
     var userLang = navigator.language || navigator.userLanguage;

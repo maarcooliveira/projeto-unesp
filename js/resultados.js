@@ -1,3 +1,12 @@
+/* NextEx - Ferramenta de Avaliação
+ * js/resultados.js
+ *
+ * Variáveis e funções relacionados à página de resultados de uma atividade. Aqui
+ * são feitos os cálculos da tabela de distância, a distância média da turma, o
+ * gráfico de resultado individual, o gráfico de gabarito e o gráfico de resultado
+ * geral da turma.
+*/
+
 var renderer, layouter, matriz_turma, matriz_geral, distancia, id = -1, resolucoes = [];
 
 for (var r = 0; r < _resolucoes.length; r++) {
@@ -24,10 +33,14 @@ $(document).ready(function() {
   calcularMatrizes();
 });
 
+// Marca o último aluno selecionado na lista de resultados
 function lastSelected(selId) {
   id = selId;
 }
 
+// Mostra o resultado gráfico da turma, com dados obtidos em calcularMatrizes() e
+// coloração das ligações definidas de acordo com o peso dos acertos/erros dos
+// alunos
 function mostrarResultadoTurma() {
   $("#compara_turma").html("");
 
@@ -37,6 +50,7 @@ function mostrarResultadoTurma() {
 
   geral.edgeFactory.build = edgeFactory;
 
+  // Insere os termos no grafo
   for (i = 0; i < gabarito['nodes'].length; i++) {
     console.log(gabarito['nodes'][i], gabarito['grid'][i]['x'], gabarito['grid'][i]['y']);
     var newNode = geral.addNode(gabarito['nodes'][i], {render:render});
@@ -44,6 +58,8 @@ function mostrarResultadoTurma() {
     newNode.layoutPosY = gabarito['grid'][i]['y'];
   }
 
+
+  // Insere as ligações no grafo, com a cor de acordo com a escala
   for (i = 0; i < gabarito['nodes'].length; i++) {
     for (j = 0; j < gabarito['nodes'].length; j++) {
       if (i > j) {
@@ -74,6 +90,7 @@ function mostrarResultadoTurma() {
   renderer.draw();
 }
 
+// Mostra o gráfico gabarito feito pelo professor
 function mostrarGabarito() {
   $("#gabarito").html("");
 
@@ -99,13 +116,14 @@ function mostrarGabarito() {
   renderer.draw();
 }
 
+// Calcula a matriz de erro de cada estudante, dados da distância média e
+// dados do gráfico de desempenho da turma
 function calcularMatrizes() {
-  // valores utilizados para calculo da nota
-  var max = gabarito['peso_f'];
-  var min = gabarito['peso_i'];
-  var n = Math.pow(max - min, 2);
-  var np = gabarito['nodes'].length; // numero de palavras
-  var npr = Math.pow(np, 2) - np; //posicoes relevantes
+  var max = gabarito['peso_f']; // peso final das ligações
+  var min = gabarito['peso_i']; // peso inicial das ligações
+  var n = Math.pow(max - min, 2); // distância máxima ^2
+  var np = gabarito['nodes'].length; // número de palavras
+  var npr = Math.pow(np, 2) - np; // posições relevantes
   var qtd_respostas = 0;
   var distancia_total = 0;
   var distancia_cel;
@@ -121,7 +139,7 @@ function calcularMatrizes() {
     }
   }
 
-  // repete para cada uma das resolucoes
+  // Repete para cada uma das resolucoes
   for (var r = 0; r < resolucoes.length; r++) {
     distancia_cel = 0;
 
@@ -131,14 +149,14 @@ function calcularMatrizes() {
     matriz_turma[r] = [];
     matriz = matriz_turma[r];
 
-    // inicializa matriz com valores das ligacoes do aluno
+    // Inicializa matriz com valores das ligacoes do aluno
     for (var i = 0; i < np; i++) {
       matriz[i] = [];
       for (var j = 0; j < np; j++) {
         matriz[i][j] = 0;
 
         for (var nc = 0; nc < resolucao['edges'].length; nc++) {
-          resolucao['edges'][nc]['color'] = PNAS_C; // assumimos primeiro que aluno ligou e prof. nao;
+          resolucao['edges'][nc]['color'] = PNAS_C; // Assumimos primeiro que aluno ligou e prof. não;
           if (gabarito['nodes'][i] === resolucao['edges'][nc]['source'] && gabarito['nodes'][j] === resolucao['edges'][nc]['target']) {
             matriz[i][j] = resolucao['edges'][nc]['weight'];
             break;
@@ -149,7 +167,7 @@ function calcularMatrizes() {
           }
         }
 
-        // completa matriz subtraindo com valores das ligacoes do professor
+        // Completa matriz subtraindo com valores das ligações do professor
         for (var nc = 0; nc < gabarito['edges'].length; nc++) {
           if (gabarito['nodes'][i] === gabarito['edges'][nc]['source'] && gabarito['nodes'][j] === gabarito['edges'][nc]['target']) {
             matriz[i][j] -= gabarito['edges'][nc]['weight'];
@@ -161,12 +179,15 @@ function calcularMatrizes() {
           }
         }
         distancia_cel += Math.sqrt(Math.pow(matriz[i][j], 2));
+        // Insere dados para gráfico geral apenas se esta atividade já foi finalizada
+        // pelo aluno
         if (foiEntregue) {
           matriz_geral[i][j] += Math.pow(matriz[i][j], 2);
         }
       }
     }
 
+    // valor da distância do aluno
     distancia[r] = distancia_cel/npr;
 
     if (foiEntregue) {
@@ -174,6 +195,7 @@ function calcularMatrizes() {
       qtd_respostas++;
     }
 
+    // atualiza a distância de cada aluno
     $("#dma-" + resolucao['aluno']).text(distancia[r].toFixed(3));
   }
 
@@ -186,14 +208,15 @@ function calcularMatrizes() {
     for (var j = 0; j < np; j++) {
       matriz_geral[i][j] = Math.sqrt((matriz_geral[i][j]/qtd_respostas)*(1/n));
     }
-    console.log(matriz_geral[i]);
   }
 
+  // Exibe distância média da turma (dmt)
   var dmt = isNaN(distancia_total/qtd_respostas) ? 0 : (distancia_total/qtd_respostas).toFixed(3);
   $("#dmt").text(dmt);
 
 }
 
+// Verifica se certo aluno já finalizou sua atividade
 function alunoEntregou(id) {
   for (var r = 0; r < resolucoes_db.length; r++) {
     if (Number(resolucoes_db[r].id_usuario) === id) {
@@ -208,6 +231,7 @@ function alunoEntregou(id) {
   return false;
 }
 
+// Mostra o resultado gráfico e individual de um aluno
 function mostrarResultadoAluno() {
   var pos;
 
@@ -256,6 +280,7 @@ function mostrarResultadoAluno() {
   }
 }
 
+// Exibe a resposta de um aluno comparando-a com o gabarito
 function mostrarMapa(pos) {
   $("#compara_aluno").html("");
 

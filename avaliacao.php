@@ -1,4 +1,10 @@
 <?php
+  /* NextEx - Ferramenta de Avaliação
+   * avaliacao.php
+   *
+   * Página de avaliação do aluno
+  */
+
   include("api/check_login.php");
   isLoggedIn();
   if (isset($_GET['id']))
@@ -51,12 +57,10 @@
         <li class="name">
           <h1><a href="aluno.php">NextEx <i class="fa fa-angle-right pad-l-r"></i> {{str.atividade}}</a></h1>
         </li>
-         <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
         <li class="toggle-topbar menu-icon"><a href="#"><span></span></a></li>
       </ul>
 
       <section class="top-bar-section">
-        <!-- Right Nav Section -->
         <ul class="right">
           <li><a id="tb_cancelar" onclick="cancelSelect();"><i class="fa fa-times pad-r"></i> {{str.cancelar}}</a></li>
           <li><a id="tb_salvar" onclick="salvar();"><i class="fa fa-floppy-o pad-r"></i> {{str.salvar}}</a></li>

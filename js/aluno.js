@@ -1,3 +1,9 @@
+/* NextEx - Ferramenta de Avaliação
+ * js/aluno.js
+ *
+ * Funções de interação com o painel de controle de aluno
+*/
+
 $(document).ready(function() {
   var ua = navigator.userAgent.toLowerCase();
   var isAndroid = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
@@ -7,6 +13,7 @@ $(document).ready(function() {
   }
 });
 
+// Remover o aluno de uma turma
 function deixarTurma(turma) {
   var ajaxurl = 'api/deixar_turma.php';
   var data =  {'turma': turma};
@@ -16,6 +23,7 @@ function deixarTurma(turma) {
   });
 }
 
+// Inserir o aluno em uma turma
 function entrarNaTurma() {
   var usuario = $('#usuario').val();
   var turma = $('#turma').val();
@@ -27,6 +35,7 @@ function entrarNaTurma() {
   });
 }
 
+// Remover navbar se o acesso for feito via aplicativo Android
 function initAndroid() {
     $('nav').css("display", "none");
     Android.changeMenuContext('removeAll');

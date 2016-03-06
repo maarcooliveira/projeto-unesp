@@ -1,3 +1,9 @@
+/* NextEx - Ferramenta de Avaliação
+ * js/atividade.js
+ *
+ * Funções de gerenciamento dos gráficos e da interface da página de atividade (professor)
+*/
+
 var width, height, g, renderer, layouter, src, dest, edge, canSelectDest = false, edgeCount = 0, row_width;
 var complete_graph, incomplete_graph;
 var mapa = {};
@@ -39,6 +45,7 @@ $(document).ready(function() {
   getInterfaceStr();
 });
 
+// Exibir formulário para editar dados da atividade
 function editar() {
   $("#form-p1").css('display', 'inline');
   $("#btn-cancelar").css('visibility', 'hidden');
@@ -53,6 +60,8 @@ function editar() {
   editado = true;
 }
 
+// Continuar após a inserção ou atualização de dados (nome da atividade, prazo,
+// termos, etc) no formulário
 function continuar() {
   if (editado) {
     $("#form-p1").css('display', 'none');
@@ -84,6 +93,7 @@ function continuar() {
   }
 }
 
+// Inicializa biblioteca Dracula Graph e carrega o gráfico
 function mostrarMapa() {
   $("#form-p1").css('display', 'none');
   $("#canvas").html("");
@@ -150,6 +160,7 @@ function mostrarMapa() {
   $('#canvas text').css('pointer-events', 'none');
 }
 
+// Coleta os dados e chama API para salvar a atividade
 function salvar() {
   var mapa_nodes = Object.keys(g['nodes']);
   var titulo = $("#titulo").val();

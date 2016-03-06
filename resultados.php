@@ -1,4 +1,10 @@
 <?php
+  /* NextEx - Ferramenta de Avaliação
+   * resultados.php
+   *
+   * Página de exibição de resultados de atividade para professores
+  */
+  
   include("api/check_login.php");
   if (isset($_GET['id']))
     hasPermission("resultados", $_GET['id']);
@@ -44,12 +50,10 @@
         <li class="name">
           <h1><a href="professor.php">NextEx <i class="fa fa-angle-right pad-l-r"></i> {{str.analise_de_resultados}}</a></h1>
         </li>
-         <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
         <li class="toggle-topbar menu-icon"><a href="#"><span></span></a></li>
       </ul>
 
       <section class="top-bar-section">
-        <!-- Right Nav Section -->
         <ul class="right">
           <li class="has-dropdown">
             <a class="dropdown-caller" href="#"><i class="fa fa-user pad-l-r"></i> <?php echo $_SESSION["nome"]; ?></a>

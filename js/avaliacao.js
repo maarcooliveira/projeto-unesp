@@ -1,3 +1,9 @@
+/* NextEx - Ferramenta de Avaliação
+ * js/avaliacao.js
+ *
+ * Funções de gerenciamento dos gráficos e da interface da página de avaliação (aluno)
+*/
+
 var width, height, g, renderer, layouter,
   src, dest, edge, matriz, canSelectDest = false, edgeCount = 0, concluido, str;
 
@@ -12,6 +18,7 @@ $(document).ready(function() {
   inicializar();
 });
 
+// Confere se atividade está sendo acessada do app Android
 function checkUserAgent() {
   var ua = navigator.userAgent.toLowerCase();
   var isAndroid = ua.indexOf("android") > -1;
@@ -20,6 +27,7 @@ function checkUserAgent() {
   }
 }
 
+// Inicializa visualização e controles da atividade
 function inicializar() {
 
   width = $('#full-hr').width();
@@ -51,6 +59,7 @@ function inicializar() {
   mostrarMapa();
 }
 
+// Monta a atividade e insere ligações salvas previamente
 function mostrarMapa() {
 
   for (i = 0; i < mapa['nodes'].length; i++) {
@@ -93,6 +102,7 @@ function mostrarMapa() {
   }
 }
 
+// Mostra gabarito gráfico para o aluno
 function mostrarGabarito() {
   var gab = new Graph();
 
@@ -114,6 +124,7 @@ function mostrarGabarito() {
   renderer.draw();
 }
 
+// Adiciona controles iniciais na navbar
 function addControles() {
   $("#tb_salvar").css('display', 'block');
   $("#tb_enviar").css('display', 'block');
@@ -132,6 +143,7 @@ function enviar() {
   enviar_form_salvar();
 }
 
+// Salva os dados da atividade, marcando-a como concluída ou não
 function enviar_form_salvar() {
   var mapa_edges = Array();
   for (var i = 0; i < g['edges'].length; i++) {
@@ -171,6 +183,7 @@ function enviar_form_salvar() {
   });
 }
 
+// Mostra tabela de distância do aluno
 function mostrarTabela() {
   // valores utilizados para calculo da nota
   var max = gabarito['peso_f'];

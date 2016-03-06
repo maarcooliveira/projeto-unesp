@@ -1,4 +1,10 @@
 <?php
+  /* NextEx - Ferramenta de Avaliação
+   * professor.php
+   *
+   * Painel de controle do professor
+  */
+
   include("api/check_login.php");
   isLoggedIn();
   hasPermission("professor", NULL);
@@ -33,12 +39,10 @@
         <li class="name">
           <h1><a href="#"><i class="fa fa-chevron-right"></i> NextEx</a></h1>
         </li>
-         <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
         <li class="toggle-topbar menu-icon"><a href="#"><span></span></a></li>
       </ul>
 
       <section class="top-bar-section">
-        <!-- Right Nav Section -->
         <ul class="right">
           <li class="has-dropdown">
             <a class="dropdown-caller" href="#"><i class="fa fa-user pad-l-r"></i> <?php echo $_SESSION["nome"]; ?></a>

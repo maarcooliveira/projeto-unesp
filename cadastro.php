@@ -1,10 +1,16 @@
 <?php
+  /* NextEx - Ferramenta de Avaliação
+   * cadastro.php
+   *
+   * Página de cadastro de usuários
+  */
+
   session_start();
 
-  // include db connect class
   require_once __DIR__ . '/api/db_connect.php';
 
-  //TEMP: para login sem facebook
+  // TODO: comentar este trecho e descomentar as outras partes do código
+  // para reativar login e cadastro via Facebook
   if (isset($_POST['usuario']) && isset($_POST['senha'])) {
     $usuario = $_POST['usuario'];
     $senha = $_POST['senha'];
