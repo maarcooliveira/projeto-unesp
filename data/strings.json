@@ -76,7 +76,9 @@
     "confirma_excluir_atividade": "This activity, student solutions and its results will be permanently deleted. You still want to delete it?",
     "confirma_excluir_turma": "This class will only be deleted if there is no activity assigned to it. You still want to delete it?",
     "usuario_placeholder": "Your student/instructor id",
-    "erro_salvar_atividade": "Sorry, we could not save your activity"
+    "erro_salvar_atividade": "Sorry, we could not save your activity",
+    "melhor_resultado": "Best results",
+    "pior_resultado": "Worst results"
   },
 
   "pt-BR": {
@@ -156,7 +158,8 @@
     "confirma_excluir_atividade": "Esta atividade e todas as resoluções enviadas serão excluídas permanentemente, assim como seus resultados. Deseja mesmo excluir?",
     "confirma_excluir_turma": "Esta turma só será excluída se não houverem mais atividades associadas à ela. Deseja realmente excluir?",
     "usuario_placeholder": "Seu id de aluno/professor",
-    "erro_salvar_atividade": "Erro ao salvar atividade"
-
+    "erro_salvar_atividade": "Erro ao salvar atividade",
+    "melhor_resultado": "Melhor resultado",
+    "pior_resultado": "Pior resultado"
   }
 }

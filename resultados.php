@@ -115,8 +115,14 @@
         </div>
 
         <div id="modalResultadoTurma" class="reveal-modal full" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="">
-          <h2 id="modalTitle">{{str.resultado_grafico_turma}}</h2>
-          <p class="lead">{{str.funcionalidade_em_breve}}</p>
+          <div class="row" id="legenda_turma">
+            <h2 id="modalTitle" class="text-center">{{str.resultado_grafico_turma}}</h2>
+            <div id="gradient"></div>
+            <div class="small-3 columns">{{str.melhor_resultado}}</div>
+            <div class="small-3 columns text-right">{{str.pior_resultado}}</div>
+          </div>
+          <div id="compara_turma"></div>
+          <div><hr id="full-hr" class="invisible"></div>
           <a class="close-reveal-modal" aria-label="Close">&#215;</a>
         </div>
 

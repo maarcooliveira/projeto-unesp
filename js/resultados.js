@@ -1,4 +1,4 @@
-var renderer, layouter, matriz_turma, distancia, id = -1, resolucoes = [];
+var renderer, layouter, matriz_turma, matriz_geral, distancia, id = -1, resolucoes = [];
 
 for (var r = 0; r < _resolucoes.length; r++) {
   resolucoes.push(JSON.parse(_resolucoes[r]));
@@ -16,11 +16,62 @@ $(document).ready(function() {
     mostrarResultadoAluno();
   });
 
+  $(document).on('opened.fndtn.reveal', '#modalResultadoTurma[data-reveal]', function () {
+    var modal = $(this);
+    mostrarResultadoTurma();
+  });
+
   calcularMatrizes();
 });
 
 function lastSelected(selId) {
   id = selId;
+}
+
+function mostrarResultadoTurma() {
+  $("#compara_turma").html("");
+
+  var height = $(window).height() - $('#legenda_turma').height();;
+  var width = $(window).width() - 40;
+  var geral = new Graph();
+
+  geral.edgeFactory.build = edgeFactory;
+
+  for (i = 0; i < gabarito['nodes'].length; i++) {
+    console.log(gabarito['nodes'][i], gabarito['grid'][i]['x'], gabarito['grid'][i]['y']);
+    var newNode = geral.addNode(gabarito['nodes'][i], {render:render});
+    newNode.layoutPosX = gabarito['grid'][i]['x'];
+    newNode.layoutPosY = gabarito['grid'][i]['y'];
+  }
+
+  for (i = 0; i < gabarito['nodes'].length; i++) {
+    for (j = 0; j < gabarito['nodes'].length; j++) {
+      if (i > j) {
+
+        /* A cor foi dividida em duas escalas:
+         * Verde-Amarelo - rgb(0,255,0) até rgb(255,255,0)
+         * Amarelo-Vermelho - rgb(255,255,0) até rgb(255,0,0)
+         * para evitar a tonalidade marrom nas ligações com valor próximo a 0.5
+        */
+        if (matriz_geral[i][j] <= 0.5) {
+          var verde = 255;
+          var vermelho = Math.ceil(matriz_geral[i][j] * 255);
+        }
+        else {
+          var vermelho = 255;
+          var verde = Math.ceil((0.5 - matriz_geral[i][j] % 0.5)/0.5 * 255);
+        }
+
+        var cor = "rgb(" + vermelho + "," + verde + ",0)";
+
+        geral.addEdge(gabarito['nodes'][i], gabarito['nodes'][j], {label: matriz_geral[i][j].toFixed(3), stroke : cor, "font-size": "16px"});
+      }
+    }
+  }
+
+  layouter = new Graph.Layout.Ordered(geral, true, null);
+  renderer = new Graph.Renderer.Raphael('compara_turma', geral, width, height);
+  renderer.draw();
 }
 
 function mostrarGabarito() {
@@ -61,12 +112,21 @@ function calcularMatrizes() {
   var matriz;
   distancia = [];
   matriz_turma = [];
+  matriz_geral = [];
+
+  for (var i = 0; i < np; i++) {
+    matriz_geral[i] = [];
+    for (var j = 0; j < np; j++) {
+      matriz_geral[i][j] = 0;
+    }
+  }
 
   // repete para cada uma das resolucoes
   for (var r = 0; r < resolucoes.length; r++) {
     distancia_cel = 0;
 
     var resolucao = resolucoes[r];
+    var foiEntregue = alunoEntregou(resolucao.aluno);
 
     matriz_turma[r] = [];
     matriz = matriz_turma[r];
@@ -101,17 +161,32 @@ function calcularMatrizes() {
           }
         }
         distancia_cel += Math.sqrt(Math.pow(matriz[i][j], 2));
+        if (foiEntregue) {
+          matriz_geral[i][j] += Math.pow(matriz[i][j], 2);
+        }
       }
     }
 
     distancia[r] = distancia_cel/npr;
 
-    if (alunoEntregou(resolucao.aluno)) {
+    if (foiEntregue) {
       distancia_total += distancia[r];
       qtd_respostas++;
     }
 
     $("#dma-" + resolucao['aluno']).text(distancia[r].toFixed(3));
+  }
+
+  // Altera distancia_maxima^2 caso o peso seja único
+  if (n === 0) {
+    n = 1;
+  }
+
+  for (var i = 0; i < np; i++) {
+    for (var j = 0; j < np; j++) {
+      matriz_geral[i][j] = Math.sqrt((matriz_geral[i][j]/qtd_respostas)*(1/n));
+    }
+    console.log(matriz_geral[i]);
   }
 
   var dmt = isNaN(distancia_total/qtd_respostas) ? 0 : (distancia_total/qtd_respostas).toFixed(3);
