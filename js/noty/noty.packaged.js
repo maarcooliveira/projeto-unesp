@@ -977,7 +977,7 @@ $.noty.layouts.topLeft = {
         selector: 'ul#noty_topLeft_layout_container',
         style   : function() {
             $(this).css({
-                top          : 20,
+                top          : 65,
                 left         : 20,
                 position     : 'fixed',
                 width        : '310px',
@@ -1233,7 +1233,7 @@ $.noty.themes.defaultTheme = {
                     border      : '1px solid #eee',
                     boxShadow   : "0 2px 4px rgba(0, 0, 0, 0.1)"
                 });
-                this.$message.css({fontSize: '13px', textAlign: 'left'});
+                this.$message.css({fontSize: '13px', textAlign: 'center'});
                 break;
             case 'bottom':
                 this.$bar.css({
@@ -1385,7 +1385,7 @@ $.noty.themes.relax = {
                     border   : '1px solid #eee',
                     boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)"
                 });
-                this.$message.css({fontSize: '13px', textAlign: 'left'});
+                this.$message.css({fontSize: '14px', textAlign: 'center'});
                 break;
             case 'bottom':
                 this.$bar.css({
@@ -1410,20 +1410,20 @@ $.noty.themes.relax = {
                 this.$bar.css({backgroundColor: '#FFF', borderColor: '#dedede', color: '#444'});
                 break;
             case 'warning':
-                this.$bar.css({backgroundColor: '#FFEAA8', borderColor: '#FFC237', color: '#826200'});
+                this.$bar.css({backgroundColor: '#F8CA00', borderColor: '#F8CA00', color: '#FFF'});
                 this.$buttons.css({borderTop: '1px solid #FFC237'});
                 break;
             case 'error':
-                this.$bar.css({backgroundColor: '#FF8181', borderColor: '#e25353', color: '#FFF'});
+                this.$bar.css({backgroundColor: '#E33258', borderColor: '#E33258', color: '#FFF'});
                 this.$message.css({fontWeight: 'bold'});
                 this.$buttons.css({borderTop: '1px solid darkred'});
                 break;
             case 'information':
-                this.$bar.css({backgroundColor: '#78C5E7', borderColor: '#3badd6', color: '#FFF'});
+                this.$bar.css({backgroundColor: '#1565c0', borderColor: '#1565c0', color: '#FFF'});
                 this.$buttons.css({borderTop: '1px solid #0B90C4'});
                 break;
             case 'success':
-                this.$bar.css({backgroundColor: '#BCF5BC', borderColor: '#7cdd77', color: 'darkgreen'});
+                this.$bar.css({backgroundColor: '#4ECDC4', borderColor: '#4ECDC4', color: '#FFF'});
                 this.$buttons.css({borderTop: '1px solid #50C24E'});
                 break;
             default:

@@ -161,8 +161,8 @@ function enviar_form_salvar() {
         window.location.href = "aluno.php";
       }
       var n = noty({
-        text: '<i class="fa fa-floppy-o"></i> ' + str.atividade_salva,
-        layout: 'topCenter',
+        text: '<i class="fa fa-floppy-o pad-r"></i> ' + str.atividade_salva,
+        layout: 'topLeft',
         type: 'success',
         theme: 'relax',
         timeout: 3000

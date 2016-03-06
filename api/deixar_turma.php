@@ -1,4 +1,11 @@
 <?php
+  /* NextEx - Ferramenta de Avaliação
+   * api/deixar_turma.php
+   *
+   * Remove um aluno de dada turma. Os dados das atividades realizados pelo aluno
+   * nessa turma são mantidos.
+  */
+  
   session_start();
   $turma = isset($_POST['turma']) ? $_POST['turma'] : "";
 

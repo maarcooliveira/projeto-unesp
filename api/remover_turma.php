@@ -1,4 +1,11 @@
 <?php
+  /* NextEx - Ferramenta de Avaliação
+   * api/remover_turma.php
+   *
+   * Remove uma turma de um professor. Por medidas de segurança, apenas turmas
+   * cujo todas as atividades tenham sido removidas podem ser excluídas.
+  */
+  
   session_start();
   $turma = isset($_POST['turma']) ? $_POST['turma'] : "";
 

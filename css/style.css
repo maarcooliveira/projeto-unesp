@@ -1,3 +1,9 @@
+/* NextEx - Ferramenta de Avaliação
+ * css/style.css
+ *
+ * Contém estilização específica para páginas da aplicação
+*/
+
 @import url(https://fonts.googleapis.com/css?family=Lato);
 
 body, h1, h2, h3, h4, h5, h6, p, a {
@@ -59,7 +65,6 @@ body, h1, h2, h3, h4, h5, h6, p, a {
 
 .reveal-modal{
 	overflow: auto;
-  /*position: fixed;*/
 }
 
 .top-bar {

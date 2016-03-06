@@ -210,8 +210,8 @@ function salvar() {
       console.log(msg);
       if (msg === "salvo") {
         var n = noty({
-          text: '<i class="fa fa-floppy-o"></i> ' + str.atividade_salva,
-          layout: 'topCenter',
+          text: '<i class="fa fa-floppy-o pad-r"></i> ' + str.atividade_salva,
+          layout: 'topLeft',
           type: 'success',
           theme: 'relax',
           timeout: 3000
@@ -219,8 +219,8 @@ function salvar() {
       }
       else if (msg === "erro") {
         var n = noty({
-          text: '<i class="fa fa-floppy-o"></i> ' + str.erro_salvar_atividade,
-          layout: 'topCenter',
+          text: '<i class="fa fa-floppy-o pad-r"></i> ' + str.erro_salvar_atividade,
+          layout: 'topLeft',
           type: 'error',
           theme: 'relax',
           timeout: 3000

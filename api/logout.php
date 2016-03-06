@@ -1,4 +1,10 @@
 <?php
+  /* NextEx - Ferramenta de Avaliação
+   * api/logout.php
+   *
+   * Remove os dados de sessão do usuário e redireciona para index.php
+  */
+
   if (session_status() == PHP_SESSION_NONE) {
     session_start();
   }

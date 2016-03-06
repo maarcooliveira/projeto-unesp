@@ -123,8 +123,8 @@ function addEdge(weight) {
   if (hasEdge(from, to)) {
     // Notificação de ligação já existente
     var n = noty({
-      text: '<i class="fa fa-repeat"></i> \"<strong>' + from + '</strong>\" ' + str.e + ' \"<strong>' + to + '</strong>\" ' + str.ja_relacionados,
-      layout: 'topCenter',
+      text: '<i class="fa fa-repeat pad-r"></i> \"<strong>' + from + '</strong>\" ' + str.e + ' \"<strong>' + to + '</strong>\" ' + str.ja_relacionados,
+      layout: 'topLeft',
       type: 'warning',
       theme: 'relax',
       timeout: 3000
@@ -141,8 +141,8 @@ function addEdge(weight) {
 
   // Notificação de ligação inserida
   var n = noty({
-    text: '<i class="fa fa-repeat"></i> \"<strong>' + from + '</strong>\" ' + str.e + ' \"<strong>' + to + '</strong>\" ' + str.foram_relacionados,
-    layout: 'topCenter',
+    text: '<i class="fa fa-link pad-r"></i> \"<strong>' + from + '</strong>\" ' + str.e + ' \"<strong>' + to + '</strong>\" ' + str.foram_relacionados,
+    layout: 'topLeft',
     type: 'information',
     theme: 'relax',
     timeout: 3000
@@ -168,8 +168,8 @@ function removeEdge(edge) {
   var from = edge.source.id;
   var to = edge.target.id;
   var n = noty({
-    text: '<i class="fa fa-repeat"></i> \"<strong>' + from + '</strong>\" ' + str.e + ' \"<strong>' + to + '</strong>\" ' + str.foram_desrelacionados,
-    layout: 'topCenter',
+    text: '<i class="fa fa-chain-broken pad-r"></i> \"<strong>' + from + '</strong>\" ' + str.e + ' \"<strong>' + to + '</strong>\" ' + str.foram_desrelacionados,
+    layout: 'topLeft',
     type: 'error',
     theme: 'relax',
     timeout: 3000

@@ -184,7 +184,7 @@
     <script src="./js/dracula/dracula_graph.js"></script>
     <script src="./js/dracula/dracula_algorithms.js"></script>
     <script src="./js/dracula/dracula_graffle.js"></script>
-    <script src="./js/noty/packaged/jquery.noty.packaged.min.js"></script>
+    <script src="./js/noty/noty.packaged.js"></script>
     <script src="./js/bootstrap-tokenfield.min.js"></script>
     <script src="./js/nextex_graph.js"></script>
     <script src="./js/atividade.js"></script>

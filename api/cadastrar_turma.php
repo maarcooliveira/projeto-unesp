@@ -1,4 +1,10 @@
 <?php
+  /* NextEx - Ferramenta de Avaliação
+   * api/cadastrar_turma.php
+   *
+   * Realiza o cadastro de uma nova turma para o professor logado na aplicação
+  */
+
   session_start();
   $universidade = isset($_POST['universidade']) ? $_POST['universidade'] : "";
   $turma = isset($_POST['turma']) ? $_POST['turma'] : "";

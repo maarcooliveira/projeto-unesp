@@ -1,3 +1,10 @@
+/* NextEx - Ferramenta de Avaliação
+ * js/dracula/dracula_graph.js
+ *
+ * Parte da biblioteca Dracula Graph. Arquivo original por Philipp Strathausen.
+ * Modificações feitas nesse arquivo estão marcadas em comentários com a tag NEXTEX
+*/
+
 /*
  *  Dracula Graph Layout and Drawing Framework 0.0.3alpha
  *  (c) 2010 Philipp Strathausen <strathausen@gmail.com>, http://strathausen.eu

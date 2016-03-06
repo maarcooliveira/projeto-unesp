@@ -1,5 +1,12 @@
 <?php
-
+  /* NextEx - Ferramenta de Avaliação
+   * api/atividade_aux.php
+   *
+   * Contém funções da API relacionadas a requisições no banco de dados de
+   * atividades e resoluções.
+  */
+  
+  // Retorna todas as atividades de um professor
   function getAtividadesProfessor($idProfessor) {
     include (__DIR__ . '/db_connect.php');
     $query = "SELECT atividade.*, turma.nome AS turma FROM atividade
@@ -15,6 +22,7 @@
     return $response;
   }
 
+  // Retorna todas as atividades de um aluno
   function getAtividadesAluno($idAluno) {
     include (__DIR__ . '/db_connect.php');
     $query = "SELECT atividade.*, turma.nome AS turma, resolucao.concluido AS concluido FROM atividade
@@ -32,6 +40,7 @@
     return $response;
   }
 
+  // Retorna dados de uma atividade específica
   function getAtividade($id) {
     include (__DIR__ . '/db_connect.php');
     $query = "SELECT atividade.*, turma.nome AS turma FROM atividade
@@ -43,6 +52,7 @@
     return $response;
   }
 
+  // Insere dados na tabela de resoluções quando uma nova atividade é criada
   function insertResolucoesAluno($idAluno) {
     include (__DIR__ . '/db_connect.php');
     $query = "INSERT IGNORE INTO resolucao (id_atividade, id_usuario, concluido)
@@ -51,6 +61,7 @@
     mysqli_query($connection, $query);
   }
 
+  // Retorna dados da resolução de uma atividade e aluno específicos
   function getResolucao($idAtividade, $idAluno) {
     include (__DIR__ . '/db_connect.php');
     $query = "SELECT * FROM resolucao WHERE id_atividade = {$idAtividade}
@@ -61,6 +72,7 @@
     return $response;
   }
 
+  // Retorna dados de todas as resoluções de uma atividade
   function getResolucoes($idAtividade) {
     include (__DIR__ . '/db_connect.php');
     $query = "SELECT resolucao.*, usuario.nome AS aluno FROM resolucao
@@ -76,6 +88,7 @@
     return $response;
   }
 
+  // Retorna a quantidade de resoluções finalizadas de uma dada atividade
   function getCountAtividadesEntregues($idAtividade) {
     include (__DIR__ . '/db_connect.php');
     $query = "SELECT COUNT(*) as qtd FROM resolucao r
@@ -85,5 +98,4 @@
     mysqli_free_result($qtd);
     return $response;
   }
-
 ?>

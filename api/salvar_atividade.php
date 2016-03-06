@@ -1,4 +1,10 @@
 <?php
+  /* NextEx - Ferramenta de Avaliação
+   * api/salvar_atividade.php
+   *
+   * Salva no servidor os arquivos da atividade (mapa.json) e do gabarito (gabarito.json).
+  */
+
   $dados_mapa = isset($_POST['dados_mapa']) ? $_POST['dados_mapa'] : "";
   $dados_gabarito = isset($_POST['dados_gabarito']) ? $_POST['dados_gabarito'] : "";
   $id_turma = isset($_POST['id_turma']) ? $_POST['id_turma'] : "";
@@ -12,6 +18,8 @@
   $nome_mapa = "mapa.json";
   $nome_gabarito = "gabarito.json";
 
+  // Insere uma nova atividade no banco de dados, além de uma entrada na tabela
+  // resolucao para cada estudante cadastrado na turma da atividade
   if (!$continuacao) {
     $queryAtividade  = "INSERT INTO atividade (id_turma, titulo, data_entrega, liberado)
                         VALUES ({$id_turma}, '{$titulo}', '{$data_entrega}', false)";
@@ -33,6 +41,7 @@
       return;
     }
   }
+  // A atividade foi editada, portando é feito apenas um UPDATE na tabela atividade
   else {
     $query = "UPDATE atividade SET id_turma = {$id_turma}, titulo = '{$titulo}',
               data_entrega = '{$data_entrega}', liberado = false
@@ -48,17 +57,20 @@
 
 
   if (json_decode($dados_mapa) != null) {
+    // Cria o diretório para arquivos da atividade
     $path = dirname( dirname(__FILE__) ) . "/atividades/" . $id_atividade;
     if (!file_exists($path)) {
       mkdir($path, 0777, true);
     }
 
+    // Cria o diretório para arquivos de resolução
     $pathRes = dirname( dirname(__FILE__) ) . "/atividades/" . $id_atividade . "/resolucoes";
     if (!file_exists($pathRes)) {
       mkdir($pathRes, 0777, true);
       chmod($path, 0777);
     }
 
+    // Salva a atividade
     $file = fopen($path . "/" . $nome_mapa,'w+');
     fwrite($file, $dados_mapa);
     fclose($file);
@@ -66,11 +78,13 @@
   }
 
   if (json_decode($dados_gabarito) != null) {
+    // Cria o diretório para arquivos da atividade
     $path = dirname( dirname(__FILE__) ) . "/atividades/" . $id_atividade;
     if (!file_exists($path)) {
       mkdir($path, 0777, true);
     }
 
+    // Salva o gabarito
     $file = fopen($path . "/" . $nome_gabarito,'w+');
     fwrite($file, $dados_gabarito);
     fclose($file);
@@ -78,5 +92,4 @@
   }
 
   echo "salvo";
-
 ?>
