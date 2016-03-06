@@ -52,7 +52,6 @@ function mostrarResultadoTurma() {
 
   // Insere os termos no grafo
   for (i = 0; i < gabarito['nodes'].length; i++) {
-    console.log(gabarito['nodes'][i], gabarito['grid'][i]['x'], gabarito['grid'][i]['y']);
     var newNode = geral.addNode(gabarito['nodes'][i], {render:render});
     newNode.layoutPosX = gabarito['grid'][i]['x'];
     newNode.layoutPosY = gabarito['grid'][i]['y'];
@@ -69,18 +68,23 @@ function mostrarResultadoTurma() {
          * Amarelo-Vermelho - rgb(255,255,0) até rgb(255,0,0)
          * para evitar a tonalidade marrom nas ligações com valor próximo a 0.5
         */
-        if (matriz_geral[i][j] <= 0.5) {
-          var verde = 255;
-          var vermelho = Math.ceil(matriz_geral[i][j] * 255);
+        if (matriz_geral[i][j] < 0.5) {
+          var verde = 1.0;
+          var vermelho = 2 * matriz_geral[i][j];
         }
-        else {
-          var vermelho = 255;
-          var verde = Math.ceil((0.5 - matriz_geral[i][j] % 0.5)/0.5 * 255);
+        else if (0.5 <= matriz_geral[i][j]) {
+          var vermelho = 1.0;
+          var verde = 1.0 - 2 * (matriz_geral[i][j]-0.5);
         }
+
+        verde = Math.ceil(verde * 255);
+        vermelho = Math.ceil(vermelho * 255);
 
         var cor = "rgb(" + vermelho + "," + verde + ",0)";
 
-        geral.addEdge(gabarito['nodes'][i], gabarito['nodes'][j], {label: matriz_geral[i][j].toFixed(3), stroke : cor, "font-size": "16px"});
+        if (matriz_geral[i][j] !== 0.0) {
+          geral.addEdge(gabarito['nodes'][i], gabarito['nodes'][j], {label: matriz_geral[i][j].toFixed(3), stroke : cor, "font-size": "16px"});
+        }
       }
     }
   }
