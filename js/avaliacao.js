@@ -76,7 +76,7 @@ function mostrarMapa() {
   }
 
   layouter = new Graph.Layout.Ordered(g, true, null);
-  renderer = new Graph.Renderer.Raphael('canvas', g, width, height, true);
+  renderer = new Graph.Renderer.Raphael('canvas', g, width, height, false);
   renderer.draw();
 
   // Ignora click no texto do termo; o evento é então passado para o listener da caixa do termo
