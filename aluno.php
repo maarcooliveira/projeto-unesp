@@ -10,6 +10,7 @@
   $turmasNaoInscrito = getTurmasAlunoNaoInscrito($_SESSION['id']);
   $atividades = getAtividadesAluno($_SESSION['id']);
   insertResolucoesAluno($_SESSION['id']);
+  date_default_timezone_set('America/Sao_Paulo');
 ?>
 
 <!doctype html>
@@ -75,9 +76,11 @@
             <span class="small-3 columns"><?php echo $atividade['turma'] ?></span>
             <span class="small-3 columns"><?php echo date("d/m/Y", strtotime($atividade['data_entrega'])) ?></span>
             <?php if($atividade['concluido'] == 1) { ?>
-              <span class="small-3 columns"><i class="fa fa-check-circle-o ok"></i> {{str.entregue}}</span>
-            <?php } else { ?>
-              <span class="small-3 columns"><i class="fa fa-times-circle-o not-ok"></i> {{str.nao_entregue}}</span>
+              <span class="small-3 columns"><i class="fa fa-check-circle ok pad-r"></i> {{str.entregue}}</span>
+            <?php } else if ((new DateTime($atividade['data_entrega']))->format('Y-m-d') >= (new DateTime("NOW"))->format('Y-m-d')) { ?>
+              <span class="small-3 columns"><i class="fa fa-circle-o not-ok pad-r"></i> {{str.nao_entregue}}</span>
+            <?php } else {  ?>
+              <span class="small-3 columns"><i class="fa fa-times-circle not-ok pad-r"></i> {{str.prazo_encerrado}}</span>
             <?php } ?>
             <br><br>
           </div>
@@ -101,7 +104,7 @@
             <br>
             <span class="small-6 columns"><?php echo $turma['nome'] ?></span>
             <span class="small-3 columns"><?php echo $turma['professor'] ?></span>
-            <a class="small-3 columns imp" onclick="deixarTurma('<?php echo $turma['id'] ?>');"><i class="fa fa-minus-circle"></i> {{str.sair_da_turma}}</a>
+            <a class="small-3 columns imp" onclick="deixarTurma('<?php echo $turma['id'] ?>');"><i class="fa fa-minus-circle pad-r"></i> {{str.sair_da_turma}}</a>
             <br><br>
           </div>
       <?php $count++; } ?>

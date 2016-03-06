@@ -63,7 +63,7 @@
         <h5 class="small-3 columns b">{{str.turma}}</h5>
         <h5 class="small-2 columns b">{{str.prazo}}</h5>
         <h5 class="small-2 columns b">{{str.status}}</h5>
-        <h5 class="small-2 columns b"><a href="atividade.php"><i class="fa fa-plus"></i> {{str.criar}}</a></h5>
+        <h5 class="small-2 columns b"><a href="atividade.php"><i class="fa fa-plus pad-r"></i> {{str.criar}}</a></h5>
       </div>
 
       <?php
@@ -80,11 +80,11 @@
           <span class="small-3 columns"><?php echo $atividade['turma'] ?></span>
           <span class="small-2 columns"><?php echo date("d/m/Y", strtotime($atividade['data_entrega'])) ?></span>
           <?php if ($atividade['liberado']) { ?>
-            <span class="small-2 columns"><i class="fa fa-check-square-o"></i> {{str.liberado}}</span>
+            <span class="small-2 columns"><i class="fa fa-check-square-o pad-r"></i> {{str.liberado}}</span>
           <?php } else { ?>
-            <a class="small-2 columns" onclick="liberar('<?php echo $atividade['id'] ?>');"><i class="fa fa-square-o"></i> {{str.liberar}}</a>
+            <a class="small-2 columns" onclick="liberar('<?php echo $atividade['id'] ?>');"><i class="fa fa-square-o pad-r"></i> {{str.liberar}}</a>
           <?php } ?>
-          <a class="small-2 columns imp" onclick="removerAtividade('<?php echo $atividade['id'] ?>');"><i class="fa fa-minus-circle"></i> {{str.excluir}}</a>
+          <a class="small-2 columns imp" onclick="removerAtividade('<?php echo $atividade['id'] ?>');"><i class="fa fa-minus-circle pad-r"></i> {{str.excluir}}</a>
           <br><br>
         </div>
       <?php
@@ -101,7 +101,7 @@
         <h5 class="small-4 columns b">{{str.turma}}</h5>
         <h5 class="small-4 columns b">{{str.universidade}}</h5>
         <h5 class="small-2 columns b">{{str.criado_em}}</h5>
-        <h5 class="small-2 columns b"><a href="#" data-reveal-id="modalAddTurma"><i class="fa fa-plus"></i> {{str.criar}}</a></h5>
+        <h5 class="small-2 columns b"><a href="#" data-reveal-id="modalAddTurma"><i class="fa fa-plus pad-r"></i> {{str.criar}}</a></h5>
       </div>
 
       <?php
@@ -112,7 +112,7 @@
           <span class="small-4 columns"><?php echo $turma['nome'] ?></span>
           <span class="small-4 columns"><?php echo $turma['universidade'] ?></span>
           <span class="small-2 columns"><?php echo date("d/m/Y", strtotime($turma['data_criacao'])) ?></span>
-          <a class="small-2 columns imp" onclick="removerTurma('<?php echo $turma['id'] ?>');"><i class="fa fa-minus-circle"></i> {{str.excluir}}</a>
+          <a class="small-2 columns imp" onclick="removerTurma('<?php echo $turma['id'] ?>');"><i class="fa fa-minus-circle pad-r"></i> {{str.excluir}}</a>
           <br><br>
         </div>
       <?php

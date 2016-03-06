@@ -78,7 +78,8 @@
     "usuario_placeholder": "Your student/instructor id",
     "erro_salvar_atividade": "Sorry, we could not save your activity",
     "melhor_resultado": "Best results",
-    "pior_resultado": "Worst results"
+    "pior_resultado": "Worst results",
+    "prazo_encerrado": "Deadline ended"
   },
 
   "pt-BR": {
@@ -160,6 +161,7 @@
     "usuario_placeholder": "Seu id de aluno/professor",
     "erro_salvar_atividade": "Erro ao salvar atividade",
     "melhor_resultado": "Melhor resultado",
-    "pior_resultado": "Pior resultado"
+    "pior_resultado": "Pior resultado",
+    "prazo_encerrado": "Prazo encerrado"
   }
 }

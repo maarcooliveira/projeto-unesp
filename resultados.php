@@ -95,10 +95,10 @@
                 <br>
                 <span class="small-7 columns"><?php echo $resolucao['aluno'] ?></span>
                 <?php if ($resolucao['concluido']) { ?>
-                  <span class="small-3 columns"><i class="fa fa-check-circle-o ok"></i> {{str.entregue}}</span>
+                  <span class="small-3 columns"><i class="fa fa-check-circle ok pad-r"></i> {{str.entregue}}</span>
                   <span class="small-2 columns text-center" id='<?php echo 'dma-' . $resolucao['id_usuario']?>'>-</span>
                 <?php } else { ?>
-                  <span class="small-3 columns"><i class="fa fa-times-circle-o not-ok"></i> {{str.nao_entregue}}</span>
+                  <span class="small-3 columns"><i class="fa fa-circle-o not-ok pad-r"></i> {{str.nao_entregue}}</span>
                   <span class="small-2 columns text-center">-</span>
                 <?php } ?>
                 <br><br>
